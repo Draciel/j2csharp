@@ -15,3 +15,9 @@
         alias antlr4='java -Xmx500M -cp "/usr/local/lib/antlr-4.7.1-complete.jar:$CLASSPATH" org.antlr.v4.Tool'
 
         alias grun='java org.antlr.v4.gui.TestRig'
+
+5. Install ANTLR4 plugin for Intellij
+
+6. Handy shortcuts
+         
+         Ctrl + Shift + G -> compile grammar

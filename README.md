@@ -18,6 +18,12 @@
 
 5. Install ANTLR4 plugin for Intellij
 
-6. Handy shortcuts
+6. Once you install all necessary things, right click on grammar file, choose **configure ANTLR** option and clean output directory if necessary
+
+7. Open grammar file and generate lexer, parser and other things (Ctrl + Shift + G or right click on file and choose **Generate ANTLR Recognizer** 
          
-         Ctrl + Shift + G -> compile grammar
+8. Open File -> Project Structure and mark **gen** directory as source
+
+9. Build project and run Main.main(args) 
+
+10. Have fun!

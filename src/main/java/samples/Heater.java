@@ -1,7 +1,9 @@
+//package samples; //fixme package cause some problems for parser
+
 class Heater {
 
+    public static final int OPTIMAL_TEMP = 10;
     private final int maxTemp;
-
     private int currentTemp = 0;
 
     private Heater(final int maxTemp) {

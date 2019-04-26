@@ -19,9 +19,10 @@ class MethodVisitor extends Java9BaseVisitor<Method> {
         final ParameterVisitor parameterVisitor = new ParameterVisitor();
 
         final List<Parameter> parameters = Collections.emptyList();
-        ctx.methodHeader().typeParameters()
-                .typeParameterList()
-                .typeParameter()
+        ctx.methodHeader().methodDeclarator()
+                .formalParameterList()
+                .formalParameters()
+                .formalParameter()
                 .stream()
                 .map(b -> b.accept(parameterVisitor))
                 .collect(Collectors.toList());

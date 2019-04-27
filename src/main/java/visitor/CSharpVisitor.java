@@ -9,7 +9,7 @@ public class CSharpVisitor {
 
     @Nonnull
     public Class parse(ClassDeclarationContext classDeclarationContext) {
-        final ClassVisitor classVisitor = new ClassVisitor();
+        final ClassVisitor classVisitor = ClassVisitor.instance();
         return classVisitor.visit(classDeclarationContext);
     }
 

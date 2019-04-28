@@ -15,8 +15,7 @@ class StatementVisitor extends Java9BaseVisitor<Statement> {
 
     @Override
     public Statement visitStatement(Java9Parser.StatementContext ctx) {
-        final Statement statement = new Statement(ctx.getText(), "raz dwa trzy");
-        return statement;
+        return new Statement(ctx.getText());
     }
 
     private static final class HOLDER {

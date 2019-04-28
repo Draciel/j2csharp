@@ -1,5 +1,6 @@
 package visitor;
 
+import data.Modifier;
 import data.Statement;
 import data.Method;
 import data.Parameter;
@@ -7,7 +8,6 @@ import pl.jcsharp.grammar.Java9BaseVisitor;
 import pl.jcsharp.grammar.Java9Parser;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,12 +27,16 @@ class MethodVisitor extends Java9BaseVisitor<Method> {
         final ParameterVisitor parameterVisitor = ParameterVisitor.instance();
 
         final List<Parameter> parameters = new ArrayList<>();
-        parameters.add(ctx.methodHeader()
-                .methodDeclarator()
-                .formalParameterList()
-                .lastFormalParameter()
-                .formalParameter()
-                .accept(parameterVisitor));
+
+        final Java9Parser.FormalParameterListContext formalParameterList = ctx.methodHeader()
+                .methodDeclarator().formalParameterList();
+
+        if (formalParameterList != null) {
+            parameters.add(formalParameterList
+                    .lastFormalParameter()
+                    .formalParameter()
+                    .accept(parameterVisitor));
+        }
 //        final ctx.methodHeader().methodDeclarator()
 //                .formalParameterList()
 //                .formalParameters()
@@ -47,7 +51,13 @@ class MethodVisitor extends Java9BaseVisitor<Method> {
                 .stream()
                 .map(b -> b.accept(statementVisitor))
                 .collect(Collectors.toList());
-        return new Method(name, parameters, statements);
+
+        final List<Modifier> modifiers = ctx.methodModifier()
+                .stream()
+                .map(cm -> Modifier.of(cm.getText()))
+                .collect(Collectors.toList());
+
+        return new Method(name, parameters, statements, modifiers);
     }
 
     private static final class HOLDER {

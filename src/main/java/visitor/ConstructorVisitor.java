@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class ConstructorVisitor extends Java9BaseVisitor<Constructor> {
+class ConstructorVisitor extends Java9BaseVisitor<Constructor> {
 
     private ConstructorVisitor() {
     }

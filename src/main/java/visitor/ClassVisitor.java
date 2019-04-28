@@ -7,6 +7,7 @@ import pl.jcsharp.grammar.Java9Parser;
 import utility.Nonnull;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 class ClassVisitor extends Java9BaseVisitor<Class> {
@@ -43,6 +44,13 @@ class ClassVisitor extends Java9BaseVisitor<Class> {
         final List<Modifier> modifiers = ctx.normalClassDeclaration().classModifier().stream()
                 .map(cm -> Modifier.of(cm.getText()))
                 .collect(Collectors.toList());
+
+        final Optional<Modifier> accessModifier = modifiers.stream()
+                .filter(Modifier::isAccessModifier)
+                .findFirst();
+        if (!accessModifier.isPresent()) {
+            modifiers.add(Modifier.PACKAGE);
+        }
         // handle other things
         return new Class(name, modifiers, constructors, methods, fields);
     }

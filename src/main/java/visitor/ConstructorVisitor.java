@@ -1,14 +1,13 @@
 package visitor;
 
-import data.Constructor;
-import data.Modifier;
-import data.Parameter;
-import data.Statement;
+import data.*;
 import pl.jcsharp.grammar.Java9BaseVisitor;
 import pl.jcsharp.grammar.Java9Parser;
+import utility.Nonnull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 class ConstructorVisitor extends Java9BaseVisitor<Constructor> {
@@ -38,12 +37,32 @@ class ConstructorVisitor extends Java9BaseVisitor<Constructor> {
                 .map(b -> b.accept(statementVisitor))
                 .collect(Collectors.toList());
 
-        final List<Modifier> modifiers = ctx.constructorModifier()
-                .stream()
+        final AnnotationVisitor annotationVisitor = AnnotationVisitor.instance();
+        // fixme we can optimize modifiers flow a bit
+        final List<Annotation> annotations = ctx.constructorModifier().stream()
+                .filter(ConstructorVisitor::isAnnotation)
+                .map(cm -> cm.annotation().accept(annotationVisitor))
+                .collect(Collectors.toList());
+
+        final List<Modifier> modifiers = ctx.constructorModifier().stream()
+                .filter(cm -> !isAnnotation(cm))
                 .map(cm -> Modifier.of(cm.getText()))
                 .collect(Collectors.toList());
 
-        return new Constructor(parameters, statements, modifiers);
+        // check if class does have package private
+        final Optional<Modifier> accessModifier = modifiers.stream()
+                .filter(Modifier::isAccessModifier)
+                .findFirst();
+
+        if (!accessModifier.isPresent()) {
+            modifiers.add(Modifier.PACKAGE);
+        }
+
+        return new Constructor(parameters, statements, modifiers, annotations);
+    }
+
+    private static boolean isAnnotation(@Nonnull final Java9Parser.ConstructorModifierContext ctx) {
+        return ctx.annotation() != null;
     }
 
     private static final class HOLDER {

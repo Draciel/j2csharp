@@ -23,14 +23,19 @@ public class Class {
     @Nonnull
     private final List<Method> methods;
 
+    @Nonnull
+    private final List<Annotation> annotations;
+
     public Class(@Nonnull final String name, @Nonnull final List<Modifier> modifiers,
                  @Nonnull final List<Constructor> constructors,
-                 @Nonnull final List<Method> methods, @Nonnull List<Field> fields) {
+                 @Nonnull final List<Method> methods, @Nonnull List<Field> fields,
+                 @Nonnull final List<Annotation> annotations) {
         this.name = name;
         this.modifiers = modifiers;
         this.constructors = constructors;
         this.methods = methods;
         this.fields = fields;
+        this.annotations = annotations;
     }
 
     @Nonnull
@@ -58,6 +63,11 @@ public class Class {
         return constructors;
     }
 
+    @Nonnull
+    public List<Annotation> getAnnotations() {
+        return annotations;
+    }
+
     @Override
     public String toString() {
         return "Class{" +
@@ -66,6 +76,7 @@ public class Class {
                 ", constructors=" + constructors +
                 ", fields=" + fields +
                 ", methods=" + methods +
+                ", annotations=" + annotations +
                 '}';
     }
 }

@@ -1,13 +1,16 @@
 //package samples; //fixme package cause some problems for parser
 
+@Deprecated
 final class Heater {
 
     public static final int OPTIMAL_TEMP = 10;
     private static final String HEATING_MESSAGE = "Heating ";
     private static final String COOLING_MESSAGE = "Cooling ";
+    private static final String KEEP_TEMPERATURE_MESSAGE = "Keeping temperature ";
     private final int maxTemp;
     private int currentTemp = 0;
-    private long keepTemperatureInMs = 0;
+    private long keepTemperatureTimeInMs = 0;
+    private boolean keepStable;
 
     private Heater(final int maxTemp) {
         this.maxTemp = maxTemp;
@@ -38,6 +41,15 @@ final class Heater {
     }
 
     public synchronized void keepTemperature(final long timeInMs, final boolean keepStable) {
-        keepTemperatureInMs = timeInMs;
+        keepTemperatureTimeInMs = timeInMs;
+        this.keepStable = keepStable;
+        System.out.println(KEEP_TEMPERATURE_MESSAGE);
+    }
+
+    public synchronized void keepTemperature(final long timeInsMs, final boolean keepStable, final int repeat) {
+        keepTemperature(timeInsMs, keepStable);
+        for (int i = 1; i < repeat; i++) {
+            keepTemperature(timeInsMs, keepStable);
+        }
     }
 }

@@ -7,6 +7,9 @@ import java.util.List;
 public class Constructor {
 
     @Nonnull
+    private final String className;
+
+    @Nonnull
     private final List<Parameter> parameters;
 
     @Nonnull
@@ -18,10 +21,12 @@ public class Constructor {
     @Nonnull
     private final List<Annotation> annotations;
 
-    public Constructor(@Nonnull final List<Parameter> parameters,
+    public Constructor(@Nonnull final String className,
+                       @Nonnull final List<Parameter> parameters,
                        @Nonnull final List<Statement> statements,
                        @Nonnull final List<Modifier> modifiers,
                        @Nonnull final List<Annotation> annotations) {
+        this.className = className;
         this.parameters = parameters;
         this.statements = statements;
         this.modifiers = modifiers;
@@ -44,10 +49,16 @@ public class Constructor {
         return annotations;
     }
 
+    @Nonnull
+    public String getClassName() {
+        return className;
+    }
+
     @Override
     public String toString() {
         return "Constructor{" +
-                "parameters=" + parameters +
+                "className='" + className + '\'' +
+                ", parameters=" + parameters +
                 ", statements=" + statements +
                 ", modifiers=" + modifiers +
                 ", annotations=" + annotations +

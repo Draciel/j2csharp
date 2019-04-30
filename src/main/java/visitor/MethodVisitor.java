@@ -77,7 +77,9 @@ class MethodVisitor extends Java9BaseVisitor<Method> {
             modifiers.add(Modifier.PACKAGE);
         }
 
-        return new Method(name, parameters, statements, modifiers, annotations);
+        final String result = ctx.methodHeader().result().getText();
+
+        return new Method(name, parameters, statements, modifiers, annotations, result);
     }
 
     private static boolean isAnnotation(@Nonnull final Java9Parser.MethodModifierContext ctx) {

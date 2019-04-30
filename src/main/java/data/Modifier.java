@@ -27,4 +27,7 @@ public enum Modifier {
         return isAccessModifier;
     }
 
+    public String getCodeRepresentation() {
+        return codeRepresentation;
+    }
 }

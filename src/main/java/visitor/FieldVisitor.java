@@ -3,6 +3,7 @@ package visitor;
 import data.Annotation;
 import data.Field;
 import data.Modifier;
+import data.Statement;
 import pl.jcsharp.grammar.Java9BaseVisitor;
 import pl.jcsharp.grammar.Java9Parser;
 import utility.Nonnull;
@@ -44,11 +45,17 @@ class FieldVisitor extends Java9BaseVisitor<Field> {
         }
 
         // fixme investigate if this is the only one variable declarator
-        final String name = ctx.variableDeclaratorList().variableDeclarator().get(0).variableDeclaratorId()
-                .identifier().getText();
+        final Java9Parser.VariableDeclaratorContext variableDeclaratorContext = ctx.variableDeclaratorList()
+                .variableDeclarator().get(0);
+
+        final String name = variableDeclaratorContext.variableDeclaratorId().identifier().getText();
         final String type = ctx.unannType().getText();
 
-        return Field.of(name, type, modifiers, annotations);
+        // fixme some statements like new Object()
+        final Statement initializer = variableDeclaratorContext.variableInitializer() == null ?
+                Statement.emptyStatement() : new Statement(variableDeclaratorContext.variableInitializer().getText());
+
+        return Field.of(name, type, modifiers, annotations, initializer);
     }
 
     private static boolean isAnnotation(@Nonnull final Java9Parser.FieldModifierContext ctx) {

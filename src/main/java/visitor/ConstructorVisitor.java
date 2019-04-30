@@ -23,6 +23,9 @@ class ConstructorVisitor extends Java9BaseVisitor<Constructor> {
     public Constructor visitConstructorDeclaration(Java9Parser.ConstructorDeclarationContext ctx) {
         final ParameterVisitor parameterVisitor = ParameterVisitor.instance();
         final StatementVisitor statementVisitor = StatementVisitor.instance();
+
+        final String className = ctx.constructorDeclarator().simpleTypeName().identifier().getText();
+
         final List<Parameter> parameters = new ArrayList<>();
         parameters.add(ctx.constructorDeclarator()
                 .formalParameterList()
@@ -58,7 +61,7 @@ class ConstructorVisitor extends Java9BaseVisitor<Constructor> {
             modifiers.add(Modifier.PACKAGE);
         }
 
-        return new Constructor(parameters, statements, modifiers, annotations);
+        return new Constructor(className, parameters, statements, modifiers, annotations);
     }
 
     private static boolean isAnnotation(@Nonnull final Java9Parser.ConstructorModifierContext ctx) {

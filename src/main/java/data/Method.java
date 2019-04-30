@@ -21,16 +21,21 @@ public class Method {
     @Nonnull
     private final List<Annotation> annotations;
 
+    @Nonnull
+    private final String result;
+
     public Method(@Nonnull final String name,
                   @Nonnull final List<Parameter> parameters,
                   @Nonnull final List<Statement> statements,
                   @Nonnull final List<Modifier> modifiers,
-                  @Nonnull final  List<Annotation> annotations) {
+                  @Nonnull final List<Annotation> annotations,
+                  @Nonnull final String result) {
         this.name = name;
         this.parameters = parameters;
         this.statements = statements;
         this.modifiers = modifiers;
         this.annotations = annotations;
+        this.result = result;
     }
 
     @Nonnull
@@ -58,6 +63,11 @@ public class Method {
         return annotations;
     }
 
+    @Nonnull
+    public String getResult() {
+        return result;
+    }
+
     @Override
     public String toString() {
         return "Method{" +
@@ -66,6 +76,7 @@ public class Method {
                 ", statements=" + statements +
                 ", modifiers=" + modifiers +
                 ", annotations=" + annotations +
+                ", result='" + result + '\'' +
                 '}';
     }
 }

@@ -1,9 +1,11 @@
 import data.File;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
+import parser.SimpleParser;
 import pl.jcsharp.grammar.Java9Lexer;
 import pl.jcsharp.grammar.Java9Parser;
-import parser.SimpleParser;
+import translator.csharp.CSharpTranslator;
+import translator.Translator;
 import visitor.SimpleJava9Parser;
 
 import java.io.IOException;
@@ -19,9 +21,10 @@ public class Main {
 
         // todo refactor at some point to handle multiple files
         final SimpleParser visitor = new SimpleJava9Parser();
-
         final File file = visitor.parse(parser.compilationUnit());
+        final Translator translator = new CSharpTranslator();
+        translator.translate(file);
 
-        System.out.println("Class " + file.toString());
+//        System.out.println("Class " + file.toString());
     }
 }

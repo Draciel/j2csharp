@@ -1,13 +1,20 @@
-//package samples; //fixme package cause some problems for parser
+package samples;
+
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
+
+import static java.lang.String.format;
 
 @Deprecated
 final class Heater {
 
     public static final int OPTIMAL_TEMP = 10;
-    private static final String HEATING_MESSAGE = "Heating ";
-    private static final String COOLING_MESSAGE = "Cooling ";
-    private static final String KEEP_TEMPERATURE_MESSAGE = "Keeping temperature ";
+    private static final String HEATING_MESSAGE = "Heating %s";
+    private static final String COOLING_MESSAGE = "Cooling %s";
+    private static final String KEEP_TEMPERATURE_MESSAGE = "Keeping temperature";
     private final int maxTemp;
+    private final TimeUnit timeUnit = TimeUnit.SECONDS;
+    private final AtomicBoolean atomicBoolean = new AtomicBoolean();
     private int currentTemp = 0;
     private long keepTemperatureTimeInMs = 0;
     private boolean keepStable;
@@ -25,7 +32,7 @@ final class Heater {
             if ((maxTemp - currentTemp - offset) > 0) {
                 currentTemp += offset;
             }
-            System.out.println(HEATING_MESSAGE + currentTemp);
+            System.out.println(format(HEATING_MESSAGE, currentTemp));
         }
     }
 
@@ -33,7 +40,7 @@ final class Heater {
         if (currentTemp - offset > 0) {
             currentTemp -= offset;
         }
-        System.out.println(COOLING_MESSAGE + currentTemp);
+        System.out.println(format(COOLING_MESSAGE, currentTemp));
     }
 
     public synchronized int getCurrentTemp() {

@@ -26,16 +26,26 @@ public class Class {
     @Nonnull
     private final List<Annotation> annotations;
 
+    @Nonnull
+    private final String superClass;
+
+    @Nonnull
+    private final List<String> superInterfaces;
+
     public Class(@Nonnull final String name, @Nonnull final List<Modifier> modifiers,
                  @Nonnull final List<Constructor> constructors,
                  @Nonnull final List<Method> methods, @Nonnull List<Field> fields,
-                 @Nonnull final List<Annotation> annotations) {
+                 @Nonnull final List<Annotation> annotations,
+                 @Nonnull final String superClass,
+                 @Nonnull final List<String> superInterfaces) {
         this.name = name;
         this.modifiers = modifiers;
         this.constructors = constructors;
         this.methods = methods;
         this.fields = fields;
         this.annotations = annotations;
+        this.superClass = superClass;
+        this.superInterfaces = superInterfaces;
     }
 
     @Nonnull
@@ -68,6 +78,16 @@ public class Class {
         return annotations;
     }
 
+    @Nonnull
+    public String getSuperClass() {
+        return superClass;
+    }
+
+    @Nonnull
+    public List<String> getSuperInterfaces() {
+        return superInterfaces;
+    }
+
     @Override
     public String toString() {
         return "Class{" +
@@ -77,6 +97,8 @@ public class Class {
                 ", fields=" + fields +
                 ", methods=" + methods +
                 ", annotations=" + annotations +
+                ", superClass='" + superClass + '\'' +
+                ", superInterfaces=" + superInterfaces +
                 '}';
     }
 }

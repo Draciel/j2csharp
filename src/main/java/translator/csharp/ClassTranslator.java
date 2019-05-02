@@ -30,7 +30,7 @@ class ClassTranslator implements PartialTranslator<Class> {
                 .append("class")
                 .append(Codestyle.space()) // fixme handle interfaces and enums
                 .append(input.getName())
-                .append(Codestyle.space())
+                .append(Utility.appendInheritance(input.getSuperClass(), input.getSuperInterfaces()))
                 .append("{")
                 .append(Codestyle.newLine());
 

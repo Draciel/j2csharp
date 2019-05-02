@@ -51,4 +51,18 @@ class Utility {
                 .map(s -> appendIndentation(indentation) + s.getContent())
                 .collect(Collectors.joining(Codestyle.newLine()));
     }
+
+    public static String appendInheritance(@Nonnull final String superClass,
+                                           @Nonnull final List<String> superInterfaces) {
+        if (superClass.isEmpty() && superInterfaces.isEmpty()) {
+            return Codestyle.space();
+        }
+
+        final String prefixSuperInterfaces = superClass.isEmpty() || superInterfaces.isEmpty() ? "" : "," + Codestyle.space();
+
+        final String formattedSuperInterfaces = superInterfaces.stream().collect(Collectors.joining(
+                "," + Codestyle.space(), prefixSuperInterfaces, ""));
+
+        return Codestyle.space() + ":" + Codestyle.space() + superClass + formattedSuperInterfaces + Codestyle.space();
+    }
 }

@@ -6,10 +6,11 @@ import pl.jcsharp.grammar.Java9BaseVisitor;
 import pl.jcsharp.grammar.Java9Parser;
 import utility.Nonnull;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static java.util.Collections.emptyList;
 
 class ClassVisitor extends Java9BaseVisitor<Class> {
 
@@ -59,11 +60,21 @@ class ClassVisitor extends Java9BaseVisitor<Class> {
                 .filter(Modifier::isAccessModifier)
                 .findFirst();
 
+        final String superClass = ctx.normalClassDeclaration().superclass() == null ? "" :
+                ctx.normalClassDeclaration().superclass().classType().getText();
+
+        final List<String> superInterfaces = ctx.normalClassDeclaration().superinterfaces() == null ? emptyList() :
+                ctx.normalClassDeclaration().superinterfaces().interfaceTypeList().interfaceType()
+                        .stream()
+                        .map(i -> i.classType().getText())
+                        .collect(Collectors.toList());
+
         if (!accessModifier.isPresent()) {
             modifiers.add(Modifier.PACKAGE);
         }
+
         // handle other things
-        return new Class(name, modifiers, constructors, methods, fields, annotations);
+        return new Class(name, modifiers, constructors, methods, fields, annotations, superClass, superInterfaces);
     }
 
     // fixme find better way...

@@ -6,6 +6,7 @@ import pl.jcsharp.grammar.Java9Parser;
 import utility.Nonnull;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -49,13 +50,18 @@ class MethodVisitor extends Java9BaseVisitor<Method> {
                     .accept(parameterVisitor));
         }
 
-        final List<Statement> statements = ctx.methodBody()
-                .block()
-                .blockStatements()
-                .blockStatement()
-                .stream()
-                .map(b -> b.accept(statementVisitor))
-                .collect(Collectors.toList());
+        final List<Statement> statements;
+        if (ctx.methodBody().block().blockStatements() == null) {
+            statements = Collections.singletonList(Statement.emptyStatement());
+        } else {
+            statements = ctx.methodBody()
+                    .block()
+                    .blockStatements()
+                    .blockStatement()
+                    .stream()
+                    .map(b -> b.accept(statementVisitor))
+                    .collect(Collectors.toList());
+        }
 
         // fixme we can optimize modifiers flow a bit
         final List<Annotation> annotations = ctx.methodModifier().stream()

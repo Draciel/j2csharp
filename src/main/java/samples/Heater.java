@@ -1,13 +1,14 @@
 package samples;
 
-import java.io.Serializable;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.Consumer;
 
 import static java.lang.String.format;
 
 @Deprecated
-final class Heater extends Object implements Serializable {
+final class Heater<T extends Consumer<? super Consumer<? extends Consumer<T>>>, VH extends Object>
+        extends Object implements Consumer<T> {
 
     public static final int OPTIMAL_TEMP = 10;
     private static final String HEATING_MESSAGE = "Heating %s";
@@ -19,7 +20,7 @@ final class Heater extends Object implements Serializable {
     private int currentTemp = 0;
     private long keepTemperatureTimeInMs = 0;
     private boolean keepStable;
-//    private T adapter;
+    private T adapter;
 
     private Heater(final int maxTemp) {
         this.maxTemp = maxTemp;
@@ -62,7 +63,8 @@ final class Heater extends Object implements Serializable {
         }
     }
 
-//    public void setAdapter(final T adapter) {
-//        this.adapter = adapter;
-//    }
+    @Override
+    public void accept(final T t) {
+
+    }
 }

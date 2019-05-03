@@ -7,8 +7,6 @@ import pl.jcsharp.grammar.Java9Parser;
 
 class StatementVisitor extends Java9BaseVisitor<Statement> {
 
-    private static final Statement EMPTY_STATEMENT = new Statement("");
-
     private StatementVisitor() {
     }
 
@@ -19,7 +17,7 @@ class StatementVisitor extends Java9BaseVisitor<Statement> {
     @Override
     public Statement visitStatement(Java9Parser.StatementContext ctx) {
         if (ctx.getChildCount() == 0) {
-            return EMPTY_STATEMENT;
+            return Statement.emptyStatement();
         }
         //todo temporary workaround
         final int a = ctx.start.getStartIndex();

@@ -6,6 +6,7 @@ import pl.jcsharp.grammar.Java9BaseVisitor;
 import pl.jcsharp.grammar.Java9Parser;
 import utility.Nonnull;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -28,6 +29,7 @@ class ClassVisitor extends Java9BaseVisitor<Class> {
         final MethodVisitor methodVisitor = MethodVisitor.instance();
         final ConstructorVisitor constructorVisitor = ConstructorVisitor.instance();
         final AnnotationVisitor annotationVisitor = AnnotationVisitor.instance();
+        final TypeParameterVisitor typeParameterVisitor = TypeParameterVisitor.instance();
 
         final List<Method> methods = ctx.normalClassDeclaration().classBody().classBodyDeclaration().stream()
                 .filter(ClassVisitor::isMethod)
@@ -64,9 +66,13 @@ class ClassVisitor extends Java9BaseVisitor<Class> {
                 ctx.normalClassDeclaration().superclass().classType().getText();
 
         final List<String> superInterfaces = ctx.normalClassDeclaration().superinterfaces() == null ? emptyList() :
-                ctx.normalClassDeclaration().superinterfaces().interfaceTypeList().interfaceType()
-                        .stream()
+                ctx.normalClassDeclaration().superinterfaces().interfaceTypeList().interfaceType().stream()
                         .map(i -> i.classType().getText())
+                        .collect(Collectors.toList());
+
+        final List<Generic> generics = ctx.normalClassDeclaration().typeParameters() == null ? Collections.emptyList() :
+                ctx.normalClassDeclaration().typeParameters().typeParameterList().typeParameter().stream()
+                        .map(tpc -> tpc.accept(typeParameterVisitor))
                         .collect(Collectors.toList());
 
         if (!accessModifier.isPresent()) {
@@ -74,7 +80,7 @@ class ClassVisitor extends Java9BaseVisitor<Class> {
         }
 
         // handle other things
-        return new Class(name, modifiers, constructors, methods, fields, annotations, superClass, superInterfaces);
+        return new Class(name, modifiers, constructors, methods, fields, annotations, superClass, superInterfaces, generics);
     }
 
     // fixme find better way...

@@ -17,11 +17,12 @@ class ImportVisitor extends Java9BaseVisitor<Import> {
     @Override
     public Import visitImportDeclaration(final Java9Parser.ImportDeclarationContext ctx) {
         if (ctx.singleTypeImportDeclaration() != null) {
-            return new Import(false, ctx.singleTypeImportDeclaration().typeName().getText());
+            return new Import(false, ctx.singleTypeImportDeclaration().typeName().packageOrTypeName().getText(),
+                    ctx.singleTypeImportDeclaration().typeName().identifier().getText());
         }
         if (ctx.singleStaticImportDeclaration() != null) {
-            return new Import(true, ctx.singleStaticImportDeclaration().typeName().getText() + "."
-                    + ctx.singleStaticImportDeclaration().identifier().getText());
+            return new Import(true, ctx.singleStaticImportDeclaration().typeName().packageOrTypeName().getText(),
+                    ctx.singleStaticImportDeclaration().identifier().getText());
         }
         throw new IllegalArgumentException("something went wrong during parsing!");
     }

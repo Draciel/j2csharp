@@ -13,16 +13,30 @@ public class CSharpTranslator implements Translator {
 
     @Override
     public void translate(final File input) {
-        final String namespace = "namespace " + input.getPackageName().toUpperCase();
+        final ImportTranslator importTranslator = ImportTranslator.instance();
+        final StringBuilder fileBuilder = new StringBuilder();
 
-        //fixme investigate how imports work in c# and implement
-        final String imports = "using TestImport;";
+        input.getImports().stream()
+                .map(f -> importTranslator.translate(f, 0))
+                .forEach(f -> fileBuilder.append(f).append(Codestyle.newLine()));
 
-        final String translatedClass = ClassTranslator.instance().translate(input.getClazz(), 0);
+        fileBuilder
+                .append(Codestyle.newLine())
+                .append("namespace")
+                .append(Codestyle.space())
+                .append(input.getPackageName())
+                .append(Codestyle.space())
+                .append("{")
+                .append(Codestyle.newLine());
+
+        fileBuilder.append(Codestyle.newLine())
+                .append(ClassTranslator.instance().translate(input.getClazz(), 1))
+                .append(Codestyle.newLine())
+                .append("}");
 
         final Path path = Paths.get("src/main/java/samples/Heater.cs");
         try {
-            Files.write(path, translatedClass.getBytes(), StandardOpenOption.CREATE);
+            Files.write(path, fileBuilder.toString().getBytes(), StandardOpenOption.CREATE);
         } catch (IOException e) {
             e.printStackTrace();
         }

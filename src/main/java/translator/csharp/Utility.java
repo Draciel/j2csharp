@@ -17,7 +17,7 @@ class Utility {
 
     public static boolean isAvailableModifier(@Nonnull final Modifier modifier) {
         return modifier == Modifier.PUBLIC || modifier == Modifier.PRIVATE || modifier == Modifier.PROTECTED ||
-                modifier == Modifier.STATIC || modifier == Modifier.VOLATILE;
+                modifier == Modifier.STATIC || modifier == Modifier.VOLATILE || modifier == Modifier.PACKAGE;
     }
 
     public static String appendModifiers(@Nonnull final List<Modifier> modifiers) {

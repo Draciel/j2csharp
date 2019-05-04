@@ -20,11 +20,19 @@ class Utility {
                 modifier == Modifier.STATIC || modifier == Modifier.VOLATILE || modifier == Modifier.PACKAGE;
     }
 
+    // fixme we need a bit different approach for modifiers
     public static String appendModifiers(@Nonnull final List<Modifier> modifiers) {
         return modifiers.stream()
                 .filter(Utility::isAvailableModifier)
-                .map(Modifier::getCodeRepresentation)
+                .map(Utility::translateModifiers)
                 .collect(Collectors.joining(Codestyle.space()));
+    }
+
+    public static String translateModifiers(@Nonnull final Modifier modifier) {
+        if (modifier == Modifier.PACKAGE) {
+            return "internal";
+        }
+        return modifier.getCodeRepresentation();
     }
 
     public static String appendIndentation(final int count) {

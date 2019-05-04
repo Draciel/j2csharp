@@ -23,9 +23,10 @@ class ClassTranslator implements PartialTranslator<Class> {
 
         //todo handle annotations;
         final StringBuilder builder = new StringBuilder();
-        final int indentation = indentationCounter + 1;
+        final int indentationForNested = indentationCounter + 1;
 
-        builder.append(Utility.appendModifiers(input.getModifiers()))
+        builder.append(Utility.appendIndentation(indentationCounter))
+                .append(Utility.appendModifiers(input.getModifiers()))
                 .append(Codestyle.space())
                 .append("class")
                 .append(Codestyle.space()) // fixme handle interfaces and enums
@@ -35,24 +36,26 @@ class ClassTranslator implements PartialTranslator<Class> {
                 .append(Codestyle.newLine());
 
         input.getFields().stream()
-                .map(f -> fieldTranslator.translate(f, indentation))
+                .map(f -> fieldTranslator.translate(f, indentationForNested))
                 .forEach(f -> builder.append(Codestyle.newLine())
                         .append(f)
                         .append(Codestyle.newLine()));
 
         input.getConstructors().stream()
-                .map(c -> constructorTranslator.translate(c, indentation))
+                .map(c -> constructorTranslator.translate(c, indentationForNested))
                 .forEach(c -> builder.append(Codestyle.newLine())
                         .append(c)
                         .append(Codestyle.newLine()));
 
         input.getMethods().stream()
-                .map(c -> methodTranslator.translate(c, indentation))
+                .map(c -> methodTranslator.translate(c, indentationForNested))
                 .forEach(c -> builder.append(Codestyle.newLine())
                         .append(c)
                         .append(Codestyle.newLine()));
 
-        builder.append("}");
+        builder.append(Codestyle.newLine())
+                .append(Utility.appendIndentation(indentationCounter))
+                .append("}");
 
         return builder.toString();
     }

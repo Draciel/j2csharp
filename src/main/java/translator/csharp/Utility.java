@@ -17,7 +17,8 @@ class Utility {
 
     public static boolean isAvailableModifier(@Nonnull final Modifier modifier) {
         return modifier == Modifier.PUBLIC || modifier == Modifier.PRIVATE || modifier == Modifier.PROTECTED ||
-                modifier == Modifier.STATIC || modifier == Modifier.VOLATILE || modifier == Modifier.PACKAGE;
+                modifier == Modifier.STATIC || modifier == Modifier.VOLATILE || modifier == Modifier.PACKAGE ||
+                modifier == Modifier.ABSTRACT;
     }
 
     // fixme we need a bit different approach for modifiers
@@ -58,6 +59,11 @@ class Utility {
         return statements.stream()
                 .map(s -> appendIndentation(indentation) + s.getContent())
                 .collect(Collectors.joining(Codestyle.newLine()));
+    }
+
+    public static String appendPassedParameters(@Nonnull final List<String> passedParameters) {
+        return passedParameters.stream()
+                .collect(Collectors.joining("," + Codestyle.space()));
     }
 
     public static String appendInheritance(@Nonnull final String superClass,

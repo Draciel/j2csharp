@@ -21,6 +21,74 @@ class MethodVisitor extends Java9BaseVisitor<Method> {
     }
 
     @Override
+    public Method visitInterfaceMethodDeclaration(final Java9Parser.InterfaceMethodDeclarationContext ctx) {
+        final String name = ctx.methodHeader().methodDeclarator().identifier().getText();
+        final StatementVisitor statementVisitor = StatementVisitor.instance();
+        final ParameterVisitor parameterVisitor = ParameterVisitor.instance();
+        final AnnotationVisitor annotationVisitor = AnnotationVisitor.instance();
+
+        final List<Parameter> parameters = new ArrayList<>();
+
+        final Java9Parser.FormalParameterListContext formalParameterList = ctx.methodHeader()
+                .methodDeclarator().formalParameterList();
+
+        // no params case
+        if (formalParameterList != null) {
+
+            // two or more params case
+            if (formalParameterList.formalParameters() != null) {
+                parameters.addAll(formalParameterList.formalParameters().formalParameter()
+                        .stream()
+                        .map(fpc -> fpc.accept(parameterVisitor))
+                        .collect(Collectors.toList()));
+            }
+
+            // add last parameter as it is not added by method above (or just one if method has only one parameter)
+            parameters.add(formalParameterList
+                    .lastFormalParameter()
+                    .formalParameter()
+                    .accept(parameterVisitor));
+        }
+
+        final List<Statement> statements;
+        if (ctx.methodBody().block().blockStatements() == null) {
+            statements = Collections.singletonList(Statement.emptyStatement());
+        } else {
+            statements = ctx.methodBody()
+                    .block()
+                    .blockStatements()
+                    .blockStatement()
+                    .stream()
+                    .map(b -> b.accept(statementVisitor))
+                    .collect(Collectors.toList());
+        }
+
+        // fixme we can optimize modifiers flow a bit
+        final List<Annotation> annotations = ctx.interfaceMethodModifier().stream()
+                .filter(MethodVisitor::isAnnotation)
+                .map(cm -> cm.annotation().accept(annotationVisitor))
+                .collect(Collectors.toList());
+
+        final List<Modifier> modifiers = ctx.interfaceMethodModifier().stream()
+                .filter(fm -> !isAnnotation(fm))
+                .map(cm -> Modifier.of(cm.getText()))
+                .collect(Collectors.toList());
+
+        // check if class does have package private
+        final Optional<Modifier> accessModifier = modifiers.stream()
+                .filter(Modifier::isAccessModifier)
+                .findFirst();
+
+        if (!accessModifier.isPresent()) {
+            modifiers.add(Modifier.PACKAGE);
+        }
+
+        final String result = ctx.methodHeader().result().getText();
+
+        return new Method(name, parameters, statements, modifiers, annotations, result);
+    }
+
+    @Override
     public Method visitMethodDeclaration(Java9Parser.MethodDeclarationContext ctx) {
         final String name = ctx.methodHeader().methodDeclarator().identifier().getText();
         final StatementVisitor statementVisitor = StatementVisitor.instance();
@@ -89,6 +157,10 @@ class MethodVisitor extends Java9BaseVisitor<Method> {
     }
 
     private static boolean isAnnotation(@Nonnull final Java9Parser.MethodModifierContext ctx) {
+        return ctx.annotation() != null;
+    }
+
+    private static boolean isAnnotation(@Nonnull final Java9Parser.InterfaceMethodModifierContext ctx) {
         return ctx.annotation() != null;
     }
 

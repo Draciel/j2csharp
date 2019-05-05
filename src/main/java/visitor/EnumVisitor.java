@@ -1,78 +1,83 @@
 package visitor;
 
 import data.*;
-import data.Class;
 import data.Enum;
+import org.antlr.v4.runtime.RuleContext;
 import pl.jcsharp.grammar.Java9BaseVisitor;
 import pl.jcsharp.grammar.Java9Parser;
 import utility.Nonnull;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static java.util.Collections.emptyList;
 
-class ClassVisitor extends Java9BaseVisitor<Class> {
+class EnumVisitor extends Java9BaseVisitor<Enum> {
 
-    private ClassVisitor() {
+    private EnumVisitor() {
+        //no instance
     }
 
-    public static ClassVisitor instance() {
-        return HOLDER.INSTANCE;
+    public static EnumVisitor instance() {
+        return Holder.INSTANCE;
     }
 
     @Override
-    public Class visitClassDeclaration(Java9Parser.ClassDeclarationContext ctx) {
-        final String name = ctx.normalClassDeclaration().identifier().getText();
+    public Enum visitEnumDeclaration(final Java9Parser.EnumDeclarationContext ctx) {
+        final String name = ctx.identifier().getText();
         final FieldVisitor fieldVisitor = FieldVisitor.instance();
         final MethodVisitor methodVisitor = MethodVisitor.instance();
         final ConstructorVisitor constructorVisitor = ConstructorVisitor.instance();
         final AnnotationVisitor annotationVisitor = AnnotationVisitor.instance();
-        final TypeParameterVisitor typeParameterVisitor = TypeParameterVisitor.instance();
         final InterfaceVisitor interfaceVisitor = InterfaceVisitor.instance();
-        final EnumVisitor enumVisitor = EnumVisitor.instance();
+        final ClassVisitor classVisitor = ClassVisitor.instance();
 
-        final List<Method> methods = ctx.normalClassDeclaration().classBody().classBodyDeclaration().stream()
-                .filter(ClassVisitor::isMethod)
+        final List<Method> methods = ctx.enumBody().enumBodyDeclarations().classBodyDeclaration().stream()
+                .filter(EnumVisitor::isMethod)
                 .map(b -> b.classMemberDeclaration().methodDeclaration().accept(methodVisitor))
                 .collect(Collectors.toList());
 
-        final List<Field> fields = ctx.normalClassDeclaration().classBody().classBodyDeclaration().stream()
-                .filter(ClassVisitor::isField)
+        final List<Field> fields = ctx.enumBody().enumBodyDeclarations().classBodyDeclaration().stream()
+                .filter(EnumVisitor::isField)
                 .map(b -> b.classMemberDeclaration().fieldDeclaration().accept(fieldVisitor))
                 .collect(Collectors.toList());
 
-        final List<Constructor> constructors = ctx.normalClassDeclaration().classBody().classBodyDeclaration().stream()
-                .filter(ClassVisitor::isConstructor)
+        final List<Constructor> constructors = ctx.enumBody().enumBodyDeclarations().classBodyDeclaration().stream()
+                .filter(EnumVisitor::isConstructor)
                 .map(b -> b.constructorDeclaration().accept(constructorVisitor))
                 .collect(Collectors.toList());
 
         // fixme we can optimize modifiers flow a bit
-        final List<Annotation> annotations = ctx.normalClassDeclaration().classModifier().stream()
-                .filter(ClassVisitor::isAnnotation)
+        final List<Annotation> annotations = ctx.classModifier().stream()
+                .filter(EnumVisitor::isAnnotation)
                 .map(cm -> cm.annotation().accept(annotationVisitor))
                 .collect(Collectors.toList());
 
-        final List<Modifier> modifiers = ctx.normalClassDeclaration().classModifier().stream()
+        final List<Modifier> modifiers = ctx.classModifier().stream()
                 .filter(cm -> !isAnnotation(cm))
                 .map(cm -> Modifier.of(cm.getText()))
                 .collect(Collectors.toList());
 
-        final List<Interface> interfaces = ctx.normalClassDeclaration().classBody().classBodyDeclaration().stream()
-                .filter(ClassVisitor::isInterface)
+        final List<data.Class> classes = ctx.enumBody().enumBodyDeclarations().classBodyDeclaration().stream()
+                .filter(EnumVisitor::isClass)
+                .map(b -> b.classMemberDeclaration().classDeclaration().accept(classVisitor))
+                .collect(Collectors.toList());
+
+        final List<Interface> interfaces = ctx.enumBody().enumBodyDeclarations().classBodyDeclaration().stream()
+                .filter(EnumVisitor::isInterface)
                 .map(b -> b.classMemberDeclaration().interfaceDeclaration().accept(interfaceVisitor))
                 .collect(Collectors.toList());
 
-        final List<Enum> enums = ctx.normalClassDeclaration().classBody().classBodyDeclaration().stream()
-                .filter(ClassVisitor::isEnum)
-                .map(b -> b.classMemberDeclaration().classDeclaration().enumDeclaration().accept(enumVisitor))
+        final List<Enum> enums = ctx.enumBody().enumBodyDeclarations().classBodyDeclaration().stream()
+                .filter(EnumVisitor::isEnum)
+                .map(b -> b.classMemberDeclaration().classDeclaration().enumDeclaration().accept(this))
                 .collect(Collectors.toList());
 
-        final List<Class> classes = ctx.normalClassDeclaration().classBody().classBodyDeclaration().stream()
-                .filter(ClassVisitor::isClass)
-                .map(b -> b.classMemberDeclaration().classDeclaration().accept(this))
+        final List<EnumConstant> enumConstants = ctx.enumBody().enumConstantList().enumConstant().stream()
+                .map(b -> new EnumConstant(b.identifier().getText(), b.argumentList().expression().stream()
+                        .map(RuleContext::getText)
+                        .collect(Collectors.toList())))
                 .collect(Collectors.toList());
 
         // check if class does have package private
@@ -80,17 +85,9 @@ class ClassVisitor extends Java9BaseVisitor<Class> {
                 .filter(Modifier::isAccessModifier)
                 .findFirst();
 
-        final String superClass = ctx.normalClassDeclaration().superclass() == null ? "" :
-                ctx.normalClassDeclaration().superclass().classType().getText();
-
-        final List<String> superInterfaces = ctx.normalClassDeclaration().superinterfaces() == null ? emptyList() :
-                ctx.normalClassDeclaration().superinterfaces().interfaceTypeList().interfaceType().stream()
+        final List<String> superInterfaces = ctx.superinterfaces() == null ? emptyList() :
+                ctx.superinterfaces().interfaceTypeList().interfaceType().stream()
                         .map(i -> i.classType().getText())
-                        .collect(Collectors.toList());
-
-        final List<Generic> generics = ctx.normalClassDeclaration().typeParameters() == null ? Collections.emptyList() :
-                ctx.normalClassDeclaration().typeParameters().typeParameterList().typeParameter().stream()
-                        .map(tpc -> tpc.accept(typeParameterVisitor))
                         .collect(Collectors.toList());
 
         if (!accessModifier.isPresent()) {
@@ -98,7 +95,8 @@ class ClassVisitor extends Java9BaseVisitor<Class> {
         }
 
         // handle other things
-        return new Class(name, modifiers, constructors, methods, fields, annotations, superClass, superInterfaces, generics, classes, interfaces, enums);
+        return new Enum(name, modifiers, constructors, fields, methods, annotations, superInterfaces, classes,
+                interfaces, enums, enumConstants);
     }
 
     // fixme find better way...
@@ -130,8 +128,8 @@ class ClassVisitor extends Java9BaseVisitor<Class> {
         return ctx.annotation() != null;
     }
 
-    private static final class HOLDER {
-        private static final ClassVisitor INSTANCE = new ClassVisitor();
+    private static class Holder {
+        private static final EnumVisitor INSTANCE = new EnumVisitor();
     }
-}
 
+}

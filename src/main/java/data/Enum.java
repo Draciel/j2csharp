@@ -4,7 +4,7 @@ import utility.Nonnull;
 
 import java.util.List;
 
-public class Class {
+public class Enum {
 
     @Nonnull
     private final String name;
@@ -25,13 +25,7 @@ public class Class {
     private final List<Annotation> annotations;
 
     @Nonnull
-    private final String superClass;
-
-    @Nonnull
     private final List<String> superInterfaces;
-
-    @Nonnull
-    private final List<Generic> generics;
 
     @Nonnull
     private final List<Class> classes;
@@ -42,41 +36,32 @@ public class Class {
     @Nonnull
     private final List<Enum> enums;
 
-    public Class(@Nonnull final String name, @Nonnull final List<Modifier> modifiers,
-                 @Nonnull final List<Constructor> constructors,
-                 @Nonnull final List<Method> methods, @Nonnull List<Field> fields,
-                 @Nonnull final List<Annotation> annotations,
-                 @Nonnull final String superClass,
-                 @Nonnull final List<String> superInterfaces,
-                 @Nonnull final List<Generic> generics, @Nonnull final List<Class> classes,
-                 @Nonnull final List<Interface> interfaces, @Nonnull final List<Enum> enums) {
+    @Nonnull
+    private final List<EnumConstant> enumConstants;
+
+
+    public Enum(@Nonnull final String name, @Nonnull final List<Modifier> modifiers,
+                @Nonnull final List<Constructor> constructors, @Nonnull final List<Field> fields,
+                @Nonnull final List<Method> methods, @Nonnull final List<Annotation> annotations,
+                @Nonnull final List<String> superInterfaces, @Nonnull final List<Class> classes,
+                @Nonnull final List<Interface> interfaces, @Nonnull final List<Enum> enums,
+                @Nonnull final List<EnumConstant> enumConstants) {
         this.name = name;
         this.modifiers = modifiers;
         this.constructors = constructors;
-        this.methods = methods;
         this.fields = fields;
+        this.methods = methods;
         this.annotations = annotations;
-        this.superClass = superClass;
         this.superInterfaces = superInterfaces;
-        this.generics = generics;
         this.classes = classes;
         this.interfaces = interfaces;
         this.enums = enums;
+        this.enumConstants = enumConstants;
     }
 
     @Nonnull
     public String getName() {
         return name;
-    }
-
-    @Nonnull
-    public List<Method> getMethods() {
-        return methods;
-    }
-
-    @Nonnull
-    public List<Field> getFields() {
-        return fields;
     }
 
     @Nonnull
@@ -90,23 +75,23 @@ public class Class {
     }
 
     @Nonnull
+    public List<Field> getFields() {
+        return fields;
+    }
+
+    @Nonnull
+    public List<Method> getMethods() {
+        return methods;
+    }
+
+    @Nonnull
     public List<Annotation> getAnnotations() {
         return annotations;
     }
 
     @Nonnull
-    public String getSuperClass() {
-        return superClass;
-    }
-
-    @Nonnull
     public List<String> getSuperInterfaces() {
         return superInterfaces;
-    }
-
-    @Nonnull
-    public List<Generic> getGenerics() {
-        return generics;
     }
 
     @Nonnull
@@ -124,21 +109,25 @@ public class Class {
         return enums;
     }
 
+    @Nonnull
+    public List<EnumConstant> getEnumConstants() {
+        return enumConstants;
+    }
+
     @Override
     public String toString() {
-        return "Class{" +
+        return "Enum{" +
                 "name='" + name + '\'' +
                 ", modifiers=" + modifiers +
                 ", constructors=" + constructors +
                 ", fields=" + fields +
                 ", methods=" + methods +
                 ", annotations=" + annotations +
-                ", superClass='" + superClass + '\'' +
                 ", superInterfaces=" + superInterfaces +
-                ", generics=" + generics +
                 ", classes=" + classes +
                 ", interfaces=" + interfaces +
                 ", enums=" + enums +
+                ", enumConstants=" + enumConstants +
                 '}';
     }
 }

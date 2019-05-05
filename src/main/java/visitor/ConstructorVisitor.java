@@ -27,18 +27,29 @@ class ConstructorVisitor extends Java9BaseVisitor<Constructor> {
         final String className = ctx.constructorDeclarator().simpleTypeName().identifier().getText();
 
         final List<Parameter> parameters = new ArrayList<>();
-        parameters.add(ctx.constructorDeclarator()
-                .formalParameterList()
-                .lastFormalParameter()
-                .formalParameter()
-                .accept(parameterVisitor));
+        if (ctx.constructorDeclarator().formalParameterList() != null) {
+            parameters.add(ctx.constructorDeclarator()
+                    .formalParameterList()
+                    .lastFormalParameter()
+                    .formalParameter()
+                    .accept(parameterVisitor));
+        }
 
-        final List<Statement> statements = ctx.constructorBody()
-                .blockStatements()
-                .blockStatement()
-                .stream()
-                .map(b -> b.accept(statementVisitor))
-                .collect(Collectors.toList());
+        final List<Statement> statements = new ArrayList<>();
+
+        if (ctx.constructorBody().explicitConstructorInvocation() != null) {
+            statements.add(new Statement(ctx.constructorBody().explicitConstructorInvocation().getText()));
+        }
+
+        if (ctx.constructorBody().blockStatements() != null) {
+            final List<Statement> blockStatements = ctx.constructorBody()
+                    .blockStatements()
+                    .blockStatement()
+                    .stream()
+                    .map(b -> b.accept(statementVisitor))
+                    .collect(Collectors.toList());
+            statements.addAll(blockStatements);
+        }
 
         final AnnotationVisitor annotationVisitor = AnnotationVisitor.instance();
         // fixme we can optimize modifiers flow a bit

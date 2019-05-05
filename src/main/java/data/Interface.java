@@ -4,16 +4,13 @@ import utility.Nonnull;
 
 import java.util.List;
 
-public class Class {
+public class Interface {
 
     @Nonnull
     private final String name;
 
     @Nonnull
     private final List<Modifier> modifiers;
-
-    @Nonnull
-    private final List<Constructor> constructors;
 
     @Nonnull
     private final List<Field> fields;
@@ -25,42 +22,37 @@ public class Class {
     private final List<Annotation> annotations;
 
     @Nonnull
-    private final String superClass;
-
-    @Nonnull
     private final List<String> superInterfaces;
 
     @Nonnull
     private final List<Generic> generics;
 
     @Nonnull
-    private final List<Class> classes;
+    private final List<Interface> interfaces;
 
     @Nonnull
-    private final List<Interface> interfaces;
+    private final List<Class> classes;
 
     @Nonnull
     private final List<Enum> enums;
 
-    public Class(@Nonnull final String name, @Nonnull final List<Modifier> modifiers,
-                 @Nonnull final List<Constructor> constructors,
-                 @Nonnull final List<Method> methods, @Nonnull List<Field> fields,
-                 @Nonnull final List<Annotation> annotations,
-                 @Nonnull final String superClass,
-                 @Nonnull final List<String> superInterfaces,
-                 @Nonnull final List<Generic> generics, @Nonnull final List<Class> classes,
-                 @Nonnull final List<Interface> interfaces, @Nonnull final List<Enum> enums) {
+    public Interface(@Nonnull final String name, @Nonnull final List<Modifier> modifiers,
+                     @Nonnull final List<Field> fields, @Nonnull final List<Method> methods,
+                     @Nonnull final List<Annotation> annotations,
+                     @Nonnull final List<String> superInterfaces,
+                     @Nonnull final List<Generic> generics,
+                     @Nonnull final List<Interface> interfaces,
+                     @Nonnull final List<Class> classes,
+                     @Nonnull final List<Enum> enums) {
         this.name = name;
         this.modifiers = modifiers;
-        this.constructors = constructors;
-        this.methods = methods;
         this.fields = fields;
+        this.methods = methods;
         this.annotations = annotations;
-        this.superClass = superClass;
         this.superInterfaces = superInterfaces;
         this.generics = generics;
-        this.classes = classes;
         this.interfaces = interfaces;
+        this.classes = classes;
         this.enums = enums;
     }
 
@@ -70,8 +62,8 @@ public class Class {
     }
 
     @Nonnull
-    public List<Method> getMethods() {
-        return methods;
+    public List<Modifier> getModifiers() {
+        return modifiers;
     }
 
     @Nonnull
@@ -80,23 +72,13 @@ public class Class {
     }
 
     @Nonnull
-    public List<Modifier> getModifiers() {
-        return modifiers;
-    }
-
-    @Nonnull
-    public List<Constructor> getConstructors() {
-        return constructors;
+    public List<Method> getMethods() {
+        return methods;
     }
 
     @Nonnull
     public List<Annotation> getAnnotations() {
         return annotations;
-    }
-
-    @Nonnull
-    public String getSuperClass() {
-        return superClass;
     }
 
     @Nonnull
@@ -110,13 +92,13 @@ public class Class {
     }
 
     @Nonnull
-    public List<Class> getClasses() {
-        return classes;
+    public List<Interface> getInterfaces() {
+        return interfaces;
     }
 
     @Nonnull
-    public List<Interface> getInterfaces() {
-        return interfaces;
+    public List<Class> getClasses() {
+        return classes;
     }
 
     @Nonnull
@@ -126,18 +108,16 @@ public class Class {
 
     @Override
     public String toString() {
-        return "Class{" +
+        return "Interface{" +
                 "name='" + name + '\'' +
                 ", modifiers=" + modifiers +
-                ", constructors=" + constructors +
                 ", fields=" + fields +
                 ", methods=" + methods +
                 ", annotations=" + annotations +
-                ", superClass='" + superClass + '\'' +
                 ", superInterfaces=" + superInterfaces +
                 ", generics=" + generics +
-                ", classes=" + classes +
                 ", interfaces=" + interfaces +
+                ", classes=" + classes +
                 ", enums=" + enums +
                 '}';
     }

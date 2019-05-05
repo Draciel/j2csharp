@@ -1,26 +1,25 @@
 package translator.csharp;
 
-import data.Class;
+import data.Interface;
 import translator.PartialTranslator;
 import utility.Nonnull;
 
-class ClassTranslator implements PartialTranslator<Class> {
+class InterfaceTranslator implements PartialTranslator<Interface> {
 
-    private ClassTranslator() {
+    private InterfaceTranslator() {
 
     }
 
-    public static ClassTranslator instance() {
+    public static InterfaceTranslator instance() {
         return Holder.INSTANCE;
     }
 
     @Nonnull
     @Override
-    public String translate(@Nonnull final Class input, final int indentationCounter) {
+    public String translate(@Nonnull final Interface input, final int indentationCounter) {
         final FieldTranslator fieldTranslator = FieldTranslator.instance();
-        final ConstructorTranslator constructorTranslator = ConstructorTranslator.instance();
         final MethodTranslator methodTranslator = MethodTranslator.instance();
-        final InterfaceTranslator interfaceTranslator = InterfaceTranslator.instance();
+        final ClassTranslator classTranslator = ClassTranslator.instance();
         final EnumTranslator enumTranslator = EnumTranslator.instance();
 
         //todo handle annotations;
@@ -30,10 +29,10 @@ class ClassTranslator implements PartialTranslator<Class> {
         builder.append(Utility.appendIndentation(indentationCounter))
                 .append(Utility.appendModifiers(input.getModifiers()))
                 .append(Codestyle.space())
-                .append("class")
+                .append("interface")
                 .append(Codestyle.space()) // fixme handle interfaces and enums
                 .append(input.getName())
-                .append(Utility.appendInheritance(input.getSuperClass(), input.getSuperInterfaces()))
+                .append(Utility.appendInheritance("", input.getSuperInterfaces()))
                 .append("{")
                 .append(Codestyle.newLine());
 
@@ -43,12 +42,6 @@ class ClassTranslator implements PartialTranslator<Class> {
                         .append(f)
                         .append(Codestyle.newLine()));
 
-        input.getConstructors().stream()
-                .map(c -> constructorTranslator.translate(c, indentationForNested))
-                .forEach(c -> builder.append(Codestyle.newLine())
-                        .append(c)
-                        .append(Codestyle.newLine()));
-
         input.getMethods().stream()
                 .map(c -> methodTranslator.translate(c, indentationForNested))
                 .forEach(c -> builder.append(Codestyle.newLine())
@@ -56,13 +49,13 @@ class ClassTranslator implements PartialTranslator<Class> {
                         .append(Codestyle.newLine()));
 
         input.getClasses().stream()
-                .map(c -> translate(c, indentationForNested))
+                .map(c -> classTranslator.translate(c, indentationForNested))
                 .forEach(c -> builder.append(Codestyle.newLine())
                         .append(c)
                         .append(Codestyle.newLine()));
 
         input.getInterfaces().stream()
-                .map(c -> interfaceTranslator.translate(c, indentationForNested))
+                .map(c -> translate(c, indentationForNested))
                 .forEach(c -> builder.append(Codestyle.newLine())
                         .append(c)
                         .append(Codestyle.newLine()));
@@ -80,10 +73,8 @@ class ClassTranslator implements PartialTranslator<Class> {
         return builder.toString();
     }
 
+
     private static final class Holder {
-        private static final ClassTranslator INSTANCE = new ClassTranslator();
+        private static final InterfaceTranslator INSTANCE = new InterfaceTranslator();
     }
-
-
 }
-

@@ -1,27 +1,29 @@
 package translator.csharp;
 
-import data.Class;
+import data.Enum;
 import translator.PartialTranslator;
 import utility.Nonnull;
 
-class ClassTranslator implements PartialTranslator<Class> {
+import java.util.stream.Collectors;
 
-    private ClassTranslator() {
+class EnumTranslator implements PartialTranslator<Enum> {
 
+    private EnumTranslator() {
+        //no instance
     }
 
-    public static ClassTranslator instance() {
+    public static EnumTranslator instance() {
         return Holder.INSTANCE;
     }
 
     @Nonnull
     @Override
-    public String translate(@Nonnull final Class input, final int indentationCounter) {
+    public String translate(@Nonnull final Enum input, final int indentationCounter) {
         final FieldTranslator fieldTranslator = FieldTranslator.instance();
         final ConstructorTranslator constructorTranslator = ConstructorTranslator.instance();
         final MethodTranslator methodTranslator = MethodTranslator.instance();
         final InterfaceTranslator interfaceTranslator = InterfaceTranslator.instance();
-        final EnumTranslator enumTranslator = EnumTranslator.instance();
+        final ClassTranslator classTranslator = ClassTranslator.instance();
 
         //todo handle annotations;
         final StringBuilder builder = new StringBuilder();
@@ -30,11 +32,18 @@ class ClassTranslator implements PartialTranslator<Class> {
         builder.append(Utility.appendIndentation(indentationCounter))
                 .append(Utility.appendModifiers(input.getModifiers()))
                 .append(Codestyle.space())
-                .append("class")
+                .append("enum")
                 .append(Codestyle.space()) // fixme handle interfaces and enums
                 .append(input.getName())
-                .append(Utility.appendInheritance(input.getSuperClass(), input.getSuperInterfaces()))
+                .append(Utility.appendInheritance("", input.getSuperInterfaces()))
                 .append("{")
+                .append(Codestyle.newLine())
+                .append(Codestyle.newLine())
+                .append(Utility.appendIndentation(indentationForNested))
+                .append(input.getEnumConstants().stream()
+                        .map(ec -> ec.getContantName() + "(" + Utility.appendPassedParameters(ec.getPassedParameters()) + ")")
+                        .collect(Collectors.joining("," + Codestyle.space())))
+                .append(";")
                 .append(Codestyle.newLine());
 
         input.getFields().stream()
@@ -56,7 +65,7 @@ class ClassTranslator implements PartialTranslator<Class> {
                         .append(Codestyle.newLine()));
 
         input.getClasses().stream()
-                .map(c -> translate(c, indentationForNested))
+                .map(c -> classTranslator.translate(c, indentationForNested))
                 .forEach(c -> builder.append(Codestyle.newLine())
                         .append(c)
                         .append(Codestyle.newLine()));
@@ -68,7 +77,7 @@ class ClassTranslator implements PartialTranslator<Class> {
                         .append(Codestyle.newLine()));
 
         input.getEnums().stream()
-                .map(c -> enumTranslator.translate(c, indentationForNested))
+                .map(c -> translate(c, indentationForNested))
                 .forEach(c -> builder.append(Codestyle.newLine())
                         .append(c)
                         .append(Codestyle.newLine()));
@@ -81,9 +90,7 @@ class ClassTranslator implements PartialTranslator<Class> {
     }
 
     private static final class Holder {
-        private static final ClassTranslator INSTANCE = new ClassTranslator();
+        private static final EnumTranslator INSTANCE = new EnumTranslator();
     }
 
-
 }
-

@@ -1,5 +1,6 @@
 package samples;
 
+import java.io.Serializable;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
@@ -7,7 +8,7 @@ import java.util.function.Consumer;
 import static java.lang.String.format;
 
 @Deprecated
-final class Heater<T extends Consumer<? super Consumer<? extends Consumer<T>>>, VH extends Object>
+class Heater<T extends Consumer<? super Consumer<? extends Consumer<T>>>, VH extends Object>
         extends Object implements Consumer<T> {
 
     public static final int OPTIMAL_TEMP = 10;
@@ -66,5 +67,50 @@ final class Heater<T extends Consumer<? super Consumer<? extends Consumer<T>>>, 
     @Override
     public void accept(final T t) {
 
+    }
+
+    enum EngineType {
+        ELECTRIC("ELC"), STEAM("STM");
+
+        private final String digest;
+
+        EngineType(final String digest) {
+            this.digest = digest;
+        }
+
+    }
+
+    interface Engine extends Serializable {
+
+        void start();
+
+        int stop();
+
+    }
+
+    public static abstract class BaseEngine implements Engine {
+
+        protected final int capacity;
+
+        public BaseEngine(final int capacity) {
+            this.capacity = capacity;
+        }
+
+        @Override
+        public void start() {
+            System.out.println("Starting ...!");
+        }
+    }
+
+    public static class EngineImpl extends BaseEngine {
+
+        public EngineImpl() {
+            super(16);
+        }
+
+        @Override
+        public int stop() {
+            return 0;
+        }
     }
 }

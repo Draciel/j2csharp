@@ -1,10 +1,6 @@
 package samples;
 
-import java.io.Serializable;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.function.Consumer;
-import java.util.function.Function;
+import samples.atomic.FastBoolean;
 
 import static java.lang.String.format;
 
@@ -17,7 +13,7 @@ class Heater<T extends Function<String, Object>, T2 extends Object> extends Obje
     private static final String KEEP_TEMPERATURE_MESSAGE = "Keeping temperature";
     private final int maxTemp;
     private final TimeUnit timeUnit = TimeUnit.SECONDS;
-    private final AtomicBoolean atomicBoolean = new AtomicBoolean();
+    private final FastBoolean fastBoolean = new FastBoolean();
     private int currentTemp = 0;
     private long keepTemperatureTimeInMs = 0;
     private boolean keepStable;
@@ -74,11 +70,6 @@ class Heater<T extends Function<String, Object>, T2 extends Object> extends Obje
         return 0;
     }
 
-    @Override
-    public Consumer<T> andThen(final Consumer<? super T> consumer) {
-        return null;
-    }
-
     enum EngineType {
         ELECTRIC("ELC"), STEAM("STM");
 
@@ -90,7 +81,7 @@ class Heater<T extends Function<String, Object>, T2 extends Object> extends Obje
 
     }
 
-    interface Engine extends Serializable {
+    interface Engine extends JustEmpty {
 
         void start();
 

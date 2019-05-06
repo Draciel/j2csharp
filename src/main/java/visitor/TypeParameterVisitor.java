@@ -29,7 +29,7 @@ class TypeParameterVisitor extends Java9BaseVisitor<Generic> {
             if (ctx.typeBound().classOrInterfaceType() != null) {
                 generic = ctx.typeBound().classOrInterfaceType().accept(wildcardVisitor);
             } else {
-                return new Generic(typeName, ctx.typeBound().typeVariable().getText(), "", false, Collections.emptyList());
+                return new Generic(typeName, ctx.typeBound().typeVariable().getText(), ctx.typeBound().EXTENDS().getText(), false, Collections.emptyList());
             }
         } else {
             generic = Collections.emptyList();

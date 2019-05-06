@@ -8,13 +8,13 @@ import java.util.List;
 public class Generic {
 
     @Nonnull
-    private final String typeParameter;
+    private final String typeParameter; // T
 
     @Nullable
-    private final String type;
+    private final String type; // Class<T>, kinda code smell
 
     @Nonnull
-    private final String boundType;
+    private final String boundType; //extends or super
 
     @Nullable
     private final List<Generic> boundedType;

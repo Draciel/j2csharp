@@ -1,11 +1,13 @@
 package translator.csharp;
 
+import data.Generic;
 import data.Modifier;
 import data.Parameter;
 import data.Statement;
 import utility.Nonnull;
 
 import java.util.List;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -77,6 +79,53 @@ class Utility {
         final String formattedSuperInterfaces = superInterfaces.stream().collect(Collectors.joining(
                 "," + Codestyle.space(), prefixSuperInterfaces, ""));
 
-        return Codestyle.space() + ":" + Codestyle.space() + superClass + formattedSuperInterfaces + Codestyle.space();
+        return Codestyle.space() + ":" + Codestyle.space() + superClass + formattedSuperInterfaces;
     }
+
+    public static String appendGenerics(@Nonnull final List<Generic> generics, final int indentation) {
+        final StringBuilder builder = new StringBuilder();
+        generics.stream()
+                .filter(filterWildcards())
+                .forEach(g -> builder
+                        .append(Codestyle.newLine())
+                        .append(appendIndentation(indentation))
+                        .append("where")
+                        .append(Codestyle.space())
+                        .append(g.getTypeParameter())
+                        .append(Codestyle.space())
+                        .append(":")
+                        .append(Codestyle.space())
+                        .append(formatNestedGeneric(g)));
+
+        return builder.toString();
+    }
+
+    private static Predicate<? super Generic> filterWildcards() {
+        return g -> {
+            if (g.isWildcard()) {
+                System.out.println("Wildcards are not supported in C#");
+            }
+            return !g.isWildcard();
+        };
+    }
+
+    private static String formatNestedGeneric(@Nonnull final Generic generic) {
+        if (generic.getType() != null) {
+            return generic.getType();
+        }
+
+        final String type = generic.getBoundedType().get(0).getType();
+
+        final StringBuilder builder = new StringBuilder();
+
+        return builder.append(type)
+                .append("<")
+                .append(generic.getBoundedType().stream()
+                        .filter(filterWildcards())
+                        .map(Generic::getTypeParameter)
+                        .collect(Collectors.joining(", ")))
+                .append(">")
+                .toString();
+    }
+
 }

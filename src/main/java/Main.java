@@ -4,8 +4,8 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import parser.SimpleParser;
 import pl.jcsharp.grammar.Java9Lexer;
 import pl.jcsharp.grammar.Java9Parser;
-import translator.csharp.CSharpTranslator;
 import translator.Translator;
+import translator.csharp.CSharpTranslator;
 import visitor.SimpleJava9Parser;
 
 import java.io.IOException;

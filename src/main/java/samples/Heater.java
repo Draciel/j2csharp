@@ -4,12 +4,12 @@ import java.io.Serializable;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 import static java.lang.String.format;
 
 @Deprecated
-class Heater<T extends Consumer<? super Consumer<? extends Consumer<T>>>, VH extends Object>
-        extends Object implements Consumer<T> {
+class Heater<T extends Function<String, Object>, T2 extends Object> extends Object implements Consumer<T>, Comparable<T2> {
 
     public static final int OPTIMAL_TEMP = 10;
     private static final String HEATING_MESSAGE = "Heating %s";
@@ -23,7 +23,7 @@ class Heater<T extends Consumer<? super Consumer<? extends Consumer<T>>>, VH ext
     private boolean keepStable;
     private T adapter;
 
-    private Heater(final int maxTemp) {
+    protected Heater(final int maxTemp) {
         this.maxTemp = maxTemp;
     }
 
@@ -67,6 +67,16 @@ class Heater<T extends Consumer<? super Consumer<? extends Consumer<T>>>, VH ext
     @Override
     public void accept(final T t) {
 
+    }
+
+    @Override
+    public int compareTo(final T2 t2) {
+        return 0;
+    }
+
+    @Override
+    public Consumer<T> andThen(final Consumer<? super T> consumer) {
+        return null;
     }
 
     enum EngineType {

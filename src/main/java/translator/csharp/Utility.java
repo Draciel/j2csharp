@@ -82,7 +82,7 @@ class Utility {
         return Codestyle.space() + ":" + Codestyle.space() + superClass + formattedSuperInterfaces;
     }
 
-    public static String appendGenerics(@Nonnull final List<Generic> generics, final int indentation) {
+    public static String appendGenericsBounds(@Nonnull final List<Generic> generics, final int indentation) {
         final StringBuilder builder = new StringBuilder();
         generics.stream()
                 .filter(filterWildcards())
@@ -96,6 +96,23 @@ class Utility {
                         .append(":")
                         .append(Codestyle.space())
                         .append(formatNestedGeneric(g)));
+
+        return builder.toString();
+    }
+
+    public static String appendGenericsParameters(@Nonnull final List<Generic> generics) {
+        if (generics.isEmpty()) {
+            return "";
+        }
+
+        final StringBuilder builder = new StringBuilder();
+
+        builder.append("<")
+                .append(generics.stream()
+                        .filter(filterWildcards())
+                        .map(Generic::getTypeParameter)
+                        .collect(Collectors.joining("," + Codestyle.space())))
+                .append(">");
 
         return builder.toString();
     }
@@ -114,6 +131,10 @@ class Utility {
             return generic.getType();
         }
 
+        if (generic.getBoundedType().isEmpty()) {
+            return generic.getTypeParameter();
+        }
+
         final String type = generic.getBoundedType().get(0).getType();
 
         final StringBuilder builder = new StringBuilder();
@@ -123,7 +144,7 @@ class Utility {
                 .append(generic.getBoundedType().stream()
                         .filter(filterWildcards())
                         .map(Generic::getTypeParameter)
-                        .collect(Collectors.joining(", ")))
+                        .collect(Collectors.joining("," + Codestyle.space())))
                 .append(">")
                 .toString();
     }

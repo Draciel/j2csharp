@@ -31,10 +31,11 @@ class ClassTranslator implements PartialTranslator<Class> {
                 .append(Utility.appendModifiers(input.getModifiers()))
                 .append(Codestyle.space())
                 .append("class")
-                .append(Codestyle.space()) // fixme handle interfaces and enums
+                .append(Codestyle.space())
                 .append(input.getName())
+                .append(Utility.appendGenericsParameters(input.getGenerics()))
                 .append(Utility.appendInheritance(input.getSuperClass(), input.getSuperInterfaces()))
-                .append(Utility.appendGenerics(input.getGenerics(), indentationForNested))
+                .append(Utility.appendGenericsBounds(input.getGenerics(), indentationForNested))
                 .append(Codestyle.space())
                 .append("{")
                 .append(Codestyle.newLine());

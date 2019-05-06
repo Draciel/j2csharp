@@ -1,5 +1,7 @@
 package data;
 
+import utility.Nullable;
+
 import java.util.List;
 
 public class File {
@@ -8,12 +10,22 @@ public class File {
 
     private final List<Import> imports;
 
+    @Nullable
     private final Class clazz;
 
-    public File(final String packageName, final List<Import> imports, final Class clazz) {
+    @Nullable
+    private final Enum enumm;
+
+    @Nullable
+    private final Interface interfacee;
+
+    public File(final String packageName, final List<Import> imports, final Class clazz,
+                final Enum enumm, final Interface interfacee) {
         this.packageName = packageName;
         this.imports = imports;
         this.clazz = clazz;
+        this.enumm = enumm;
+        this.interfacee = interfacee;
     }
 
     public String getPackageName() {
@@ -24,8 +36,19 @@ public class File {
         return imports;
     }
 
+    @Nullable
     public Class getClazz() {
         return clazz;
+    }
+
+    @Nullable
+    public Enum getEnum() {
+        return enumm;
+    }
+
+    @Nullable
+    public Interface getInterface() {
+        return interfacee;
     }
 
     @Override
@@ -34,6 +57,8 @@ public class File {
                 "packageName='" + packageName + '\'' +
                 ", imports=" + imports +
                 ", clazz=" + clazz +
+                ", enumm=" + enumm +
+                ", interfacee=" + interfacee +
                 '}';
     }
 }

@@ -1,8 +1,8 @@
 package visitor;
 
+import data.*;
 import data.Class;
-import data.File;
-import data.Import;
+import data.Enum;
 import pl.jcsharp.grammar.Java9BaseVisitor;
 import pl.jcsharp.grammar.Java9Parser;
 
@@ -21,6 +21,8 @@ class FileVisitor extends Java9BaseVisitor<File> {
     @Override
     public File visitOrdinaryCompilation(final Java9Parser.OrdinaryCompilationContext ctx) {
         final ClassVisitor classVisitor = ClassVisitor.instance();
+        final EnumVisitor enumVisitor = EnumVisitor.instance();
+        final InterfaceVisitor interfaceVisitor = InterfaceVisitor.instance();
         final ImportVisitor importVisitor = ImportVisitor.instance();
 
         final String packageName = ctx.packageDeclaration().packageName().identifier().getText();
@@ -31,10 +33,20 @@ class FileVisitor extends Java9BaseVisitor<File> {
                 .collect(Collectors.toList());
 
         //fixme handle multiple classes in one file
-        final Class clazz = ctx.typeDeclaration(0).classDeclaration()
-                .accept(classVisitor);
+        Class clazz = null;
+        Enum enumm = null;
+        Interface interfacee = null;
+        if (ctx.typeDeclaration(0).interfaceDeclaration() != null) {
+            interfacee = ctx.typeDeclaration(0).interfaceDeclaration().accept(interfaceVisitor);
+        } else if (ctx.typeDeclaration(0).classDeclaration() != null && ctx.typeDeclaration(0).classDeclaration().normalClassDeclaration() != null) {
+            clazz = ctx.typeDeclaration(0).classDeclaration().accept(classVisitor);
+        } else if (ctx.typeDeclaration(0).classDeclaration().enumDeclaration() != null) {
+            enumm = ctx.typeDeclaration(0).classDeclaration().enumDeclaration().accept(enumVisitor);
+        } else {
+            throw new IllegalArgumentException("This type of object is not supported");
+        }
 
-        return new File(packageName, imports, clazz);
+        return new File(packageName, imports, clazz, enumm, interfacee);
     }
 
     private static final class Holder {

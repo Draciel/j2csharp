@@ -9,22 +9,33 @@ import translator.csharp.CSharpTranslator;
 import visitor.SimpleJava9Parser;
 
 import java.io.IOException;
+import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Main {
 
     public static void main(String[] args) throws IOException {
-        final Java9Lexer lexer = new Java9Lexer(
-                CharStreams.fromPath(Paths.get("src/main/java/samples/Heater.java")));
-        final CommonTokenStream tokens = new CommonTokenStream(lexer);
-        final Java9Parser parser = new Java9Parser(tokens);
-
-        // todo refactor at some point to handle multiple files
         final SimpleParser visitor = new SimpleJava9Parser();
-        final File file = visitor.parse(parser.compilationUnit());
         final Translator translator = new CSharpTranslator();
-        translator.translate(file);
 
-//        System.out.println("Class " + file.toString());
+        final List<Path> files = new ArrayList<>();
+        files.add(Paths.get("src/main/java/samples/Heater.java"));
+        files.add(Paths.get("src/main/java/samples/Function.java"));
+        files.add(Paths.get("src/main/java/samples/Consumer.java"));
+        files.add(Paths.get("src/main/java/samples/JustEmpty.java"));
+        files.add(Paths.get("src/main/java/samples/TimeUnit.java"));
+        files.add(Paths.get("src/main/java/samples/atomic/FastBoolean.java"));
+        files.add(Paths.get("src/main/java/samples/comparable/Comparable.java"));
+
+        for (int i = 0; i < files.size(); i++) {
+            final Java9Lexer lexer = new Java9Lexer(CharStreams.fromPath(files.get(i)));
+            final CommonTokenStream tokens = new CommonTokenStream(lexer);
+            final Java9Parser parser = new Java9Parser(tokens);
+
+            final File file = visitor.parse(parser.compilationUnit());
+            translator.translate(file, files.get(i));
+        }
     }
 }

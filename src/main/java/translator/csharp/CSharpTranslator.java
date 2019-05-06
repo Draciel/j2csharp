@@ -6,19 +6,32 @@ import translator.Translator;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 
 public class CSharpTranslator implements Translator {
 
     @Override
-    public void translate(final File input) {
+    public void translate(final File input, final Path path) {
         final ImportTranslator importTranslator = ImportTranslator.instance();
         final StringBuilder fileBuilder = new StringBuilder();
+        final ClassTranslator classTranslator = ClassTranslator.instance();
+        final InterfaceTranslator interfaceTranslator = InterfaceTranslator.instance();
+        final EnumTranslator enumTranslator = EnumTranslator.instance();
 
         input.getImports().stream()
                 .map(f -> importTranslator.translate(f, 0))
                 .forEach(f -> fileBuilder.append(f).append(Codestyle.newLine()));
+
+        final String translationOutput;
+        if (input.getClazz() != null) {
+            translationOutput = classTranslator.translate(input.getClazz(), 1);
+        } else if (input.getInterface() != null) {
+            translationOutput = interfaceTranslator.translate(input.getInterface(), 1);
+        } else if (input.getEnum() != null) {
+            translationOutput = enumTranslator.translate(input.getEnum(), 1);
+        } else {
+            throw new IllegalArgumentException("Unsupported object typee!");
+        }
 
         fileBuilder
                 .append(Codestyle.newLine())
@@ -30,13 +43,15 @@ public class CSharpTranslator implements Translator {
                 .append(Codestyle.newLine());
 
         fileBuilder.append(Codestyle.newLine())
-                .append(ClassTranslator.instance().translate(input.getClazz(), 1))
+                .append(translationOutput)
                 .append(Codestyle.newLine())
                 .append("}");
 
-        final Path path = Paths.get("src/main/java/samples/Heater.cs");
+        final String fileName = path.getFileName().toString();
+
+        final Path writePath = path.getParent().resolve(fileName.replace(".java", ".cs"));
         try {
-            Files.write(path, fileBuilder.toString().getBytes(), StandardOpenOption.CREATE);
+            Files.write(writePath, fileBuilder.toString().getBytes(), StandardOpenOption.CREATE);
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -33,7 +33,7 @@ class EnumTranslator implements PartialTranslator<Enum> {
                 .append(Utility.appendModifiers(input.getModifiers()))
                 .append(Codestyle.space())
                 .append("enum")
-                .append(Codestyle.space()) // fixme handle interfaces and enums
+                .append(Codestyle.space())
                 .append(input.getName())
                 .append(Utility.appendInheritance("", input.getSuperInterfaces()))
                 .append("{")
@@ -41,7 +41,8 @@ class EnumTranslator implements PartialTranslator<Enum> {
                 .append(Codestyle.newLine())
                 .append(Utility.appendIndentation(indentationForNested))
                 .append(input.getEnumConstants().stream()
-                        .map(ec -> ec.getContantName() + "(" + Utility.appendPassedParameters(ec.getPassedParameters()) + ")")
+                        .map(ec -> ec.getPassedParameters().isEmpty() ? ec.getContantName() :
+                                ec.getContantName() + "(" + Utility.appendPassedParameters(ec.getPassedParameters()) + ")")
                         .collect(Collectors.joining("," + Codestyle.space())))
                 .append(";")
                 .append(Codestyle.newLine());

@@ -30,9 +30,12 @@ class InterfaceTranslator implements PartialTranslator<Interface> {
                 .append(Utility.appendModifiers(input.getModifiers()))
                 .append(Codestyle.space())
                 .append("interface")
-                .append(Codestyle.space()) // fixme handle interfaces and enums
+                .append(Codestyle.space())
                 .append(input.getName())
+                .append(Utility.appendGenericsParameters(input.getGenerics()))
                 .append(Utility.appendInheritance("", input.getSuperInterfaces()))
+                .append(Utility.appendGenericsBounds(input.getGenerics(), indentationForNested))
+                .append(Codestyle.space())
                 .append("{")
                 .append(Codestyle.newLine());
 

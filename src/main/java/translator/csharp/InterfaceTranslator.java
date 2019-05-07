@@ -1,10 +1,25 @@
 package translator.csharp;
 
 import data.Interface;
+import data.Modifier;
 import translator.ComponentTranslator;
 import utility.Nonnull;
 
+import java.util.List;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
 class InterfaceTranslator implements ComponentTranslator<Interface> {
+
+    private static Function<Modifier, Modifier> MODIFIER_TRANSFORMER = modifier -> {
+        switch (modifier) {
+            case PACKAGE:
+                return Modifier.INTERNAL;
+
+            default:
+                return modifier;
+        }
+    };
 
     private InterfaceTranslator() {
 
@@ -27,7 +42,7 @@ class InterfaceTranslator implements ComponentTranslator<Interface> {
         final int indentationForNested = indentationCounter + 1;
 
         builder.append(Utility.appendIndentation(indentationCounter))
-                .append(Utility.appendModifiers(input.getModifiers()))
+                .append(Utility.appendModifiers(translateModifiers(input.getModifiers())))
                 .append(Codestyle.space())
                 .append("interface")
                 .append(Codestyle.space())
@@ -76,6 +91,17 @@ class InterfaceTranslator implements ComponentTranslator<Interface> {
         return builder.toString();
     }
 
+    private static List<Modifier> translateModifiers(@Nonnull final List<Modifier> modifiers) {
+        return modifiers.stream()
+                .filter(InterfaceTranslator::isAvailableModifier)
+                .map(MODIFIER_TRANSFORMER)
+                .collect(Collectors.toList());
+    }
+
+    private static boolean isAvailableModifier(@Nonnull final Modifier modifier) {
+        return modifier == Modifier.PUBLIC || modifier == Modifier.PRIVATE || modifier == Modifier.PROTECTED ||
+                modifier == Modifier.STATIC || modifier == Modifier.PACKAGE;
+    }
 
     private static final class Holder {
         private static final InterfaceTranslator INSTANCE = new InterfaceTranslator();

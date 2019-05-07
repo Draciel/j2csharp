@@ -5,8 +5,14 @@ import utility.Nonnull;
 import java.util.Arrays;
 
 public enum Modifier {
-    PRIVATE("private", true), PACKAGE("", true), PROTECTED("protected", true), PUBLIC("public", true), STATIC("static", false), FINAL("final", false), TRANSIENT("transient", false), VOLATILE("volatile", false),
-    SYNCHRONIZED("synchronized", false), /*not used in c#*/ STRICTFP("strictfp", false), ABSTRACT("abstract", false);
+    //java modifiers
+    PRIVATE("private", true), PACKAGE("", true), PROTECTED("protected", true), PUBLIC("public", true),
+    STATIC("static", false), FINAL("final", false), TRANSIENT("transient", false), VOLATILE("volatile", false),
+    SYNCHRONIZED("synchronized", false), /*not used in c#*/ STRICTFP("strictfp", false), ABSTRACT("abstract", false),
+
+    //c# modifiers
+    /*final*/ READONLY("readonly", false), /*static final*/ CONST("const", false), INTERNAL("internal", true),
+    OVERRIDE("override", false);
 
     private final String codeRepresentation;
 

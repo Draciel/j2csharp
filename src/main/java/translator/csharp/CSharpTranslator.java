@@ -50,7 +50,7 @@ public class CSharpTranslator implements Translator {
         final Path outputPath = path.getParent().resolve(fileName.replace(".java", ".cs"));
         try {
             Files.write(outputPath, fileBuilder.toString().getBytes(), StandardOpenOption.CREATE);
-            System.out.println("Finished translation!");
+            System.out.println(fileName + " have been successfully translated!");
         } catch (IOException e) {
             e.printStackTrace();
             System.out.println("Translation finished with exception");

@@ -1,6 +1,7 @@
 package samples;
 
 import samples.atomic.FastBoolean;
+import samples.comparable.Comparable;
 
 import static java.lang.String.format;
 

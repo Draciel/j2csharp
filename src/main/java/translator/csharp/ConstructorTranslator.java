@@ -1,10 +1,25 @@
 package translator.csharp;
 
 import data.Constructor;
+import data.Modifier;
 import translator.ComponentTranslator;
 import utility.Nonnull;
 
+import java.util.List;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
 class ConstructorTranslator implements ComponentTranslator<Constructor> {
+
+    private static Function<Modifier, Modifier> MODIFIER_TRANSFORMER = modifier -> {
+        switch (modifier) {
+            case PACKAGE:
+                return Modifier.INTERNAL;
+
+            default:
+                return modifier;
+        }
+    };
 
     private ConstructorTranslator() {
         //no instance
@@ -19,7 +34,7 @@ class ConstructorTranslator implements ComponentTranslator<Constructor> {
     public String translate(@Nonnull final Constructor input, final int indentationCounter) {
         return new StringBuilder()
                 .append(Utility.appendIndentation(indentationCounter))
-                .append(Utility.appendModifiers(input.getModifiers()))
+                .append(Utility.appendModifiers(translateModifiers(input.getModifiers())))
                 .append(Codestyle.space())
                 .append(input.getClassName())
                 .append("(")
@@ -33,6 +48,18 @@ class ConstructorTranslator implements ComponentTranslator<Constructor> {
                 .append(Utility.appendIndentation(indentationCounter))
                 .append("}")
                 .toString();
+    }
+
+    private static List<Modifier> translateModifiers(@Nonnull final List<Modifier> modifiers) {
+        return modifiers.stream()
+                .filter(ConstructorTranslator::isAvailableModifier)
+                .map(MODIFIER_TRANSFORMER)
+                .collect(Collectors.toList());
+    }
+
+    private static boolean isAvailableModifier(@Nonnull final Modifier modifier) {
+        return modifier == Modifier.PUBLIC || modifier == Modifier.PRIVATE || modifier == Modifier.PROTECTED ||
+                modifier == Modifier.PACKAGE;
     }
 
     private static final class Holder {

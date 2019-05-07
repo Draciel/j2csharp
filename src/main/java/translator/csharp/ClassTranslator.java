@@ -1,10 +1,25 @@
 package translator.csharp;
 
 import data.Class;
+import data.Modifier;
 import translator.ComponentTranslator;
 import utility.Nonnull;
 
+import java.util.List;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
 class ClassTranslator implements ComponentTranslator<Class> {
+
+    private static Function<Modifier, Modifier> MODIFIER_TRANSFORMER = modifier -> {
+        switch (modifier) {
+            case PACKAGE:
+                return Modifier.INTERNAL;
+
+            default:
+                return modifier;
+        }
+    };
 
     private ClassTranslator() {
 
@@ -28,7 +43,7 @@ class ClassTranslator implements ComponentTranslator<Class> {
         final int indentationForNested = indentationCounter + 1;
 
         builder.append(Utility.appendIndentation(indentationCounter))
-                .append(Utility.appendModifiers(input.getModifiers()))
+                .append(Utility.appendModifiers(translateModifiers(input.getModifiers())))
                 .append(Codestyle.space())
                 .append("class")
                 .append(Codestyle.space())
@@ -81,6 +96,18 @@ class ClassTranslator implements ComponentTranslator<Class> {
                 .append("}");
 
         return builder.toString();
+    }
+
+    private static List<Modifier> translateModifiers(@Nonnull final List<Modifier> modifiers) {
+        return modifiers.stream()
+                .filter(ClassTranslator::isAvailableModifier)
+                .map(MODIFIER_TRANSFORMER)
+                .collect(Collectors.toList());
+    }
+
+    private static boolean isAvailableModifier(@Nonnull final Modifier modifier) {
+        return modifier == Modifier.PUBLIC || modifier == Modifier.PRIVATE || modifier == Modifier.PROTECTED ||
+                modifier == Modifier.PACKAGE || modifier == Modifier.ABSTRACT;
     }
 
     private static final class Holder {

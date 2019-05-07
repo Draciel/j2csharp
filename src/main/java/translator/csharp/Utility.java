@@ -1,6 +1,9 @@
 package translator.csharp;
 
-import data.*;
+import data.Generic;
+import data.Modifier;
+import data.Parameter;
+import data.Statement;
 import utility.Nonnull;
 
 import java.util.List;
@@ -14,25 +17,10 @@ class Utility {
         //no instance
     }
 
-    public static boolean isAvailableModifier(@Nonnull final Modifier modifier) {
-        return modifier == Modifier.PUBLIC || modifier == Modifier.PRIVATE || modifier == Modifier.PROTECTED ||
-                modifier == Modifier.STATIC || modifier == Modifier.VOLATILE || modifier == Modifier.PACKAGE ||
-                modifier == Modifier.ABSTRACT;
-    }
-
-    // fixme we need a bit different approach for modifiers
     public static String appendModifiers(@Nonnull final List<Modifier> modifiers) {
         return modifiers.stream()
-                .filter(Utility::isAvailableModifier)
-                .map(Utility::translateModifiers)
+                .map(Modifier::getCodeRepresentation)
                 .collect(Collectors.joining(Codestyle.space()));
-    }
-
-    public static String translateModifiers(@Nonnull final Modifier modifier) {
-        if (modifier == Modifier.PACKAGE) {
-            return "internal";
-        }
-        return modifier.getCodeRepresentation();
     }
 
     public static String appendIndentation(final int count) {

@@ -9,7 +9,7 @@ public class Field {
 
     private final String name;
 
-    private final String type;
+    private final Type type;
 
     private final List<Modifier> modifiers;
 
@@ -18,7 +18,7 @@ public class Field {
     private final Statement initializer;
 
     private Field(@Nonnull final String name,
-                  @Nonnull final String type,
+                  @Nonnull final Type type,
                   @Nonnull final List<Modifier> modifiers,
                   @Nonnull final List<Annotation> annotations,
                   @Nonnull final Statement initializer) {
@@ -30,7 +30,7 @@ public class Field {
     }
 
     public static Field of(@Nonnull final String name,
-                           @Nonnull final String type,
+                           @Nonnull final Type type,
                            @Nonnull final List<Modifier> list,
                            @Nonnull final List<Annotation> annotations,
                            @Nonnull final Statement statement) {
@@ -38,7 +38,7 @@ public class Field {
     }
 
     public static Field of(@Nonnull final String name,
-                           @Nonnull final String type,
+                           @Nonnull final Type type,
                            @Nonnull final List<Annotation> annotations,
                            @Nonnull final Statement statement,
                            @Nonnull final Modifier... modifiers) {
@@ -49,7 +49,7 @@ public class Field {
         return name;
     }
 
-    public String getType() {
+    public Type getType() {
         return type;
     }
 

@@ -6,11 +6,11 @@ public class Parameter {
 
     private final String name;
 
-    private final String type;
+    private final Type type;
 
     private final List<Annotation> annotations;
 
-    public Parameter(final String name, final String type, List<Annotation> annotations) {
+    public Parameter(final String name, final Type type, List<Annotation> annotations) {
         this.name = name;
         this.type = type;
         this.annotations = annotations;
@@ -20,7 +20,7 @@ public class Parameter {
         return name;
     }
 
-    public String getType() {
+    public Type getType() {
         return type;
     }
 

@@ -2,6 +2,7 @@ package visitor;
 
 import data.Annotation;
 import data.Parameter;
+import data.Type;
 import pl.jcsharp.grammar.Java9BaseVisitor;
 import pl.jcsharp.grammar.Java9Parser;
 import utility.Nonnull;
@@ -30,7 +31,7 @@ class ParameterVisitor extends Java9BaseVisitor<Parameter> {
         final String name = ctx.variableDeclaratorId().getText();
         final String type = ctx.unannType().getText();
 
-        return new Parameter(name, type, annotations);
+        return new Parameter(name, new Type(type), annotations);
     }
 
     private static boolean isAnnotation(@Nonnull final Java9Parser.VariableModifierContext ctx) {

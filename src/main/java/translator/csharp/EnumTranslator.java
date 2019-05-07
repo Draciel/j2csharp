@@ -1,12 +1,12 @@
 package translator.csharp;
 
 import data.Enum;
-import translator.PartialTranslator;
+import translator.ComponentTranslator;
 import utility.Nonnull;
 
 import java.util.stream.Collectors;
 
-class EnumTranslator implements PartialTranslator<Enum> {
+class EnumTranslator implements ComponentTranslator<Enum> {
 
     private EnumTranslator() {
         //no instance

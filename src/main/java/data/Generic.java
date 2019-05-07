@@ -8,21 +8,21 @@ import java.util.List;
 public class Generic {
 
     @Nonnull
-    private final String typeParameter; // T
+    private final Type typeParameter; // T
 
     @Nullable
-    private final String type; // Class<T>, kinda code smell
+    private final Type type; // Class, kinda code smell
 
     @Nonnull
     private final String boundType; //extends or super
 
     @Nullable
-    private final List<Generic> boundedType;
+    private final List<Generic> boundedType; // mainly wildcards, not supported in c#
 
     private final boolean isWildcard;
 
-    public Generic(@Nonnull final String typeParameter,
-                   @Nullable final String type,
+    public Generic(@Nonnull final Type typeParameter,
+                   @Nullable final Type type,
                    @Nonnull final String boundType,
                    final boolean isWildcard,
                    @Nullable final List<Generic> boundedType) {
@@ -34,7 +34,7 @@ public class Generic {
     }
 
     @Nonnull
-    public String getTypeParameter() {
+    public Type getTypeParameter() {
         return typeParameter;
     }
 
@@ -49,7 +49,7 @@ public class Generic {
     }
 
     @Nullable
-    public String getType() {
+    public Type getType() {
         return type;
     }
 

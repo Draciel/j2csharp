@@ -1,9 +1,6 @@
 package translator.csharp;
 
-import data.Generic;
-import data.Modifier;
-import data.Parameter;
-import data.Statement;
+import data.*;
 import utility.Nonnull;
 
 import java.util.List;
@@ -52,8 +49,9 @@ class Utility {
     }
 
     public static String appendParameters(@Nonnull final List<Parameter> parameters) {
+        final TypeBootstrap bootstrap = TypeBootstrap.instance();
         return parameters.stream()
-                .map(p -> p.getType() + Codestyle.space() + p.getName())
+                .map(p -> bootstrap.translate(p.getType(), 0) + Codestyle.space() + p.getName())
                 .collect(Collectors.joining("," + Codestyle.space()));
     }
 
@@ -91,7 +89,7 @@ class Utility {
                         .append(appendIndentation(indentation))
                         .append("where")
                         .append(Codestyle.space())
-                        .append(g.getTypeParameter())
+                        .append(g.getTypeParameter().literal())
                         .append(Codestyle.space())
                         .append(":")
                         .append(Codestyle.space())
@@ -110,7 +108,7 @@ class Utility {
         builder.append("<")
                 .append(generics.stream()
                         .filter(filterWildcards())
-                        .map(Generic::getTypeParameter)
+                        .map(g -> g.getTypeParameter().literal())
                         .collect(Collectors.joining("," + Codestyle.space())))
                 .append(">");
 
@@ -127,15 +125,16 @@ class Utility {
     }
 
     private static String formatNestedGeneric(@Nonnull final Generic generic) {
+        final TypeBootstrap bootstrap = TypeBootstrap.instance();
         if (generic.getType() != null) {
-            return generic.getType();
+            return bootstrap.translate(generic.getType(), 0);
         }
 
         if (generic.getBoundedType().isEmpty()) {
-            return generic.getTypeParameter();
+            return bootstrap.translate(generic.getTypeParameter(), 0);
         }
 
-        final String type = generic.getBoundedType().get(0).getType();
+        final String type = bootstrap.translate(generic.getBoundedType().get(0).getType(), 0);
 
         final StringBuilder builder = new StringBuilder();
 
@@ -144,6 +143,7 @@ class Utility {
                 .append(generic.getBoundedType().stream()
                         .filter(filterWildcards())
                         .map(Generic::getTypeParameter)
+                        .map(t -> bootstrap.translate(t, 0))
                         .collect(Collectors.joining("," + Codestyle.space())))
                 .append(">")
                 .toString();

@@ -1,9 +1,6 @@
 package visitor;
 
-import data.Annotation;
-import data.Field;
-import data.Modifier;
-import data.Statement;
+import data.*;
 import pl.jcsharp.grammar.Java9BaseVisitor;
 import pl.jcsharp.grammar.Java9Parser;
 import utility.Nonnull;
@@ -55,7 +52,7 @@ class FieldVisitor extends Java9BaseVisitor<Field> {
         final Statement initializer = variableDeclaratorContext.variableInitializer() == null ?
                 Statement.emptyStatement() : new Statement(variableDeclaratorContext.variableInitializer().getText());
 
-        return Field.of(name, type, modifiers, annotations, initializer);
+        return Field.of(name, new Type(type), modifiers, annotations, initializer);
     }
 
     @Override
@@ -92,7 +89,7 @@ class FieldVisitor extends Java9BaseVisitor<Field> {
         final Statement initializer = variableDeclaratorContext.variableInitializer() == null ?
                 Statement.emptyStatement() : new Statement(variableDeclaratorContext.variableInitializer().getText());
 
-        return Field.of(name, type, modifiers, annotations, initializer);
+        return Field.of(name, new Type(type), modifiers, annotations, initializer);
     }
 
     private static boolean isAnnotation(@Nonnull final Java9Parser.FieldModifierContext ctx) {

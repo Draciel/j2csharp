@@ -2,20 +2,20 @@ package data;
 
 public class Annotation {
 
-    private final String type;
+    private final String name;
 
-    public Annotation(String type) {
-        this.type = type;
+    public Annotation(String name) {
+        this.name = name;
     }
 
-    public String getType() {
-        return type;
+    public String getName() {
+        return name;
     }
 
     @Override
     public String toString() {
         return "Annotation{" +
-                "type='" + type + '\'' +
+                "name='" + name + '\'' +
                 '}';
     }
 }

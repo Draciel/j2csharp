@@ -1,10 +1,10 @@
 package translator.csharp;
 
 import data.Interface;
-import translator.PartialTranslator;
+import translator.ComponentTranslator;
 import utility.Nonnull;
 
-class InterfaceTranslator implements PartialTranslator<Interface> {
+class InterfaceTranslator implements ComponentTranslator<Interface> {
 
     private InterfaceTranslator() {
 

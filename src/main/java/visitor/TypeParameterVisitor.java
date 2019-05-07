@@ -1,6 +1,7 @@
 package visitor;
 
 import data.Generic;
+import data.Type;
 import pl.jcsharp.grammar.Java9BaseVisitor;
 import pl.jcsharp.grammar.Java9Parser;
 
@@ -29,13 +30,13 @@ class TypeParameterVisitor extends Java9BaseVisitor<Generic> {
             if (ctx.typeBound().classOrInterfaceType() != null) {
                 generic = ctx.typeBound().classOrInterfaceType().accept(wildcardVisitor);
             } else {
-                return new Generic(typeName, ctx.typeBound().typeVariable().getText(), ctx.typeBound().EXTENDS().getText(), false, Collections.emptyList());
+                return new Generic(new Type(typeName), new Type(ctx.typeBound().typeVariable().getText()), ctx.typeBound().EXTENDS().getText(), false, Collections.emptyList());
             }
         } else {
             generic = Collections.emptyList();
             boundType = "";
         }
-        return new Generic(typeName, null, boundType, false, generic);
+        return new Generic(new Type(typeName), null, boundType, false, generic);
     }
 
     private static class Holder {

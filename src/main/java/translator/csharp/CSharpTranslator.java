@@ -12,8 +12,8 @@ public class CSharpTranslator implements Translator {
 
     @Override
     public void translate(final File input, final Path path) {
-        final ImportTranslator importTranslator = ImportTranslator.instance();
         final StringBuilder fileBuilder = new StringBuilder();
+        final ImportTranslator importTranslator = ImportTranslator.instance();
         final ClassTranslator classTranslator = ClassTranslator.instance();
         final InterfaceTranslator interfaceTranslator = InterfaceTranslator.instance();
         final EnumTranslator enumTranslator = EnumTranslator.instance();
@@ -30,31 +30,30 @@ public class CSharpTranslator implements Translator {
         } else if (input.getEnum() != null) {
             translationOutput = enumTranslator.translate(input.getEnum(), 1);
         } else {
-            throw new IllegalArgumentException("Unsupported object typee!");
+            throw new IllegalArgumentException("Unsupported object type!");
         }
 
-        fileBuilder
-                .append(Codestyle.newLine())
+        fileBuilder.append(Codestyle.newLine())
                 .append("namespace")
                 .append(Codestyle.space())
                 .append(input.getPackageName())
                 .append(Codestyle.space())
                 .append("{")
-                .append(Codestyle.newLine());
-
-        fileBuilder.append(Codestyle.newLine())
+                .append(Codestyle.newLine())
+                .append(Codestyle.newLine())
                 .append(translationOutput)
                 .append(Codestyle.newLine())
                 .append("}");
 
         final String fileName = path.getFileName().toString();
 
-        final Path writePath = path.getParent().resolve(fileName.replace(".java", ".cs"));
+        final Path outputPath = path.getParent().resolve(fileName.replace(".java", ".cs"));
         try {
-            Files.write(writePath, fileBuilder.toString().getBytes(), StandardOpenOption.CREATE);
+            Files.write(outputPath, fileBuilder.toString().getBytes(), StandardOpenOption.CREATE);
+            System.out.println("Finished translation!");
         } catch (IOException e) {
             e.printStackTrace();
+            System.out.println("Translation finished with exception");
         }
-        System.out.println("Finished translation!");
     }
 }

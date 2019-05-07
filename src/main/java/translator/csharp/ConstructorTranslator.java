@@ -1,10 +1,10 @@
 package translator.csharp;
 
 import data.Constructor;
-import translator.PartialTranslator;
+import translator.ComponentTranslator;
 import utility.Nonnull;
 
-class ConstructorTranslator implements PartialTranslator<Constructor> {
+class ConstructorTranslator implements ComponentTranslator<Constructor> {
 
     private ConstructorTranslator() {
         //no instance

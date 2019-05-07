@@ -1,6 +1,7 @@
 package visitor;
 
 import data.Generic;
+import data.Type;
 import pl.jcsharp.grammar.Java9BaseVisitor;
 import pl.jcsharp.grammar.Java9Parser;
 import utility.Nonnull;
@@ -34,11 +35,11 @@ class WildcardTypeParameterVisitor extends Java9BaseVisitor<List<Generic>> {
                 final String typeParameter = wildcardContext.QUESTION().getText();
                 final String bound = getBound(wildcardContext.wildcardBounds());
                 final List<Generic> innerGenerics = wildcardContext.wildcardBounds().referenceType().classOrInterfaceType().accept(this);
-                generics.add(new Generic(typeParameter, type, bound, true, innerGenerics));
+                generics.add(new Generic(new Type(typeParameter), new Type(type), bound, true, innerGenerics));
             } else {
                 final String typeParameter = typeArgumentListContext.typeArgument().get(i).referenceType().getText();
                 final String bound = "";
-                generics.add(new Generic(typeParameter, type, bound, false, Collections.emptyList()));
+                generics.add(new Generic(new Type(typeParameter), new Type(type), bound, false, Collections.emptyList()));
             }
         }
 

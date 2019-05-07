@@ -1,10 +1,10 @@
 package translator.csharp;
 
 import data.Field;
-import translator.PartialTranslator;
+import translator.ComponentTranslator;
 import utility.Nonnull;
 
-class FieldTranslator implements PartialTranslator<Field> {
+class FieldTranslator implements ComponentTranslator<Field> {
 
     private FieldTranslator() {
         //no instance
@@ -17,11 +17,12 @@ class FieldTranslator implements PartialTranslator<Field> {
     @Nonnull
     @Override
     public String translate(@Nonnull final Field input, final int indentationCounter) {
+        final TypeBootstrap bootstrap = TypeBootstrap.instance();
         return new StringBuilder()
                 .append(Utility.appendIndentation(indentationCounter))
                 .append(Utility.appendModifiers(input.getModifiers()))
                 .append(Codestyle.space())
-                .append(input.getType())
+                .append(bootstrap.translate(input.getType(), 0))
                 .append(Codestyle.space())
                 .append(input.getName())
                 .append(Utility.appendInitializer(input.getInitializer()))

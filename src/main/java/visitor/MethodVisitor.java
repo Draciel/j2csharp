@@ -51,9 +51,15 @@ class MethodVisitor extends Java9BaseVisitor<Method> {
         }
 
         final List<Statement> statements;
-        if (ctx.methodBody().block().blockStatements() == null) {
+        final boolean isDeclaration;
+        if (ctx.methodBody().block() == null) {
             statements = Collections.singletonList(Statement.emptyStatement());
+            isDeclaration = true;
+        } else if (ctx.methodBody().block().blockStatements() == null) {
+            statements = Collections.singletonList(Statement.emptyStatement());
+            isDeclaration = false;
         } else {
+            isDeclaration = false;
             statements = ctx.methodBody()
                     .block()
                     .blockStatements()
@@ -85,7 +91,7 @@ class MethodVisitor extends Java9BaseVisitor<Method> {
 
         final String result = ctx.methodHeader().result().getText();
 
-        return new Method(name, parameters, statements, modifiers, annotations, result);
+        return new Method(name, parameters, statements, modifiers, annotations, result, isDeclaration);
     }
 
     @Override
@@ -119,8 +125,13 @@ class MethodVisitor extends Java9BaseVisitor<Method> {
         }
 
         final List<Statement> statements;
-        if (ctx.methodBody().block().blockStatements() == null) {
+        final boolean isDeclaration;
+        if (ctx.methodBody().block() == null) {
             statements = Collections.singletonList(Statement.emptyStatement());
+            isDeclaration = true;
+        } else if (ctx.methodBody().block().blockStatements() == null) {
+            statements = Collections.singletonList(Statement.emptyStatement());
+            isDeclaration = false;
         } else {
             statements = ctx.methodBody()
                     .block()
@@ -129,6 +140,7 @@ class MethodVisitor extends Java9BaseVisitor<Method> {
                     .stream()
                     .map(b -> b.accept(statementVisitor))
                     .collect(Collectors.toList());
+            isDeclaration = false;
         }
 
         // fixme we can optimize modifiers flow a bit
@@ -153,7 +165,7 @@ class MethodVisitor extends Java9BaseVisitor<Method> {
 
         final String result = ctx.methodHeader().result().getText();
 
-        return new Method(name, parameters, statements, modifiers, annotations, result);
+        return new Method(name, parameters, statements, modifiers, annotations, result, isDeclaration);
     }
 
     private static boolean isAnnotation(@Nonnull final Java9Parser.MethodModifierContext ctx) {

@@ -95,23 +95,23 @@ class InterfaceVisitor extends Java9BaseVisitor<Interface> {
 
     // fixme find better way...
     private static boolean isMethod(@Nonnull final Java9Parser.InterfaceMemberDeclarationContext ctx) {
-        return (ctx.interfaceDeclaration() != null && ctx.interfaceMethodDeclaration() != null);
+        return ctx.interfaceMethodDeclaration() != null;
     }
 
     private static boolean isField(@Nonnull final Java9Parser.InterfaceMemberDeclarationContext ctx) {
-        return (ctx.interfaceDeclaration() != null && ctx.constantDeclaration() != null);
+        return ctx.constantDeclaration() != null;
     }
 
     private static boolean isEnum(@Nonnull final Java9Parser.InterfaceMemberDeclarationContext ctx) {
-        return (ctx.interfaceDeclaration() != null && ctx.classDeclaration().enumDeclaration() != null);
+        return (ctx.classDeclaration() != null && ctx.classDeclaration().enumDeclaration() != null);
     }
 
     private static boolean isClass(@Nonnull final Java9Parser.InterfaceMemberDeclarationContext ctx) {
-        return (ctx.interfaceDeclaration() != null && ctx.classDeclaration() != null);
+        return ctx.classDeclaration() != null;
     }
 
     private static boolean isInterface(@Nonnull final Java9Parser.InterfaceMemberDeclarationContext ctx) {
-        return (ctx.interfaceDeclaration() != null && ctx.interfaceDeclaration() != null);
+        return ctx.interfaceDeclaration() != null;
     }
 
     private static boolean isAnnotation(@Nonnull final Java9Parser.InterfaceModifierContext ctx) {

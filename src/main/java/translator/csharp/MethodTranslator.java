@@ -33,7 +33,8 @@ class MethodTranslator implements ComponentTranslator<Method> {
     @Nonnull
     @Override
     public String translate(@Nonnull final Method input, int indentationCounter) {
-        return new StringBuilder()
+        final StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder
                 .append(Utility.appendIndentation(indentationCounter))
                 .append(Utility.appendModifiers(translateModifiers(input.getModifiers(), input.getAnnotations())))
                 .append(Codestyle.space())
@@ -42,15 +43,21 @@ class MethodTranslator implements ComponentTranslator<Method> {
                 .append(input.getName())
                 .append("(")
                 .append(Utility.appendParameters(input.getParameters()))
-                .append(")")
-                .append(Codestyle.space())
-                .append("{")
-                .append(Codestyle.newLine())
-                .append(Utility.appendStatements(input.getStatements(), indentationCounter + 1))
-                .append(Codestyle.newLine())
-                .append(Utility.appendIndentation(indentationCounter))
-                .append("}")
-                .toString();
+                .append(")");
+
+        if (input.isDeclaration()) {
+            stringBuilder.append(";");
+        } else {
+            stringBuilder.append(Codestyle.space())
+                    .append("{")
+                    .append(Codestyle.newLine())
+                    .append(Utility.appendStatements(input.getStatements(), indentationCounter + 1))
+                    .append(Codestyle.newLine())
+                    .append(Utility.appendIndentation(indentationCounter))
+                    .append("}");
+        }
+
+        return stringBuilder.toString();
     }
 
     private static List<Modifier> translateModifiers(@Nonnull final List<Modifier> modifiers,

@@ -15,6 +15,10 @@ public class Method {
     @Nonnull
     private final List<Statement> statements;
 
+    // mainly used in interface methods
+    @Nonnull
+    private final boolean isDeclaration;
+
     @Nonnull
     private final List<Modifier> modifiers;
 
@@ -29,13 +33,15 @@ public class Method {
                   @Nonnull final List<Statement> statements,
                   @Nonnull final List<Modifier> modifiers,
                   @Nonnull final List<Annotation> annotations,
-                  @Nonnull final String result) {
+                  @Nonnull final String result,
+                  final boolean isDeclaration) {
         this.name = name;
         this.parameters = parameters;
         this.statements = statements;
         this.modifiers = modifiers;
         this.annotations = annotations;
         this.result = result;
+        this.isDeclaration = isDeclaration;
     }
 
     @Nonnull
@@ -68,12 +74,17 @@ public class Method {
         return result;
     }
 
+    public boolean isDeclaration() {
+        return isDeclaration;
+    }
+
     @Override
     public String toString() {
         return "Method{" +
                 "name='" + name + '\'' +
                 ", parameters=" + parameters +
                 ", statements=" + statements +
+                ", isDeclaration=" + isDeclaration +
                 ", modifiers=" + modifiers +
                 ", annotations=" + annotations +
                 ", result='" + result + '\'' +

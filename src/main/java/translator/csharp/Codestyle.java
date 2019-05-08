@@ -1,6 +1,10 @@
 package translator.csharp;
 
-class Codestyle {
+final class Codestyle {
+
+    private Codestyle() {
+        //no instance
+    }
 
     private static final String SPACE = " ";
     private static final String INDENTATION = "  ";

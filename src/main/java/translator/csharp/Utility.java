@@ -11,7 +11,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-class Utility {
+final class Utility {
 
     private Utility() {
         //no instance

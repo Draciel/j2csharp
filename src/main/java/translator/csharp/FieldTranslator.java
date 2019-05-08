@@ -68,7 +68,7 @@ class FieldTranslator implements ComponentTranslator<Field> {
     private static boolean isAvailableModifier(@Nonnull final Modifier modifier) {
         return modifier == Modifier.PUBLIC || modifier == Modifier.PRIVATE || modifier == Modifier.PROTECTED ||
                 modifier == Modifier.STATIC || modifier == Modifier.VOLATILE || modifier == Modifier.PACKAGE ||
-                modifier == Modifier.FINAL;
+                modifier == Modifier.FINAL || modifier == Modifier.INTERNAL;
     }
 
     private static class Holder {

@@ -19,6 +19,7 @@ class ConstructorVisitor extends Java9BaseVisitor<Constructor> {
         return HOLDER.INSTANCE;
     }
 
+
     @Override
     public Constructor visitConstructorDeclaration(Java9Parser.ConstructorDeclarationContext ctx) {
         final ParameterVisitor parameterVisitor = ParameterVisitor.instance();
@@ -68,7 +69,9 @@ class ConstructorVisitor extends Java9BaseVisitor<Constructor> {
                 .filter(Modifier::isAccessModifier)
                 .findFirst();
 
-        if (!accessModifier.isPresent()) {
+        if (ctx.getParent().getParent() instanceof Java9Parser.EnumBodyDeclarationsContext) {
+            modifiers.add(Modifier.PRIVATE);
+        } else if (!accessModifier.isPresent()) {
             modifiers.add(Modifier.PACKAGE);
         }
 

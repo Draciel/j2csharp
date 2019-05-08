@@ -1,6 +1,7 @@
 package visitor;
 
 import data.*;
+import org.antlr.v4.runtime.misc.Interval;
 import pl.jcsharp.grammar.Java9BaseVisitor;
 import pl.jcsharp.grammar.Java9Parser;
 import utility.Nonnull;
@@ -50,7 +51,7 @@ class FieldVisitor extends Java9BaseVisitor<Field> {
 
         // fixme some statements like new Object()
         final Statement initializer = variableDeclaratorContext.variableInitializer() == null ?
-                Statement.emptyStatement() : new Statement(variableDeclaratorContext.variableInitializer().getText());
+                Statement.emptyStatement() : parseVariableDeclarator(variableDeclaratorContext);
 
         return Field.of(name, new Type(type), modifiers, annotations, initializer);
     }
@@ -85,11 +86,17 @@ class FieldVisitor extends Java9BaseVisitor<Field> {
         final String name = variableDeclaratorContext.variableDeclaratorId().identifier().getText();
         final String type = ctx.unannType().getText();
 
-        // fixme some statements like new Object()
         final Statement initializer = variableDeclaratorContext.variableInitializer() == null ?
-                Statement.emptyStatement() : new Statement(variableDeclaratorContext.variableInitializer().getText());
+                Statement.emptyStatement() : parseVariableDeclarator(variableDeclaratorContext);
 
         return Field.of(name, new Type(type), modifiers, annotations, initializer);
+    }
+
+    private static Statement parseVariableDeclarator(@Nonnull final Java9Parser.VariableDeclaratorContext ctx) {
+        final int a = ctx.start.getStartIndex();
+        final int b = ctx.stop.getStopIndex();
+        final Interval interval = new Interval(a, b);
+        return new Statement(ctx.start.getInputStream().getText(interval));
     }
 
     private static boolean isAnnotation(@Nonnull final Java9Parser.FieldModifierContext ctx) {

@@ -119,8 +119,6 @@ class EnumTranslator implements ComponentTranslator<Enum> {
                     .append(">")
                     .append(Codestyle.space())
                     .append("values")
-                    .append("(")
-                    .append(")")
                     .append(Codestyle.space())
                     .append("{")
                     .append(Codestyle.newLine())

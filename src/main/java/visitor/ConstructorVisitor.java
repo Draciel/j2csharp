@@ -1,6 +1,8 @@
 package visitor;
 
 import data.*;
+import data.statements.Statement;
+import data.statements.StatementWithoutTrailingSubstatement;
 import pl.jcsharp.grammar.Java9BaseVisitor;
 import pl.jcsharp.grammar.Java9Parser;
 import utility.Nonnull;
@@ -36,10 +38,14 @@ class ConstructorVisitor extends Java9BaseVisitor<Constructor> {
                     .accept(parameterVisitor));
         }
 
+        final StatementWithoutTrailingSubstatement.StatementExpression explicitConstructorInvocation;
         final List<Statement> statements = new ArrayList<>();
 
         if (ctx.constructorBody().explicitConstructorInvocation() != null) {
-            statements.add(new Statement(ctx.constructorBody().explicitConstructorInvocation().getText()));
+            explicitConstructorInvocation =
+                    StatementWithoutTrailingSubstatement.StatementExpression.of(ctx.constructorBody().explicitConstructorInvocation().getText());
+        } else {
+            explicitConstructorInvocation = StatementWithoutTrailingSubstatement.StatementExpression.empty();
         }
 
         if (ctx.constructorBody().blockStatements() != null) {
@@ -75,7 +81,8 @@ class ConstructorVisitor extends Java9BaseVisitor<Constructor> {
             modifiers.add(Modifier.PACKAGE);
         }
 
-        return new Constructor(className, parameters, statements, modifiers, annotations);
+        return new Constructor(className, parameters, statements, modifiers, annotations,
+                explicitConstructorInvocation);
     }
 
     private static boolean isAnnotation(@Nonnull final Java9Parser.ConstructorModifierContext ctx) {

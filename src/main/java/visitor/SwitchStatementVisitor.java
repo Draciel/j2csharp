@@ -1,0 +1,23 @@
+package visitor;
+
+import data.statements.StatementWithoutTrailingSubstatement;
+import pl.jcsharp.grammar.Java9BaseVisitor;
+import pl.jcsharp.grammar.Java9Parser;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+
+class SwitchStatementVisitor extends Java9BaseVisitor<StatementWithoutTrailingSubstatement.SwitchStatement> {
+
+
+    public static SwitchStatementVisitor instance() {
+        return Holder.INSTANCE;
+    }
+
+    @Override
+    public StatementWithoutTrailingSubstatement.SwitchStatement visitSwitchStatement(final Java9Parser.SwitchStatementContext ctx) {
+        throw new NotImplementedException();
+    }
+
+    private static final class Holder {
+        private static final SwitchStatementVisitor INSTANCE = new SwitchStatementVisitor();
+    }
+}

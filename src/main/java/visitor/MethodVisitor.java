@@ -1,6 +1,7 @@
 package visitor;
 
 import data.*;
+import data.statements.Statement;
 import pl.jcsharp.grammar.Java9BaseVisitor;
 import pl.jcsharp.grammar.Java9Parser;
 import utility.Nonnull;
@@ -53,10 +54,10 @@ class MethodVisitor extends Java9BaseVisitor<Method> {
         final List<Statement> statements;
         final boolean isDeclaration;
         if (ctx.methodBody().block() == null) {
-            statements = Collections.singletonList(Statement.emptyStatement());
+            statements = Collections.singletonList(Statement.empty());
             isDeclaration = true;
         } else if (ctx.methodBody().block().blockStatements() == null) {
-            statements = Collections.singletonList(Statement.emptyStatement());
+            statements = Collections.singletonList(Statement.empty());
             isDeclaration = false;
         } else {
             isDeclaration = false;
@@ -127,10 +128,10 @@ class MethodVisitor extends Java9BaseVisitor<Method> {
         final List<Statement> statements;
         final boolean isDeclaration;
         if (ctx.methodBody().block() == null) {
-            statements = Collections.singletonList(Statement.emptyStatement());
+            statements = Collections.singletonList(Statement.empty());
             isDeclaration = true;
         } else if (ctx.methodBody().block().blockStatements() == null) {
-            statements = Collections.singletonList(Statement.emptyStatement());
+            statements = Collections.singletonList(Statement.empty());
             isDeclaration = false;
         } else {
             statements = ctx.methodBody()

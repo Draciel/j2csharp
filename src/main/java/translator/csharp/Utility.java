@@ -3,7 +3,8 @@ package translator.csharp;
 import data.Generic;
 import data.Modifier;
 import data.Parameter;
-import data.Statement;
+import data.statements.Statement;
+import data.statements.StatementWithoutTrailingSubstatement;
 import utility.Nonnull;
 
 import java.util.List;
@@ -29,7 +30,7 @@ final class Utility {
                 .collect(Collectors.joining());
     }
 
-    public static String appendInitializer(@Nonnull final Statement statement) {
+    public static String appendInitializer(@Nonnull final StatementWithoutTrailingSubstatement.StatementExpression statement) {
         if (!statement.getContent().isEmpty()) {
             return Codestyle.space() + "=" + Codestyle.space() + statement.getContent();
         }
@@ -43,9 +44,10 @@ final class Utility {
                 .collect(Collectors.joining("," + Codestyle.space()));
     }
 
+    @Deprecated
     public static String appendStatements(@Nonnull final List<Statement> statements, final int indentation) {
         return statements.stream()
-                .map(s -> appendIndentation(indentation) + s.getContent())
+                .map(s -> appendIndentation(indentation))
                 .collect(Collectors.joining(Codestyle.newLine()));
     }
 

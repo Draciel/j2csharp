@@ -1,10 +1,13 @@
 package data;
 
+import data.statements.StatementWithoutTrailingSubstatement;
 import utility.Nonnull;
 
 import java.util.Arrays;
 import java.util.List;
 
+// this class indicates field or variable dependent on context.
+//todo rename to FieldVariable
 public class Field {
 
     private final String name;
@@ -15,13 +18,13 @@ public class Field {
 
     private final List<Annotation> annotations;
 
-    private final Statement initializer;
+    private final StatementWithoutTrailingSubstatement.StatementExpression initializer;
 
     private Field(@Nonnull final String name,
                   @Nonnull final Type type,
                   @Nonnull final List<Modifier> modifiers,
                   @Nonnull final List<Annotation> annotations,
-                  @Nonnull final Statement initializer) {
+                  @Nonnull final StatementWithoutTrailingSubstatement.StatementExpression initializer) {
         this.name = name;
         this.type = type;
         this.modifiers = modifiers;
@@ -33,14 +36,14 @@ public class Field {
                            @Nonnull final Type type,
                            @Nonnull final List<Modifier> list,
                            @Nonnull final List<Annotation> annotations,
-                           @Nonnull final Statement statement) {
+                           @Nonnull final StatementWithoutTrailingSubstatement.StatementExpression statement) {
         return new Field(name, type, list, annotations, statement);
     }
 
     public static Field of(@Nonnull final String name,
                            @Nonnull final Type type,
                            @Nonnull final List<Annotation> annotations,
-                           @Nonnull final Statement statement,
+                           @Nonnull final StatementWithoutTrailingSubstatement.StatementExpression statement,
                            @Nonnull final Modifier... modifiers) {
         return new Field(name, type, Arrays.asList(modifiers), annotations, statement);
     }
@@ -61,7 +64,7 @@ public class Field {
         return annotations;
     }
 
-    public Statement getInitializer() {
+    public StatementWithoutTrailingSubstatement.StatementExpression getInitializer() {
         return initializer;
     }
 

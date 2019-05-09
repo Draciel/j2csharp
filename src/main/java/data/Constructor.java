@@ -1,6 +1,9 @@
 package data;
 
+import data.statements.Statement;
+import data.statements.StatementWithoutTrailingSubstatement;
 import utility.Nonnull;
+import utility.Nullable;
 
 import java.util.List;
 
@@ -21,16 +24,21 @@ public class Constructor {
     @Nonnull
     private final List<Annotation> annotations;
 
+    @Nonnull
+    private final StatementWithoutTrailingSubstatement.StatementExpression explicitConstructorInvocation;
+
     public Constructor(@Nonnull final String className,
                        @Nonnull final List<Parameter> parameters,
                        @Nonnull final List<Statement> statements,
                        @Nonnull final List<Modifier> modifiers,
-                       @Nonnull final List<Annotation> annotations) {
+                       @Nonnull final List<Annotation> annotations,
+                       @Nullable StatementWithoutTrailingSubstatement.StatementExpression explicitConstructorInvocation) {
         this.className = className;
         this.parameters = parameters;
         this.statements = statements;
         this.modifiers = modifiers;
         this.annotations = annotations;
+        this.explicitConstructorInvocation = explicitConstructorInvocation;
     }
 
     public List<Parameter> getParameters() {
@@ -50,6 +58,11 @@ public class Constructor {
     }
 
     @Nonnull
+    public StatementWithoutTrailingSubstatement.StatementExpression getExplicitConstructorInvocation() {
+        return explicitConstructorInvocation;
+    }
+
+    @Nonnull
     public String getClassName() {
         return className;
     }
@@ -62,6 +75,7 @@ public class Constructor {
                 ", statements=" + statements +
                 ", modifiers=" + modifiers +
                 ", annotations=" + annotations +
+                ", explicitConstructorInvocation=" + explicitConstructorInvocation +
                 '}';
     }
 }

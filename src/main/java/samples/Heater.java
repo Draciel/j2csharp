@@ -3,10 +3,14 @@ package samples;
 import samples.atomic.FastBoolean;
 import samples.comparable.Comparable;
 
+import java.util.Arrays;
+import java.util.List;
+
 import static java.lang.String.format;
 
 @Deprecated
-class Heater<T extends Function<String, Object>, T2 extends Object> extends Object implements Consumer<T>, Comparable<T2> {
+class Heater<T extends Function<String, Object>, T2 extends Object> extends Object implements Consumer<T>,
+        Comparable<T2> {
 
     public static final int OPTIMAL_TEMP = 10;
     private static final String HEATING_MESSAGE = "Heating %s";
@@ -26,6 +30,37 @@ class Heater<T extends Function<String, Object>, T2 extends Object> extends Obje
 
     public static Heater create(final int maxTemp) {
         return new Heater(maxTemp);
+    }
+
+    public void whileTest() {
+        int i = 0;
+        while (i < 5) {
+            System.out.println("Looping via while " + i);
+            i++;
+        }
+    }
+
+    public void ifThenElseTest() {
+        final int i = 5;
+        if (i > 5) {
+            System.out.println("I is greater than 5");
+        } else if (i > 3) {
+            System.out.println("I is greater than 3 and lower than 5");
+        } else {
+            System.out.println("I is lower than 3");
+        }
+    }
+
+    public void loopTest() {
+        final List<Integer> integers = Arrays.asList(1, 2, 3, 4, 5);
+
+        for (int i = 0; i < 10; i++) {
+            System.out.println("Basic Counting " + i);
+        }
+
+        for (Integer i : integers) {
+            System.out.println("Enhanced counting " + i);
+        }
     }
 
     public void heat(final int offset) {

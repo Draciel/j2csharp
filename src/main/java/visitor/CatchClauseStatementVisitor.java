@@ -1,8 +1,8 @@
 package visitor;
 
 import data.Type;
-import data.statements.CatchClauseStatement;
-import data.statements.StatementWithoutTrailingSubstatement;
+import data.CatchClauseStatement;
+import data.Statement;
 import pl.jcsharp.grammar.Java9BaseVisitor;
 import pl.jcsharp.grammar.Java9Parser;
 
@@ -28,7 +28,7 @@ class CatchClauseStatementVisitor extends Java9BaseVisitor<CatchClauseStatement>
 
         final String name = ctx.catchFormalParameter().variableDeclaratorId().identifier().getText();
 
-        final StatementWithoutTrailingSubstatement.Block block = ctx.block().accept(blockVisitor);
+        final Statement.Block block = ctx.block().accept(blockVisitor);
 
         return new CatchClauseStatement(block, types, name);
     }

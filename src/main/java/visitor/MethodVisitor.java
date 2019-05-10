@@ -1,7 +1,10 @@
 package visitor;
 
-import data.*;
-import data.statements.Statement;
+import data.Annotation;
+import data.Method;
+import data.Modifier;
+import data.Parameter;
+import data.Statement;
 import pl.jcsharp.grammar.Java9BaseVisitor;
 import pl.jcsharp.grammar.Java9Parser;
 import utility.Nonnull;
@@ -24,7 +27,8 @@ class MethodVisitor extends Java9BaseVisitor<Method> {
     @Override
     public Method visitInterfaceMethodDeclaration(final Java9Parser.InterfaceMethodDeclarationContext ctx) {
         final String name = ctx.methodHeader().methodDeclarator().identifier().getText();
-        final StatementVisitor statementVisitor = StatementVisitor.instance();
+        final StatementWithoutTrailingSubstatementVisitor statementVisitor =
+                StatementWithoutTrailingSubstatementVisitor.instance();
         final ParameterVisitor parameterVisitor = ParameterVisitor.instance();
         final AnnotationVisitor annotationVisitor = AnnotationVisitor.instance();
 
@@ -54,10 +58,10 @@ class MethodVisitor extends Java9BaseVisitor<Method> {
         final List<Statement> statements;
         final boolean isDeclaration;
         if (ctx.methodBody().block() == null) {
-            statements = Collections.singletonList(Statement.empty());
+            statements = Collections.singletonList(Statement.EmptyStatement.instance());
             isDeclaration = true;
         } else if (ctx.methodBody().block().blockStatements() == null) {
-            statements = Collections.singletonList(Statement.empty());
+            statements = Collections.singletonList(Statement.EmptyStatement.instance());
             isDeclaration = false;
         } else {
             isDeclaration = false;
@@ -98,7 +102,8 @@ class MethodVisitor extends Java9BaseVisitor<Method> {
     @Override
     public Method visitMethodDeclaration(Java9Parser.MethodDeclarationContext ctx) {
         final String name = ctx.methodHeader().methodDeclarator().identifier().getText();
-        final StatementVisitor statementVisitor = StatementVisitor.instance();
+        final StatementWithoutTrailingSubstatementVisitor statementVisitor =
+                StatementWithoutTrailingSubstatementVisitor.instance();
         final ParameterVisitor parameterVisitor = ParameterVisitor.instance();
         final AnnotationVisitor annotationVisitor = AnnotationVisitor.instance();
 
@@ -128,10 +133,10 @@ class MethodVisitor extends Java9BaseVisitor<Method> {
         final List<Statement> statements;
         final boolean isDeclaration;
         if (ctx.methodBody().block() == null) {
-            statements = Collections.singletonList(Statement.empty());
+            statements = Collections.singletonList(Statement.EmptyStatement.instance());
             isDeclaration = true;
         } else if (ctx.methodBody().block().blockStatements() == null) {
-            statements = Collections.singletonList(Statement.empty());
+            statements = Collections.singletonList(Statement.EmptyStatement.instance());
             isDeclaration = false;
         } else {
             statements = ctx.methodBody()

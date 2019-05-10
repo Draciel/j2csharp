@@ -1,8 +1,10 @@
 package visitor;
 
-import data.*;
-import data.statements.Statement;
-import data.statements.StatementWithoutTrailingSubstatement;
+import data.Annotation;
+import data.Constructor;
+import data.Modifier;
+import data.Parameter;
+import data.Statement;
 import pl.jcsharp.grammar.Java9BaseVisitor;
 import pl.jcsharp.grammar.Java9Parser;
 import utility.Nonnull;
@@ -25,7 +27,8 @@ class ConstructorVisitor extends Java9BaseVisitor<Constructor> {
     @Override
     public Constructor visitConstructorDeclaration(Java9Parser.ConstructorDeclarationContext ctx) {
         final ParameterVisitor parameterVisitor = ParameterVisitor.instance();
-        final StatementVisitor statementVisitor = StatementVisitor.instance();
+        final StatementWithoutTrailingSubstatementVisitor statementVisitor =
+                StatementWithoutTrailingSubstatementVisitor.instance();
 
         final String className = ctx.constructorDeclarator().simpleTypeName().identifier().getText();
 
@@ -38,14 +41,14 @@ class ConstructorVisitor extends Java9BaseVisitor<Constructor> {
                     .accept(parameterVisitor));
         }
 
-        final StatementWithoutTrailingSubstatement.StatementExpression explicitConstructorInvocation;
+        final Statement.StatementExpression explicitConstructorInvocation;
         final List<Statement> statements = new ArrayList<>();
 
         if (ctx.constructorBody().explicitConstructorInvocation() != null) {
             explicitConstructorInvocation =
-                    StatementWithoutTrailingSubstatement.StatementExpression.of(ctx.constructorBody().explicitConstructorInvocation().getText());
+                    Statement.StatementExpression.of(ctx.constructorBody().explicitConstructorInvocation().getText());
         } else {
-            explicitConstructorInvocation = StatementWithoutTrailingSubstatement.StatementExpression.empty();
+            explicitConstructorInvocation = Statement.StatementExpression.empty();
         }
 
         if (ctx.constructorBody().blockStatements() != null) {

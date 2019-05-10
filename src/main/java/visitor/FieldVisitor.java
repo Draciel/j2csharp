@@ -1,7 +1,7 @@
 package visitor;
 
 import data.*;
-import data.statements.StatementWithoutTrailingSubstatement;
+import data.Statement;
 import org.antlr.v4.runtime.misc.Interval;
 import pl.jcsharp.grammar.Java9BaseVisitor;
 import pl.jcsharp.grammar.Java9Parser;
@@ -53,9 +53,9 @@ class FieldVisitor extends Java9BaseVisitor<Field> {
         final String type = ctx.unannType().getText();
 
         // fixme some statements like new Object()
-        final StatementWithoutTrailingSubstatement.StatementExpression initializer =
+        final Statement.StatementExpression initializer =
                 variableDeclaratorContext.variableInitializer() == null ?
-                        StatementWithoutTrailingSubstatement.StatementExpression.empty() :
+                        Statement.StatementExpression.empty() :
                         parseVariableDeclarator(variableDeclaratorContext);
 
         return Field.of(name, new Type(type), modifiers, annotations, initializer);
@@ -91,9 +91,9 @@ class FieldVisitor extends Java9BaseVisitor<Field> {
         final String name = variableDeclaratorContext.variableDeclaratorId().identifier().getText();
         final String type = ctx.unannType().getText();
 
-        final StatementWithoutTrailingSubstatement.StatementExpression initializer =
+        final Statement.StatementExpression initializer =
                 variableDeclaratorContext.variableInitializer() == null ?
-                        StatementWithoutTrailingSubstatement.StatementExpression.empty() :
+                        Statement.StatementExpression.empty() :
                         parseVariableDeclarator(variableDeclaratorContext);
 
         return Field.of(name, new Type(type), modifiers, annotations, initializer);
@@ -113,9 +113,9 @@ class FieldVisitor extends Java9BaseVisitor<Field> {
         final String name = variableDeclaratorContext.variableDeclaratorId().identifier().getText();
         final String type = ctx.unannType().getText();
 
-        final StatementWithoutTrailingSubstatement.StatementExpression initializer =
+        final Statement.StatementExpression initializer =
                 variableDeclaratorContext.variableInitializer() == null ?
-                        StatementWithoutTrailingSubstatement.StatementExpression.empty() :
+                        Statement.StatementExpression.empty() :
                         parseVariableDeclarator(variableDeclaratorContext);
 
         //fixme handle annotations for local variables
@@ -132,8 +132,8 @@ class FieldVisitor extends Java9BaseVisitor<Field> {
         final String name = ctx.variableDeclaratorId().identifier().getText();
         final String type = ctx.unannType().getText();
 
-        final StatementWithoutTrailingSubstatement.StatementExpression initializer =
-                StatementWithoutTrailingSubstatement.StatementExpression.empty();
+        final Statement.StatementExpression initializer =
+                Statement.StatementExpression.empty();
 
         //fixme handle annotations for local variables
         return Field.of(name, new Type(type), modifiers, Collections.emptyList(), initializer);
@@ -150,18 +150,18 @@ class FieldVisitor extends Java9BaseVisitor<Field> {
         final String name = ctx.variableDeclaratorId().identifier().getText();
         final String type = ctx.unannType().getText();
 
-        final StatementWithoutTrailingSubstatement.StatementExpression statementExpression =
+        final Statement.StatementExpression statementExpression =
                 ctx.expression().accept(statementExpressionVisitor);
 
         //fixme handle annotations for local variables
         return Field.of(name, new Type(type), modifiers, Collections.emptyList(), statementExpression);
     }
 
-    private static StatementWithoutTrailingSubstatement.StatementExpression parseVariableDeclarator(@Nonnull final Java9Parser.VariableDeclaratorContext ctx) {
+    private static Statement.StatementExpression parseVariableDeclarator(@Nonnull final Java9Parser.VariableDeclaratorContext ctx) {
         final int a = ctx.start.getStartIndex();
         final int b = ctx.stop.getStopIndex();
         final Interval interval = new Interval(a, b);
-        return StatementWithoutTrailingSubstatement.StatementExpression.of(ctx.start.getInputStream().getText(interval));
+        return Statement.StatementExpression.of(ctx.start.getInputStream().getText(interval));
     }
 
     private static boolean isAnnotation(@Nonnull final Java9Parser.FieldModifierContext ctx) {

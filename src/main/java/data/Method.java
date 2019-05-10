@@ -1,6 +1,5 @@
 package data;
 
-import data.statements.Statement;
 import utility.Nonnull;
 
 import java.util.List;

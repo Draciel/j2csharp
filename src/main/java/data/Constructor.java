@@ -1,7 +1,5 @@
 package data;
 
-import data.statements.Statement;
-import data.statements.StatementWithoutTrailingSubstatement;
 import utility.Nonnull;
 import utility.Nullable;
 
@@ -25,14 +23,14 @@ public class Constructor {
     private final List<Annotation> annotations;
 
     @Nonnull
-    private final StatementWithoutTrailingSubstatement.StatementExpression explicitConstructorInvocation;
+    private final Statement.StatementExpression explicitConstructorInvocation;
 
     public Constructor(@Nonnull final String className,
                        @Nonnull final List<Parameter> parameters,
                        @Nonnull final List<Statement> statements,
                        @Nonnull final List<Modifier> modifiers,
                        @Nonnull final List<Annotation> annotations,
-                       @Nullable StatementWithoutTrailingSubstatement.StatementExpression explicitConstructorInvocation) {
+                       @Nullable Statement.StatementExpression explicitConstructorInvocation) {
         this.className = className;
         this.parameters = parameters;
         this.statements = statements;
@@ -58,7 +56,7 @@ public class Constructor {
     }
 
     @Nonnull
-    public StatementWithoutTrailingSubstatement.StatementExpression getExplicitConstructorInvocation() {
+    public Statement.StatementExpression getExplicitConstructorInvocation() {
         return explicitConstructorInvocation;
     }
 

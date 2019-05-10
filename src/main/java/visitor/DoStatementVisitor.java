@@ -1,25 +1,26 @@
 package visitor;
 
-import data.statements.Statement;
-import data.statements.StatementWithoutTrailingSubstatement;
+import data.Statement;
 import pl.jcsharp.grammar.Java9BaseVisitor;
 import pl.jcsharp.grammar.Java9Parser;
 
-class DoStatementVisitor extends Java9BaseVisitor<StatementWithoutTrailingSubstatement.DoStatement> {
+class DoStatementVisitor extends Java9BaseVisitor<Statement.DoStatement> {
 
     public static DoStatementVisitor instance() {
         return Holder.INSTANCE;
     }
 
     @Override
-    public StatementWithoutTrailingSubstatement.DoStatement visitDoStatement(final Java9Parser.DoStatementContext ctx) {
-        final StatementVisitor statementVisitor = StatementVisitor.instance();
+    public Statement.DoStatement visitDoStatement(final Java9Parser.DoStatementContext ctx) {
+        final StatementWithoutTrailingSubstatementVisitor statementVisitor =
+                StatementWithoutTrailingSubstatementVisitor.instance();
         final StatementExpressionVisitor statementExpressionVisitor = StatementExpressionVisitor.instance();
 
         final Statement statement = ctx.statement().accept(statementVisitor);
-        final StatementWithoutTrailingSubstatement.StatementExpression statementExpression = ctx.expression().accept(statementExpressionVisitor);
+        final Statement.StatementExpression statementExpression =
+                ctx.expression().accept(statementExpressionVisitor);
 
-        return StatementWithoutTrailingSubstatement.DoStatement.of(statementExpression, statement);
+        return Statement.DoStatement.of(statementExpression, statement);
     }
 
     private static final class Holder {

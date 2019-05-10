@@ -1,27 +1,25 @@
 package visitor;
 
-import data.statements.IfStatement;
-import data.statements.Statement;
-import data.statements.StatementWithoutTrailingSubstatement;
+import data.Statement;
 import pl.jcsharp.grammar.Java9BaseVisitor;
 import pl.jcsharp.grammar.Java9Parser;
 
-class IfStatementVisitor extends Java9BaseVisitor<IfStatement> {
+class IfStatementVisitor extends Java9BaseVisitor<Statement.IfStatement> {
 
     public static IfStatementVisitor instance() {
         return Holder.INSTANCE;
     }
 
     @Override
-    public IfStatement visitIfThenElseStatement(final Java9Parser.IfThenElseStatementContext ctx) {
+    public Statement.IfStatement visitIfThenElseStatement(final Java9Parser.IfThenElseStatementContext ctx) {
         final StatementExpressionVisitor statementExpressionVisitor = StatementExpressionVisitor.instance();
-        final StatementVisitor statementVisitor = StatementVisitor.instance();
+        final StatementWithoutTrailingSubstatementVisitor statementVisitor = StatementWithoutTrailingSubstatementVisitor.instance();
 
-        final StatementWithoutTrailingSubstatement.StatementExpression conditional = ctx.expression().accept(statementExpressionVisitor);
+        final Statement.StatementExpression conditional = ctx.expression().accept(statementExpressionVisitor);
         final Statement ifBodyStatement = ctx.statementNoShortIf().accept(statementVisitor);
         final Statement elseBodyStatement = ctx.statement().accept(statementVisitor);
 
-        return new IfStatement(conditional, ifBodyStatement, elseBodyStatement);
+        return Statement.IfStatement.of(conditional, ifBodyStatement, elseBodyStatement);
     }
 
 //    @Override
@@ -38,14 +36,14 @@ class IfStatementVisitor extends Java9BaseVisitor<IfStatement> {
 
 
     @Override
-    public IfStatement visitIfThenStatement(final Java9Parser.IfThenStatementContext ctx) {
+    public Statement.IfStatement visitIfThenStatement(final Java9Parser.IfThenStatementContext ctx) {
         final StatementExpressionVisitor statementExpressionVisitor = StatementExpressionVisitor.instance();
-        final StatementVisitor statementVisitor = StatementVisitor.instance();
+        final StatementWithoutTrailingSubstatementVisitor statementVisitor = StatementWithoutTrailingSubstatementVisitor.instance();
 
-        final StatementWithoutTrailingSubstatement.StatementExpression conditional = ctx.expression().accept(statementExpressionVisitor);
+        final Statement.StatementExpression conditional = ctx.expression().accept(statementExpressionVisitor);
         final Statement ifBodyStatement = ctx.statement().accept(statementVisitor);
 
-        return new IfStatement(conditional, ifBodyStatement, null);
+        return Statement.IfStatement.of(conditional, ifBodyStatement, null);
     }
 
     private static final class Holder {

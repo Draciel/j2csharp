@@ -1,21 +1,21 @@
-package data.statements;
+package data;
 
-import data.BlockStatement;
-import data.Field;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 import utility.Nonnull;
+import utility.Nullable;
 
 import java.util.List;
 import java.util.Objects;
 
-import static data.statements.StatementWithoutTrailingSubstatement.ComplexStatementType.*;
+import static data.Statement.ComplexStatementType.*;
 
 //todo find better name
-public abstract class StatementWithoutTrailingSubstatement {
+public abstract class Statement {
 
     @Nonnull
     private final ComplexStatementType type;
 
-    private StatementWithoutTrailingSubstatement(@Nonnull final ComplexStatementType type) {
+    private Statement(@Nonnull final ComplexStatementType type) {
         this.type = type;
     }
 
@@ -26,7 +26,7 @@ public abstract class StatementWithoutTrailingSubstatement {
 
     @Override
     public String toString() {
-        return "StatementWithoutTrailingSubstatement{" +
+        return "Statement{" +
                 "type=" + type +
                 '}';
     }
@@ -35,7 +35,8 @@ public abstract class StatementWithoutTrailingSubstatement {
 
         SYNCHRONIZED("synchronized"), RETURN("return"), BLOCK(""), ASSERT("assert"), BREAK("break"),
         CONTINUE("continue"), DO("do"), SWITCH("switch"), EMPTY(""), THROW("throw"), TRY("try"),
-        TRY_WITH_RESOURCES("try"), ENHANCED_FOR("for"), STATEMENT_EXPRESSION("");
+        TRY_WITH_RESOURCES("try"), STATEMENT_EXPRESSION(""), IF("if"), WHILE("while"),
+        BASIC_FOR("for"), ENHANCED_FOR("for");
 
         //todo this is useless
         private final String keyword;
@@ -49,7 +50,7 @@ public abstract class StatementWithoutTrailingSubstatement {
         }
     }
 
-    public static final class SynchronizedStatement extends StatementWithoutTrailingSubstatement {
+    public static final class SynchronizedStatement extends Statement {
 
         @Nonnull
         private final Block block;
@@ -102,7 +103,7 @@ public abstract class StatementWithoutTrailingSubstatement {
         }
     }
 
-    public static final class ReturnStatement extends StatementWithoutTrailingSubstatement {
+    public static final class ReturnStatement extends Statement {
 
         @Nonnull
         private final StatementExpression returnStatement;
@@ -143,7 +144,7 @@ public abstract class StatementWithoutTrailingSubstatement {
         }
     }
 
-    public static final class Block extends StatementWithoutTrailingSubstatement {
+    public static final class Block extends Statement {
 
         @Nonnull
         private final List<BlockStatement> blockStatement;
@@ -183,7 +184,7 @@ public abstract class StatementWithoutTrailingSubstatement {
         }
     }
 
-    public static final class AssertStatement extends StatementWithoutTrailingSubstatement {
+    public static final class AssertStatement extends Statement {
 
         @Nonnull
         private final List<StatementExpression> statementExpressions;
@@ -224,7 +225,7 @@ public abstract class StatementWithoutTrailingSubstatement {
         }
     }
 
-    public static final class BreakStatement extends StatementWithoutTrailingSubstatement {
+    public static final class BreakStatement extends Statement {
 
         @Nonnull
         private final String identifier;
@@ -264,7 +265,7 @@ public abstract class StatementWithoutTrailingSubstatement {
         }
     }
 
-    public static final class ContinueStatement extends StatementWithoutTrailingSubstatement {
+    public static final class ContinueStatement extends Statement {
 
         @Nonnull
         private final String identifier;
@@ -304,7 +305,7 @@ public abstract class StatementWithoutTrailingSubstatement {
         }
     }
 
-    public static final class DoStatement extends StatementWithoutTrailingSubstatement {
+    public static final class DoStatement extends Statement {
 
         @Nonnull
         private final StatementExpression expression;
@@ -357,7 +358,7 @@ public abstract class StatementWithoutTrailingSubstatement {
         }
     }
 
-    public static final class SwitchStatement extends StatementWithoutTrailingSubstatement {
+    public static final class SwitchStatement extends Statement {
 
         @Nonnull
         private final StatementExpression statementExpression;
@@ -412,7 +413,7 @@ public abstract class StatementWithoutTrailingSubstatement {
     }
 
     // todo investigate if it is needed
-    public static final class EmptyStatement extends StatementWithoutTrailingSubstatement {
+    public static final class EmptyStatement extends Statement {
 
         private EmptyStatement(@Nonnull final ComplexStatementType type) {
             super(type);
@@ -432,7 +433,7 @@ public abstract class StatementWithoutTrailingSubstatement {
         }
     }
 
-    public static final class ThrowStatement extends StatementWithoutTrailingSubstatement {
+    public static final class ThrowStatement extends Statement {
 
         @Nonnull
         private final StatementExpression statementExpression;
@@ -473,7 +474,7 @@ public abstract class StatementWithoutTrailingSubstatement {
         }
     }
 
-    public static final class TryStatement extends StatementWithoutTrailingSubstatement {
+    public static final class TryStatement extends Statement {
 
         @Nonnull
         private final Block tryBlock;
@@ -539,7 +540,7 @@ public abstract class StatementWithoutTrailingSubstatement {
         }
     }
 
-    public static final class TryWithResourcesStatement extends StatementWithoutTrailingSubstatement {
+    public static final class TryWithResourcesStatement extends Statement {
 
         @Nonnull
         private final Block tryBlock;
@@ -618,74 +619,7 @@ public abstract class StatementWithoutTrailingSubstatement {
         }
     }
 
-    public static final class EnhancedForStatement extends StatementWithoutTrailingSubstatement {
-
-        @Nonnull
-        private final Field variable;
-
-        @Nonnull
-        private final StatementExpression collection;
-
-        @Nonnull
-        private final Statement bodyStatement;
-
-        private EnhancedForStatement(@Nonnull final ComplexStatementType type,
-                                     @Nonnull final Field variable,
-                                     @Nonnull final StatementExpression collection,
-                                     @Nonnull final Statement bodyStatement) {
-            super(type);
-            this.variable = variable;
-            this.collection = collection;
-            this.bodyStatement = bodyStatement;
-        }
-
-        public static EnhancedForStatement of(@Nonnull final Field variable,
-                                              @Nonnull final StatementExpression collection,
-                                              @Nonnull final Statement bodyStatement) {
-            return new EnhancedForStatement(ENHANCED_FOR, variable, collection, bodyStatement);
-        }
-
-        @Override
-        public boolean equals(final Object o) {
-            if (this == o) return true;
-            if (!(o instanceof EnhancedForStatement)) return false;
-            final EnhancedForStatement that = (EnhancedForStatement) o;
-            return Objects.equals(variable, that.variable) &&
-                    Objects.equals(collection, that.collection) &&
-                    Objects.equals(bodyStatement, that.bodyStatement);
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(variable, collection, bodyStatement);
-        }
-
-        @Nonnull
-        public Field getVariable() {
-            return variable;
-        }
-
-        @Nonnull
-        public StatementExpression getCollection() {
-            return collection;
-        }
-
-        @Nonnull
-        public Statement getBodyStatement() {
-            return bodyStatement;
-        }
-
-        @Override
-        public String toString() {
-            return "EnhancedForStatement{" +
-                    "variable=" + variable +
-                    ", collection=" + collection +
-                    ", bodyStatement=" + bodyStatement +
-                    '}';
-        }
-    }
-
-    public static final class StatementExpression extends StatementWithoutTrailingSubstatement {
+    public static final class StatementExpression extends Statement {
 
         private static final StatementExpression EMPTY_STATEMENT_EXPRESSION =
                 new StatementExpression(STATEMENT_EXPRESSION, "");
@@ -716,6 +650,229 @@ public abstract class StatementWithoutTrailingSubstatement {
         public String toString() {
             return "StatementExpression{" +
                     "content='" + content + '\'' +
+                    '}';
+        }
+    }
+
+    public static class LabeledStatement extends Statement {
+
+        private LabeledStatement(@Nonnull final ComplexStatementType type) {
+            super(type);
+        }
+
+        public static LabeledStatement of() {
+            throw new NotImplementedException();
+        }
+
+    }
+
+    public static class IfStatement extends Statement {
+
+        @Nonnull
+        private final StatementExpression conditional;
+
+        @Nonnull
+        private final Statement ifBodyStatement;
+
+        @Nullable
+        private final Statement elseBodyStatement;
+
+
+        private IfStatement(@Nonnull final ComplexStatementType type,
+                            @Nonnull final StatementExpression conditional,
+                            @Nonnull final Statement ifBodyStatement,
+                            @Nullable final Statement elseBodyStatement) {
+            super(type);
+            this.conditional = conditional;
+            this.ifBodyStatement = ifBodyStatement;
+            this.elseBodyStatement = elseBodyStatement;
+        }
+
+        public static IfStatement of(@Nonnull final StatementExpression conditional,
+                                     @Nonnull final Statement ifBodyStatement,
+                                     @Nullable final Statement elseBodyStatement) {
+            return new IfStatement(IF, conditional, ifBodyStatement, elseBodyStatement);
+        }
+
+        @Nonnull
+        public StatementExpression getConditional() {
+            return conditional;
+        }
+
+        @Nonnull
+        public Statement getIfBodyStatement() {
+            return ifBodyStatement;
+        }
+
+        @Nullable
+        public Statement getElseBodyStatement() {
+            return elseBodyStatement;
+        }
+
+        @Override
+        public String toString() {
+            return "IfStatement{" +
+                    "conditional=" + conditional +
+                    ", ifBodyStatement=" + ifBodyStatement +
+                    ", elseBodyStatement=" + elseBodyStatement +
+                    '}';
+        }
+    }
+
+    public static class WhileStatement extends Statement {
+
+        @Nonnull
+        private final StatementExpression condition;
+
+        @Nullable
+        private final Statement whileBody;
+
+        private WhileStatement(@Nonnull final ComplexStatementType type,
+                               @Nonnull final StatementExpression condition,
+                               @Nullable final Statement whileBody) {
+            super(type);
+            this.condition = condition;
+            this.whileBody = whileBody;
+        }
+
+        public static WhileStatement of(@Nonnull final StatementExpression condition,
+                                        @Nullable final Statement whileBody) {
+            return new WhileStatement(WHILE, condition, whileBody);
+        }
+
+        @Nonnull
+        public StatementExpression getCondition() {
+            return condition;
+        }
+
+        @Nullable
+        public Statement getWhileBody() {
+            return whileBody;
+        }
+
+        @Override
+        public String toString() {
+            return "WhileStatement{" +
+                    "condition=" + condition +
+                    ", whileBody=" + whileBody +
+                    '}';
+        }
+    }
+
+    public static class BasicForStatement extends Statement {
+
+        @Nullable
+        private final Field initVariable;
+
+        @Nullable
+        private final StatementExpression expression;
+
+        @Nullable
+        private final StatementExpression updateStatement;
+
+        @Nonnull
+        private final Statement bodyStatement;
+
+
+        private BasicForStatement(@Nonnull final ComplexStatementType type,
+                                  @Nullable final Field initVariable,
+                                  @Nullable final StatementExpression expression,
+                                  @Nullable final StatementExpression updateStatement,
+                                  @Nonnull final Statement bodyStatement) {
+
+            super(type);
+            this.initVariable = initVariable;
+            this.expression = expression;
+            this.updateStatement = updateStatement;
+            this.bodyStatement = bodyStatement;
+        }
+
+        public static BasicForStatement of(@Nullable final Field initVariable,
+                                           @Nullable final StatementExpression expression,
+                                           @Nullable final StatementExpression updateStatement,
+                                           @Nonnull final Statement bodyStatement) {
+            return new BasicForStatement(BASIC_FOR, initVariable, expression, updateStatement, bodyStatement);
+        }
+
+        @Nullable
+        public Field getInitVariable() {
+            return initVariable;
+        }
+
+        @Nullable
+        public StatementExpression getExpression() {
+            return expression;
+        }
+
+        @Nullable
+        public StatementExpression getUpdateStatement() {
+            return updateStatement;
+        }
+
+        @Nonnull
+        public Statement getBodyStatement() {
+            return bodyStatement;
+        }
+
+        @Override
+        public String toString() {
+            return "BasicForStatement{" +
+                    "initVariable=" + initVariable +
+                    ", expression=" + expression +
+                    ", updateStatement=" + updateStatement +
+                    ", bodyStatement=" + bodyStatement +
+                    '}';
+        }
+    }
+
+    public static class EnhancedForStatement extends Statement {
+
+        @Nonnull
+        private final Field variable;
+
+        @Nonnull
+        private final StatementExpression collection;
+
+        @Nonnull
+        private final Statement bodyStatement;
+
+        private EnhancedForStatement(@Nonnull final ComplexStatementType type,
+                                     @Nonnull final Field variable,
+                                     @Nonnull final StatementExpression collection,
+                                     @Nonnull final Statement bodyStatement) {
+            super(type);
+            this.variable = variable;
+            this.collection = collection;
+            this.bodyStatement = bodyStatement;
+        }
+
+        public static EnhancedForStatement of(@Nonnull final Field variable,
+                                              @Nonnull final StatementExpression collection,
+                                              @Nonnull final Statement bodyStatement) {
+            return new EnhancedForStatement(ENHANCED_FOR, variable, collection, bodyStatement);
+        }
+
+        @Nonnull
+        public Field getVariable() {
+            return variable;
+        }
+
+        @Nonnull
+        public StatementExpression getCollection() {
+            return collection;
+        }
+
+        @Nonnull
+        public Statement getBodyStatement() {
+            return bodyStatement;
+        }
+
+        @Override
+        public String toString() {
+            return "EnhancedForStatement{" +
+                    "variable=" + variable +
+                    ", collection=" + collection +
+                    ", bodyStatement=" + bodyStatement +
                     '}';
         }
     }

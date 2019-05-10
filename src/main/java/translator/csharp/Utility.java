@@ -3,8 +3,7 @@ package translator.csharp;
 import data.Generic;
 import data.Modifier;
 import data.Parameter;
-import data.statements.Statement;
-import data.statements.StatementWithoutTrailingSubstatement;
+import data.Statement;
 import utility.Nonnull;
 
 import java.util.List;
@@ -30,7 +29,7 @@ final class Utility {
                 .collect(Collectors.joining());
     }
 
-    public static String appendInitializer(@Nonnull final StatementWithoutTrailingSubstatement.StatementExpression statement) {
+    public static String appendInitializer(@Nonnull final Statement.StatementExpression statement) {
         if (!statement.getContent().isEmpty()) {
             return Codestyle.space() + "=" + Codestyle.space() + statement.getContent();
         }

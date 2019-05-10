@@ -1,6 +1,5 @@
 package data;
 
-import data.statements.StatementWithoutTrailingSubstatement;
 import utility.Nonnull;
 
 import java.util.Arrays;
@@ -18,13 +17,13 @@ public class Field {
 
     private final List<Annotation> annotations;
 
-    private final StatementWithoutTrailingSubstatement.StatementExpression initializer;
+    private final Statement.StatementExpression initializer;
 
     private Field(@Nonnull final String name,
                   @Nonnull final Type type,
                   @Nonnull final List<Modifier> modifiers,
                   @Nonnull final List<Annotation> annotations,
-                  @Nonnull final StatementWithoutTrailingSubstatement.StatementExpression initializer) {
+                  @Nonnull final Statement.StatementExpression initializer) {
         this.name = name;
         this.type = type;
         this.modifiers = modifiers;
@@ -36,14 +35,14 @@ public class Field {
                            @Nonnull final Type type,
                            @Nonnull final List<Modifier> list,
                            @Nonnull final List<Annotation> annotations,
-                           @Nonnull final StatementWithoutTrailingSubstatement.StatementExpression statement) {
+                           @Nonnull final Statement.StatementExpression statement) {
         return new Field(name, type, list, annotations, statement);
     }
 
     public static Field of(@Nonnull final String name,
                            @Nonnull final Type type,
                            @Nonnull final List<Annotation> annotations,
-                           @Nonnull final StatementWithoutTrailingSubstatement.StatementExpression statement,
+                           @Nonnull final Statement.StatementExpression statement,
                            @Nonnull final Modifier... modifiers) {
         return new Field(name, type, Arrays.asList(modifiers), annotations, statement);
     }
@@ -64,7 +63,7 @@ public class Field {
         return annotations;
     }
 
-    public StatementWithoutTrailingSubstatement.StatementExpression getInitializer() {
+    public Statement.StatementExpression getInitializer() {
         return initializer;
     }
 

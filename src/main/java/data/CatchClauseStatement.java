@@ -1,6 +1,5 @@
-package data.statements;
+package data;
 
-import data.Type;
 import utility.Nonnull;
 
 import java.util.List;
@@ -9,7 +8,7 @@ import java.util.Objects;
 public class CatchClauseStatement {
 
     @Nonnull
-    private final StatementWithoutTrailingSubstatement.Block block;
+    private final Statement.Block block;
 
     @Nonnull
     private final List<Type> types;
@@ -17,7 +16,7 @@ public class CatchClauseStatement {
     @Nonnull
     private final String variableName;
 
-    public CatchClauseStatement(@Nonnull final StatementWithoutTrailingSubstatement.Block block,
+    public CatchClauseStatement(@Nonnull final Statement.Block block,
                                 @Nonnull final List<Type> types, @Nonnull final String variableName) {
         this.block = block;
         this.types = types;
@@ -25,7 +24,7 @@ public class CatchClauseStatement {
     }
 
     @Nonnull
-    public StatementWithoutTrailingSubstatement.Block getBlock() {
+    public Statement.Block getBlock() {
         return block;
     }
 

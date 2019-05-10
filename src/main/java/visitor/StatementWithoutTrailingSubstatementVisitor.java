@@ -1,17 +1,63 @@
 package visitor;
 
-import data.statements.StatementWithoutTrailingSubstatement;
+import data.Statement;
 import pl.jcsharp.grammar.Java9BaseVisitor;
 import pl.jcsharp.grammar.Java9Parser;
 
-public class StatementWithoutTrailingSubstatementVisitor extends Java9BaseVisitor<StatementWithoutTrailingSubstatement> {
+public class StatementWithoutTrailingSubstatementVisitor extends Java9BaseVisitor<Statement> {
 
     public static StatementWithoutTrailingSubstatementVisitor instance() {
         return Holder.INSTANCE;
     }
 
     @Override
-    public StatementWithoutTrailingSubstatement visitStatementWithoutTrailingSubstatement(final Java9Parser.StatementWithoutTrailingSubstatementContext ctx) {
+    public Statement visitStatement(final Java9Parser.StatementContext ctx) {
+        final LabeledStatementVisitor labeledStatementVisitor = LabeledStatementVisitor.instance();
+        final IfStatementVisitor ifStatementVisitor = IfStatementVisitor.instance();
+        final WhileStatementVisitor whileStatementVisitor = WhileStatementVisitor.instance();
+        final ForStatementVisitor forStatementVisitor = ForStatementVisitor.instance();
+
+        if (ctx.statementWithoutTrailingSubstatement() != null) {
+            return ctx.statementWithoutTrailingSubstatement().accept(this);
+        } else if (ctx.labeledStatement() != null) {
+            return ctx.labeledStatement().accept(labeledStatementVisitor);
+        } else if (ctx.ifThenStatement() != null) {
+            return ctx.ifThenStatement().accept(ifStatementVisitor);
+        } else if (ctx.ifThenElseStatement() != null) {
+            return ctx.ifThenElseStatement().accept(ifStatementVisitor);
+        } else if (ctx.whileStatement() != null) {
+            return ctx.whileStatement().accept(whileStatementVisitor);
+        } else if (ctx.forStatement() != null) {
+            return ctx.forStatement().accept(forStatementVisitor);
+        } else {
+            throw new IllegalArgumentException("Unsupported statement type!");
+        }
+    }
+
+    @Override
+    public Statement visitStatementNoShortIf(final Java9Parser.StatementNoShortIfContext ctx) {
+        final LabeledStatementVisitor labeledStatementVisitor = LabeledStatementVisitor.instance();
+        final IfStatementVisitor ifStatementVisitor = IfStatementVisitor.instance();
+        final WhileStatementVisitor whileStatementVisitor = WhileStatementVisitor.instance();
+        final ForStatementVisitor forStatementVisitor = ForStatementVisitor.instance();
+
+        if (ctx.statementWithoutTrailingSubstatement() != null) {
+            return ctx.statementWithoutTrailingSubstatement().accept(this);
+        } else if (ctx.labeledStatementNoShortIf() != null) {
+            return ctx.labeledStatementNoShortIf().accept(labeledStatementVisitor);
+        } else if (ctx.ifThenElseStatementNoShortIf() != null) {
+            return ctx.ifThenElseStatementNoShortIf().accept(ifStatementVisitor);
+        } else if (ctx.whileStatementNoShortIf() != null) {
+            return ctx.whileStatementNoShortIf().accept(whileStatementVisitor);
+        } else if (ctx.forStatementNoShortIf() != null) {
+            return ctx.forStatementNoShortIf().accept(forStatementVisitor);
+        } else {
+            throw new IllegalArgumentException("Unsupported statement type!");
+        }
+    }
+
+    @Override
+    public Statement visitStatementWithoutTrailingSubstatement(final Java9Parser.StatementWithoutTrailingSubstatementContext ctx) {
         final SynchronizedStatementVisitor synchronizedStatementVisitor = SynchronizedStatementVisitor.instance();
         final ReturnStatementVisitor returnStatementVisitor = ReturnStatementVisitor.instance();
         final BlockVisitor blockVisitor = BlockVisitor.instance();
@@ -42,7 +88,7 @@ public class StatementWithoutTrailingSubstatementVisitor extends Java9BaseVisito
         } else if (ctx.switchStatement() != null) {
             return ctx.switchStatement().accept(switchStatementVisitor);
         } else if (ctx.emptyStatement() != null) {
-            return StatementWithoutTrailingSubstatement.EmptyStatement.instance();
+            return Statement.EmptyStatement.instance();
         } else if (ctx.throwStatement() != null) {
             return ctx.throwStatement().accept(throwStatementVisitor);
         } else if (ctx.tryStatement() != null) {

@@ -2,7 +2,7 @@ package visitor;
 
 import data.BlockStatement;
 import data.Field;
-import data.statements.Statement;
+import data.Statement;
 import pl.jcsharp.grammar.Java9BaseVisitor;
 import pl.jcsharp.grammar.Java9Parser;
 
@@ -14,7 +14,8 @@ class BlockStatementVisitor extends Java9BaseVisitor<BlockStatement> {
 
     @Override
     public BlockStatement visitBlockStatement(final Java9Parser.BlockStatementContext ctx) {
-        final StatementVisitor statementVisitor = StatementVisitor.instance();
+        final StatementWithoutTrailingSubstatementVisitor statementVisitor =
+                StatementWithoutTrailingSubstatementVisitor.instance();
         final FieldVisitor fieldVisitor = FieldVisitor.instance();
 
         final Field field;

@@ -71,7 +71,7 @@ final class Utility {
         final StringBuilder builder = new StringBuilder();
         generics.stream()
                 .filter(filterWildcards())
-                .filter(g -> g.getBoundedType().isEmpty() || g.getType() == null)
+                .filter(g -> !(g.getBoundedType().isEmpty() && g.getType() == null))
                 .forEach(g -> builder
                         .append(Codestyle.newLine())
                         .append(appendIndentation(indentation))

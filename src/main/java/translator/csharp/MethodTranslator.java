@@ -39,7 +39,7 @@ final class MethodTranslator implements ComponentTranslator<Method> {
                 .append(Utility.appendIndentation(indentationCounter))
                 .append(Utility.appendModifiers(translateModifiers(input.getModifiers(), input.getAnnotations())))
                 .append(Codestyle.space())
-                .append(input.getResult())
+                .append(TypeBootstrap.instance().translate(input.getResult(), 0))
                 .append(Codestyle.space())
                 .append(input.getName())
                 .append("(")

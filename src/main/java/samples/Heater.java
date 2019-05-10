@@ -160,6 +160,11 @@ class Heater<T extends Function<String, Object>, T2 extends Object> extends Obje
         }
 
         @Override
+        public void start() {
+            super.start();
+        }
+
+        @Override
         public int stop() {
             return 0;
         }

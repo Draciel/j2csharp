@@ -17,7 +17,10 @@ final class StatementExpressionTranslator implements ComponentTranslator<Stateme
     @Nonnull
     @Override
     public String translate(@Nonnull final Statement.StatementExpression input, final int indentationCounter) {
-        final String output = Utility.appendIndentation(indentationCounter) + input.getContent();
+        final StatementBootstrap statementBootstrap = StatementBootstrap.instance();
+
+        final String output = Utility.appendIndentation(indentationCounter) + statementBootstrap.translate(input, 0);
+
         if (input.isExpression()) {
             return output;
         }

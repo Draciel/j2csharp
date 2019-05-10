@@ -84,9 +84,9 @@ final class MethodVisitor extends Java9BaseVisitor<Method> {
             modifiers.add(Modifier.PACKAGE);
         }
 
-        final String result = ctx.methodHeader().result().getText();
+        final Type resultType = new Type(ctx.methodHeader().result().getText());
 
-        return new Method(name, parameters, block, modifiers, annotations, result, isDeclaration);
+        return new Method(name, parameters, block, modifiers, annotations, resultType, isDeclaration);
     }
 
     @Override
@@ -159,9 +159,9 @@ final class MethodVisitor extends Java9BaseVisitor<Method> {
             modifiers.add(Modifier.PACKAGE);
         }
 
-        final String result = ctx.methodHeader().result().getText();
+        final Type resultType = new Type(ctx.methodHeader().result().getText());
 
-        return new Method(name, parameters, block, modifiers, annotations, result, isDeclaration);
+        return new Method(name, parameters, block, modifiers, annotations, resultType, isDeclaration);
     }
 
     private static boolean isAnnotation(@Nonnull final Java9Parser.MethodModifierContext ctx) {

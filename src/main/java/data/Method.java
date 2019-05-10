@@ -26,14 +26,14 @@ public class Method {
     private final List<Annotation> annotations;
 
     @Nonnull
-    private final String result;
+    private final Type result;
 
     public Method(@Nonnull final String name,
                   @Nonnull final List<Parameter> parameters,
                   @Nonnull final Statement block,
                   @Nonnull final List<Modifier> modifiers,
                   @Nonnull final List<Annotation> annotations,
-                  @Nonnull final String result,
+                  @Nonnull final Type result,
                   final boolean isDeclaration) {
         this.name = name;
         this.parameters = parameters;
@@ -70,7 +70,7 @@ public class Method {
     }
 
     @Nonnull
-    public String getResult() {
+    public Type getResult() {
         return result;
     }
 

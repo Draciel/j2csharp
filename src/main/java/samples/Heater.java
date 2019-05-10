@@ -2,11 +2,8 @@ package samples;
 
 import samples.atomic.FastBoolean;
 import samples.comparable.Comparable;
-
-import java.util.Arrays;
-import java.util.List;
-
-import static java.lang.String.format;
+import samples.exception.NotImplementedException;
+import samples.exception.NotImplementedExceptionBetter;
 
 @Deprecated
 class Heater<T extends Function<String, Object>, T2 extends Object> extends Object implements Consumer<T>,
@@ -24,20 +21,20 @@ class Heater<T extends Function<String, Object>, T2 extends Object> extends Obje
     private boolean keepStable;
     private T adapter;
 
-    public void whileTest() {
-        int i = 0;
-        while (i < 5) {
-            System.out.println("Looping via while " + i);
-            i++;
-        }
-    }
-
     protected Heater(final int maxTemp) {
         this.maxTemp = maxTemp;
     }
 
     public static Heater create(final int maxTemp) {
         return new Heater(maxTemp);
+    }
+
+    public void whileTest() {
+        int i = 0;
+        while (i < 5) {
+            System.out.println("Looping via while " + i);
+            i++;
+        }
     }
 
     public void ifThenElseTest() {
@@ -53,13 +50,13 @@ class Heater<T extends Function<String, Object>, T2 extends Object> extends Obje
     }
 
     public void loopTest() {
-        final List<Integer> integers = Arrays.asList(1, 2, 3, 4, 5);
+        final int[] integers = new int[]{1, 2, 3, 4, 5};
 
         for (int i = 0; i < 10; i++) {
             System.out.println("Basic Counting " + i);
         }
 
-        for (Integer i : integers) {
+        for (int i : integers) {
             System.out.println("Enhanced counting " + i);
         }
     }
@@ -68,14 +65,24 @@ class Heater<T extends Function<String, Object>, T2 extends Object> extends Obje
         if ((maxTemp - currentTemp - offset) > 0) {
             currentTemp += offset;
         }
-        System.out.println(format(HEATING_MESSAGE, currentTemp));
+        try {
+            System.out.println(format(HEATING_MESSAGE, currentTemp));
+        } catch (NotImplementedException ex) {
+            System.out.println("Not implemented!");
+        }
     }
 
     public synchronized void cool(final int offset) {
         if (currentTemp - offset > 0) {
             currentTemp -= offset;
         }
-        System.out.println(format(COOLING_MESSAGE, currentTemp));
+        try {
+            System.out.println(format(COOLING_MESSAGE, currentTemp));
+        } catch (NotImplementedException | NotImplementedExceptionBetter x) {
+            System.out.println("Not implemented!");
+        } finally {
+            System.out.println("Finally block!");
+        }
     }
 
     public synchronized int getCurrentTemp() {
@@ -85,7 +92,11 @@ class Heater<T extends Function<String, Object>, T2 extends Object> extends Obje
     public synchronized void keepTemperature(final long timeInMs, final boolean keepStable) {
         keepTemperatureTimeInMs = timeInMs;
         this.keepStable = keepStable;
-        System.out.println(KEEP_TEMPERATURE_MESSAGE);
+        try {
+            System.out.println(KEEP_TEMPERATURE_MESSAGE);
+        } finally {
+            System.out.println("Finally!");
+        }
     }
 
     public synchronized void keepTemperature(final long timeInsMs, final boolean keepStable, final int repeat) {
@@ -103,6 +114,10 @@ class Heater<T extends Function<String, Object>, T2 extends Object> extends Obje
     @Override
     public int compareTo(final T2 t2) {
         return 0;
+    }
+
+    private static String format(String message, Object... strings) {
+        throw new NotImplementedException();
     }
 
     enum EngineType {

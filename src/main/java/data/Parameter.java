@@ -10,10 +10,18 @@ public class Parameter {
 
     private final List<Annotation> annotations;
 
-    public Parameter(final String name, final Type type, List<Annotation> annotations) {
+    private final boolean isVararg;
+
+    public Parameter(final String name, final Type type, List<Annotation> annotations,
+                     final boolean isVararg) {
         this.name = name;
         this.type = type;
         this.annotations = annotations;
+        this.isVararg = isVararg;
+    }
+
+    public boolean isVararg() {
+        return isVararg;
     }
 
     public String getName() {
@@ -32,8 +40,9 @@ public class Parameter {
     public String toString() {
         return "Parameter{" +
                 "name='" + name + '\'' +
-                ", type='" + type + '\'' +
+                ", type=" + type +
                 ", annotations=" + annotations +
+                ", isVararg=" + isVararg +
                 '}';
     }
 }

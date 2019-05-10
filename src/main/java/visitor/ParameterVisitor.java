@@ -31,7 +31,22 @@ final class ParameterVisitor extends Java9BaseVisitor<Parameter> {
         final String name = ctx.variableDeclaratorId().getText();
         final String type = ctx.unannType().getText();
 
-        return new Parameter(name, new Type(type), annotations);
+        return new Parameter(name, new Type(type), annotations, false);
+    }
+
+    @Override
+    public Parameter visitLastFormalParameter(final Java9Parser.LastFormalParameterContext ctx) {
+        final AnnotationVisitor annotationVisitor = AnnotationVisitor.instance();
+        // fixme we can optimize modifiers flow a bit
+        final List<Annotation> annotations = ctx.variableModifier().stream()
+                .filter(ParameterVisitor::isAnnotation)
+                .map(cm -> cm.annotation().accept(annotationVisitor))
+                .collect(Collectors.toList());
+
+        final String name = ctx.variableDeclaratorId().getText();
+        final String type = ctx.unannType().getText();
+
+        return new Parameter(name, new Type(type), annotations, true);
     }
 
     private static boolean isAnnotation(@Nonnull final Java9Parser.VariableModifierContext ctx) {

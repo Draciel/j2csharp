@@ -1,13 +1,14 @@
 package visitor;
 
-import data.Type;
 import data.CatchClauseStatement;
 import data.Statement;
+import data.Type;
 import pl.jcsharp.grammar.Java9BaseVisitor;
 import pl.jcsharp.grammar.Java9Parser;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 final class CatchClauseStatementVisitor extends Java9BaseVisitor<CatchClauseStatement> {
 
@@ -23,12 +24,19 @@ final class CatchClauseStatementVisitor extends Java9BaseVisitor<CatchClauseStat
     public CatchClauseStatement visitCatchClause(final Java9Parser.CatchClauseContext ctx) {
         final BlockVisitor blockVisitor = BlockVisitor.instance();
 
-        final List<Type> types = ctx.catchFormalParameter()
-                .catchType()
-                .classType()
-                .stream()
-                .map(ct -> new Type(ct.identifier().getText()))
-                .collect(Collectors.toList());
+        final List<Type> types;
+        if (ctx.catchFormalParameter().catchType().classType().isEmpty()) {
+            types = Collections.singletonList(new Type(ctx.catchFormalParameter().catchType().unannClassType().getText()));
+        } else {
+            types = new ArrayList<>();
+            types.add(new Type(ctx.catchFormalParameter().catchType().unannClassType().getText()));
+            ctx.catchFormalParameter()
+                    .catchType()
+                    .classType()
+                    .stream()
+                    .map(ct -> new Type(ct.identifier().getText()))
+                    .forEachOrdered(types::add);
+        }
 
         final String name = ctx.catchFormalParameter().variableDeclaratorId().identifier().getText();
 

@@ -476,7 +476,7 @@ public abstract class Statement {
 
     public static final class TryStatement extends Statement {
 
-        @Nullable
+        @Nonnull
         private final Block tryBlock;
 
         @Nonnull
@@ -487,7 +487,7 @@ public abstract class Statement {
 
         private TryStatement(@Nonnull final ComplexStatementType type, @Nonnull final Block tryBlock,
                              @Nonnull final List<CatchClauseStatement> catchClauseStatements,
-                             @Nonnull final Block finallyBlock) {
+                             @Nullable final Block finallyBlock) {
             super(type);
             this.tryBlock = tryBlock;
             this.catchClauseStatements = catchClauseStatements;
@@ -496,7 +496,7 @@ public abstract class Statement {
 
         public static TryStatement of(@Nonnull final Block tryBlock,
                                       @Nonnull final List<CatchClauseStatement> catchClauseStatements,
-                                      @Nonnull final Block finallyBlock) {
+                                      @Nullable final Block finallyBlock) {
             return new TryStatement(TRY, tryBlock, catchClauseStatements, finallyBlock);
         }
 
@@ -510,7 +510,7 @@ public abstract class Statement {
             return catchClauseStatements;
         }
 
-        @Nonnull
+        @Nullable
         public Block getFinallyBlock() {
             return finallyBlock;
         }

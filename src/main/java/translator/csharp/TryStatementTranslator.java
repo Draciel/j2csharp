@@ -23,9 +23,12 @@ final class TryStatementTranslator implements ComponentTranslator<Statement.TryS
 
         stringBuilder.append(Utility.appendIndentation(indentationCounter))
                 .append("try")
+                .append(Codestyle.space())
                 .append("{")
                 .append(Codestyle.newLine())
                 .append(blockTranslator.translate(input.getTryBlock(), indentationCounter))
+                .append(Codestyle.newLine())
+                .append(Utility.appendIndentation(indentationCounter))
                 .append("}");
 
         if (!input.getCatchClauseStatements().isEmpty()) {
@@ -40,6 +43,8 @@ final class TryStatementTranslator implements ComponentTranslator<Statement.TryS
                     .append("{")
                     .append(Codestyle.newLine())
                     .append(blockTranslator.translate(input.getFinallyBlock(), indentationCounter))
+                    .append(Codestyle.newLine())
+                    .append(Utility.appendIndentation(indentationCounter))
                     .append("}");
         }
 

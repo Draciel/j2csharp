@@ -113,10 +113,15 @@ final class MethodVisitor extends Java9BaseVisitor<Method> {
             }
 
             // add last parameter as it is not added by method above (or just one if method has only one parameter)
-            parameters.add(formalParameterList
-                    .lastFormalParameter()
-                    .formalParameter()
-                    .accept(parameterVisitor));
+            // and is not var arg
+            if (formalParameterList.lastFormalParameter().formalParameter() != null) {
+                parameters.add(formalParameterList.lastFormalParameter()
+                        .formalParameter()
+                        .accept(parameterVisitor));
+            } else {
+                parameters.add(formalParameterList.lastFormalParameter()
+                        .accept(parameterVisitor));
+            }
         }
 
         final Statement block;

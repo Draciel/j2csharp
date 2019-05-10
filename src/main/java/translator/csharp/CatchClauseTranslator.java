@@ -21,7 +21,7 @@ final class CatchClauseTranslator implements ComponentTranslator<CatchClauseStat
         final StringBuilder catchClauseBuilder = new StringBuilder();
         final BlockTranslator blockTranslator = BlockTranslator.instance();
 
-        final String translatedBlock = blockTranslator.translate(input.getBlock(), indentationCounter + 1);
+        final String translatedBlock = blockTranslator.translate(input.getBlock(), indentationCounter);
 
         input.getTypes()
                 .stream()
@@ -33,11 +33,13 @@ final class CatchClauseTranslator implements ComponentTranslator<CatchClauseStat
                         .append(t)
                         .append(Codestyle.space())
                         .append(input.getVariableName())
+                        .append(")")
                         .append(Codestyle.space())
                         .append("{")
                         .append(Codestyle.newLine())
                         .append(translatedBlock)
                         .append(Codestyle.newLine())
+                        .append(Utility.appendIndentation(indentationCounter))
                         .append("}"));
 
         return catchClauseBuilder.toString();

@@ -42,7 +42,8 @@ final class Utility {
     public static String appendParameters(@Nonnull final List<Parameter> parameters) {
         final TypeBootstrap bootstrap = TypeBootstrap.instance();
         return parameters.stream()
-                .map(p -> bootstrap.translate(p.getType(), 0) + Codestyle.space() + p.getName())
+                .map(p -> !p.isVararg() ? bootstrap.translate(p.getType(), 0) + Codestyle.space() + p.getName() :
+                        "params" + Codestyle.space() + bootstrap.translate(p.getType(), 0) + "[]" + Codestyle.space() + p.getName())
                 .collect(Collectors.joining("," + Codestyle.space()));
     }
 

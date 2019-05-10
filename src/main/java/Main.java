@@ -28,6 +28,8 @@ public class Main {
         files.add(Paths.get("src/main/java/samples/TimeUnit.java"));
         files.add(Paths.get("src/main/java/samples/atomic/FastBoolean.java"));
         files.add(Paths.get("src/main/java/samples/comparable/Comparable.java"));
+        files.add(Paths.get("src/main/java/samples/exception/NotImplementedException.java"));
+        files.add(Paths.get("src/main/java/samples/exception/NotImplementedExceptionBetter.java"));
 
         for (int i = 0; i < files.size(); i++) {
             final Java9Lexer lexer = new Java9Lexer(CharStreams.fromPath(files.get(i)));

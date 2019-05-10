@@ -157,7 +157,8 @@ final class EnumTranslator implements ComponentTranslator<Enum> {
                     .append(input.getEnumConstants().stream()
                             .map(EnumConstant::getContantName)
                             .collect(Collectors.joining("," + Codestyle.space())))
-                    .append(";")
+                    .append(Utility.appendIndentation(indentationCounter))
+                    .append("}")
                     .append(Codestyle.newLine());
         }
 

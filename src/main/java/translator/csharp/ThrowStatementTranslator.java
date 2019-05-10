@@ -19,7 +19,7 @@ final class ThrowStatementTranslator implements ComponentTranslator<Statement.Th
     public String translate(@Nonnull final Statement.ThrowStatement input, final int indentationCounter) {
         final StatementExpressionTranslator statementExpressionTranslator = StatementExpressionTranslator.instance();
         return Utility.appendIndentation(indentationCounter) + "throw" + Codestyle.space() +
-                statementExpressionTranslator.translate(input.getStatementExpression(), 0);
+                statementExpressionTranslator.translate(input.getStatementExpression(), 0) + ";";
     }
 
     private static final class Holder {

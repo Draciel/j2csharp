@@ -10,7 +10,7 @@ import utility.Nonnull;
 import java.util.List;
 import java.util.stream.Collectors;
 
-class ParameterVisitor extends Java9BaseVisitor<Parameter> {
+final class ParameterVisitor extends Java9BaseVisitor<Parameter> {
 
     private ParameterVisitor() {
     }

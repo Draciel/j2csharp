@@ -4,7 +4,11 @@ import data.Statement;
 import pl.jcsharp.grammar.Java9BaseVisitor;
 import pl.jcsharp.grammar.Java9Parser;
 
-class SynchronizedStatementVisitor extends Java9BaseVisitor<Statement.SynchronizedStatement> {
+final class SynchronizedStatementVisitor extends Java9BaseVisitor<Statement.SynchronizedStatement> {
+
+    private SynchronizedStatementVisitor() {
+        //no instance
+    }
 
     public static SynchronizedStatementVisitor instance() {
         return Holder.INSTANCE;

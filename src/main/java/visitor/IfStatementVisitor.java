@@ -4,7 +4,11 @@ import data.Statement;
 import pl.jcsharp.grammar.Java9BaseVisitor;
 import pl.jcsharp.grammar.Java9Parser;
 
-class IfStatementVisitor extends Java9BaseVisitor<Statement.IfStatement> {
+final class IfStatementVisitor extends Java9BaseVisitor<Statement.IfStatement> {
+
+    private IfStatementVisitor() {
+        //no instance
+    }
 
     public static IfStatementVisitor instance() {
         return Holder.INSTANCE;
@@ -13,7 +17,8 @@ class IfStatementVisitor extends Java9BaseVisitor<Statement.IfStatement> {
     @Override
     public Statement.IfStatement visitIfThenElseStatement(final Java9Parser.IfThenElseStatementContext ctx) {
         final StatementExpressionVisitor statementExpressionVisitor = StatementExpressionVisitor.instance();
-        final StatementWithoutTrailingSubstatementVisitor statementVisitor = StatementWithoutTrailingSubstatementVisitor.instance();
+        final StatementWithoutTrailingSubstatementVisitor statementVisitor =
+                StatementWithoutTrailingSubstatementVisitor.instance();
 
         final Statement.StatementExpression conditional = ctx.expression().accept(statementExpressionVisitor);
         final Statement ifBodyStatement = ctx.statementNoShortIf().accept(statementVisitor);
@@ -38,7 +43,8 @@ class IfStatementVisitor extends Java9BaseVisitor<Statement.IfStatement> {
     @Override
     public Statement.IfStatement visitIfThenStatement(final Java9Parser.IfThenStatementContext ctx) {
         final StatementExpressionVisitor statementExpressionVisitor = StatementExpressionVisitor.instance();
-        final StatementWithoutTrailingSubstatementVisitor statementVisitor = StatementWithoutTrailingSubstatementVisitor.instance();
+        final StatementWithoutTrailingSubstatementVisitor statementVisitor =
+                StatementWithoutTrailingSubstatementVisitor.instance();
 
         final Statement.StatementExpression conditional = ctx.expression().accept(statementExpressionVisitor);
         final Statement ifBodyStatement = ctx.statement().accept(statementVisitor);

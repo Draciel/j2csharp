@@ -4,7 +4,11 @@ import data.Statement;
 import pl.jcsharp.grammar.Java9BaseVisitor;
 import pl.jcsharp.grammar.Java9Parser;
 
-class ContinueStatementVisitor extends Java9BaseVisitor<Statement.ContinueStatement> {
+final class ContinueStatementVisitor extends Java9BaseVisitor<Statement.ContinueStatement> {
+
+    private ContinueStatementVisitor() {
+        //no instance
+    }
 
     public static ContinueStatementVisitor instance() {
         return Holder.INSTANCE;

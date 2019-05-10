@@ -4,7 +4,7 @@ import data.Import;
 import pl.jcsharp.grammar.Java9BaseVisitor;
 import pl.jcsharp.grammar.Java9Parser;
 
-class ImportVisitor extends Java9BaseVisitor<Import> {
+final class ImportVisitor extends Java9BaseVisitor<Import> {
 
     private ImportVisitor() {
 

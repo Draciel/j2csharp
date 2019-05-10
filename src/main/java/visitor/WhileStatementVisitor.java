@@ -4,7 +4,11 @@ import data.Statement;
 import pl.jcsharp.grammar.Java9BaseVisitor;
 import pl.jcsharp.grammar.Java9Parser;
 
-class WhileStatementVisitor extends Java9BaseVisitor<Statement.WhileStatement> {
+final class WhileStatementVisitor extends Java9BaseVisitor<Statement.WhileStatement> {
+
+    private WhileStatementVisitor() {
+        //no instance
+    }
 
     public static WhileStatementVisitor instance() {
         return Holder.INSTANCE;

@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-class WildcardTypeParameterVisitor extends Java9BaseVisitor<List<Generic>> {
+final class WildcardTypeParameterVisitor extends Java9BaseVisitor<List<Generic>> {
 
     private WildcardTypeParameterVisitor() {
         //no instance
@@ -30,16 +30,19 @@ class WildcardTypeParameterVisitor extends Java9BaseVisitor<List<Generic>> {
         final List<Generic> generics = new ArrayList<>();
 
         for (int i = 0; i < typeArgumentListContext.typeArgument().size(); i++) {
-            final Java9Parser.WildcardContext wildcardContext = typeArgumentListContext.typeArgument().get(i).wildcard();
+            final Java9Parser.WildcardContext wildcardContext =
+                    typeArgumentListContext.typeArgument().get(i).wildcard();
             if (wildcardContext != null) {
                 final String typeParameter = wildcardContext.QUESTION().getText();
                 final String bound = getBound(wildcardContext.wildcardBounds());
-                final List<Generic> innerGenerics = wildcardContext.wildcardBounds().referenceType().classOrInterfaceType().accept(this);
+                final List<Generic> innerGenerics =
+                        wildcardContext.wildcardBounds().referenceType().classOrInterfaceType().accept(this);
                 generics.add(new Generic(new Type(typeParameter), new Type(type), bound, true, innerGenerics));
             } else {
                 final String typeParameter = typeArgumentListContext.typeArgument().get(i).referenceType().getText();
                 final String bound = "";
-                generics.add(new Generic(new Type(typeParameter), new Type(type), bound, false, Collections.emptyList()));
+                generics.add(new Generic(new Type(typeParameter), new Type(type), bound, false,
+                        Collections.emptyList()));
             }
         }
 

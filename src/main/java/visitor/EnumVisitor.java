@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 
 import static java.util.Collections.emptyList;
 
-class EnumVisitor extends Java9BaseVisitor<Enum> {
+final class EnumVisitor extends Java9BaseVisitor<Enum> {
 
     private EnumVisitor() {
         //no instance
@@ -83,7 +83,8 @@ class EnumVisitor extends Java9BaseVisitor<Enum> {
                         .collect(Collectors.toList());
 
         final List<EnumConstant> enumConstants = ctx.enumBody().enumConstantList().enumConstant().stream()
-                .map(b -> new EnumConstant(b.identifier().getText(), b.argumentList() == null ? Collections.emptyList() :
+                .map(b -> new EnumConstant(b.identifier().getText(), b.argumentList() == null ?
+                        Collections.emptyList() :
                         b.argumentList().expression().stream()
                                 .map(RuleContext::getText)
                                 .collect(Collectors.toList())))

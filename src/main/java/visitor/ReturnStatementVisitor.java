@@ -4,7 +4,11 @@ import data.Statement;
 import pl.jcsharp.grammar.Java9BaseVisitor;
 import pl.jcsharp.grammar.Java9Parser;
 
-class ReturnStatementVisitor extends Java9BaseVisitor<Statement.ReturnStatement> {
+final class ReturnStatementVisitor extends Java9BaseVisitor<Statement.ReturnStatement> {
+
+    private ReturnStatementVisitor() {
+        //no instance
+    }
 
     public static ReturnStatementVisitor instance() {
         return Holder.INSTANCE;

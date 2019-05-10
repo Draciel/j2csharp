@@ -8,7 +8,11 @@ import pl.jcsharp.grammar.Java9Parser;
 import java.util.List;
 import java.util.stream.Collectors;
 
-class TryStatementVisitor extends Java9BaseVisitor<Statement.TryStatement> {
+final class TryStatementVisitor extends Java9BaseVisitor<Statement.TryStatement> {
+
+    private TryStatementVisitor() {
+        //no instance
+    }
 
     public static TryStatementVisitor instance() {
         return Holder.INSTANCE;

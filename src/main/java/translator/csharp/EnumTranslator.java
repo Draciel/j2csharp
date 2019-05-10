@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-class EnumTranslator implements ComponentTranslator<Enum> {
+final class EnumTranslator implements ComponentTranslator<Enum> {
 
     private static Function<Modifier, Modifier> MODIFIER_TRANSFORMER = modifier -> {
         switch (modifier) {
@@ -65,7 +65,8 @@ class EnumTranslator implements ComponentTranslator<Enum> {
                     .append(Codestyle.newLine())
                     .append(Codestyle.newLine())
                     .append(input.getEnumConstants().stream()
-                            .map(ec -> translateEnumConstant(enumConstantModifiers, ec, input.getName(), indentationForNested))
+                            .map(ec -> translateEnumConstant(enumConstantModifiers, ec, input.getName(),
+                                    indentationForNested))
                             .collect(Collectors.joining()));
 
             input.getFields().stream()

@@ -4,7 +4,7 @@ import data.Annotation;
 import pl.jcsharp.grammar.Java9BaseVisitor;
 import pl.jcsharp.grammar.Java9Parser;
 
-class AnnotationVisitor extends Java9BaseVisitor<Annotation> {
+final class AnnotationVisitor extends Java9BaseVisitor<Annotation> {
 
     private AnnotationVisitor() {
         //no instance

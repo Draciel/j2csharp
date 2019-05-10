@@ -4,7 +4,11 @@ import data.Statement;
 import pl.jcsharp.grammar.Java9BaseVisitor;
 import pl.jcsharp.grammar.Java9Parser;
 
-class BreakStatementVisitor extends Java9BaseVisitor<Statement.BreakStatement> {
+final class BreakStatementVisitor extends Java9BaseVisitor<Statement.BreakStatement> {
+
+    private BreakStatementVisitor() {
+        //no instance
+    }
 
     public static BreakStatementVisitor instance() {
         return Holder.INSTANCE;

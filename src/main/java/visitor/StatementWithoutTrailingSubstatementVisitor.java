@@ -4,7 +4,11 @@ import data.Statement;
 import pl.jcsharp.grammar.Java9BaseVisitor;
 import pl.jcsharp.grammar.Java9Parser;
 
-public class StatementWithoutTrailingSubstatementVisitor extends Java9BaseVisitor<Statement> {
+final class StatementWithoutTrailingSubstatementVisitor extends Java9BaseVisitor<Statement> {
+
+    private StatementWithoutTrailingSubstatementVisitor() {
+        //no instance
+    }
 
     public static StatementWithoutTrailingSubstatementVisitor instance() {
         return Holder.INSTANCE;

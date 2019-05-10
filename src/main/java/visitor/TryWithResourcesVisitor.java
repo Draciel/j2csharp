@@ -9,7 +9,11 @@ import pl.jcsharp.grammar.Java9Parser;
 import java.util.List;
 import java.util.stream.Collectors;
 
-class TryWithResourcesVisitor extends Java9BaseVisitor<Statement.TryWithResourcesStatement> {
+final class TryWithResourcesVisitor extends Java9BaseVisitor<Statement.TryWithResourcesStatement> {
+
+    private TryWithResourcesVisitor() {
+        //no instance
+    }
 
     public static TryWithResourcesVisitor instance() {
         return Holder.INSTANCE;

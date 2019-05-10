@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-class InterfaceTranslator implements ComponentTranslator<Interface> {
+final class InterfaceTranslator implements ComponentTranslator<Interface> {
 
     private static Function<Modifier, Modifier> MODIFIER_TRANSFORMER = modifier -> {
         switch (modifier) {

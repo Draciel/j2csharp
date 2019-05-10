@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-class MethodVisitor extends Java9BaseVisitor<Method> {
+final class MethodVisitor extends Java9BaseVisitor<Method> {
 
     private MethodVisitor() {
     }

@@ -6,7 +6,11 @@ import data.Statement;
 import pl.jcsharp.grammar.Java9BaseVisitor;
 import pl.jcsharp.grammar.Java9Parser;
 
-class BlockStatementVisitor extends Java9BaseVisitor<BlockStatement> {
+final class BlockStatementVisitor extends Java9BaseVisitor<BlockStatement> {
+
+    private BlockStatementVisitor() {
+        //no instance
+    }
 
     public static BlockStatementVisitor instance() {
         return Holder.INSTANCE;

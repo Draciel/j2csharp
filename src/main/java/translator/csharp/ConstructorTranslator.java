@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-class ConstructorTranslator implements ComponentTranslator<Constructor> {
+final class ConstructorTranslator implements ComponentTranslator<Constructor> {
 
     private static Function<Modifier, Modifier> MODIFIER_TRANSFORMER = modifier -> {
         switch (modifier) {

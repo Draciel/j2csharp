@@ -5,8 +5,11 @@ import pl.jcsharp.grammar.Java9BaseVisitor;
 import pl.jcsharp.grammar.Java9Parser;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
-class SwitchStatementVisitor extends Java9BaseVisitor<Statement.SwitchStatement> {
+final class SwitchStatementVisitor extends Java9BaseVisitor<Statement.SwitchStatement> {
 
+    private SwitchStatementVisitor() {
+        //no instance
+    }
 
     public static SwitchStatementVisitor instance() {
         return Holder.INSTANCE;

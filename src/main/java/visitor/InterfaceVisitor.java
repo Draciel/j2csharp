@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 
 import static java.util.Collections.emptyList;
 
-class InterfaceVisitor extends Java9BaseVisitor<Interface> {
+final class InterfaceVisitor extends Java9BaseVisitor<Interface> {
 
     private InterfaceVisitor() {
     }
@@ -34,12 +34,14 @@ class InterfaceVisitor extends Java9BaseVisitor<Interface> {
         final ClassVisitor classVisitor = ClassVisitor.instance();
         final EnumVisitor enumVisitor = EnumVisitor.instance();
 
-        final List<Method> methods = ctx.normalInterfaceDeclaration().interfaceBody().interfaceMemberDeclaration().stream()
+        final List<Method> methods =
+                ctx.normalInterfaceDeclaration().interfaceBody().interfaceMemberDeclaration().stream()
                 .filter(InterfaceVisitor::isMethod)
                 .map(b -> b.interfaceMethodDeclaration().accept(methodVisitor))
                 .collect(Collectors.toList());
 
-        final List<Field> fields = ctx.normalInterfaceDeclaration().interfaceBody().interfaceMemberDeclaration().stream()
+        final List<Field> fields =
+                ctx.normalInterfaceDeclaration().interfaceBody().interfaceMemberDeclaration().stream()
                 .filter(InterfaceVisitor::isField)
                 .map(b -> b.constantDeclaration().accept(fieldVisitor))
                 .collect(Collectors.toList());
@@ -55,12 +57,14 @@ class InterfaceVisitor extends Java9BaseVisitor<Interface> {
                 .map(cm -> Modifier.of(cm.getText()))
                 .collect(Collectors.toList());
 
-        final List<Class> classes = ctx.normalInterfaceDeclaration().interfaceBody().interfaceMemberDeclaration().stream()
+        final List<Class> classes =
+                ctx.normalInterfaceDeclaration().interfaceBody().interfaceMemberDeclaration().stream()
                 .filter(InterfaceVisitor::isClass)
                 .map(b -> b.classDeclaration().accept(classVisitor))
                 .collect(Collectors.toList());
 
-        final List<Interface> interfaces = ctx.normalInterfaceDeclaration().interfaceBody().interfaceMemberDeclaration().stream()
+        final List<Interface> interfaces =
+                ctx.normalInterfaceDeclaration().interfaceBody().interfaceMemberDeclaration().stream()
                 .filter(InterfaceVisitor::isInterface)
                 .map(b -> b.interfaceDeclaration().accept(this))
                 .collect(Collectors.toList());
@@ -75,12 +79,14 @@ class InterfaceVisitor extends Java9BaseVisitor<Interface> {
                 .filter(Modifier::isAccessModifier)
                 .findFirst();
 
-        final List<String> superInterfaces = ctx.normalInterfaceDeclaration().extendsInterfaces() == null ? emptyList() :
+        final List<String> superInterfaces = ctx.normalInterfaceDeclaration().extendsInterfaces() == null ?
+                emptyList() :
                 ctx.normalInterfaceDeclaration().extendsInterfaces().interfaceTypeList().interfaceType().stream()
                         .map(i -> i.classType().getText())
                         .collect(Collectors.toList());
 
-        final List<Generic> generics = ctx.normalInterfaceDeclaration().typeParameters() == null ? Collections.emptyList() :
+        final List<Generic> generics = ctx.normalInterfaceDeclaration().typeParameters() == null ?
+                Collections.emptyList() :
                 ctx.normalInterfaceDeclaration().typeParameters().typeParameterList().typeParameter().stream()
                         .map(tpc -> tpc.accept(typeParameterVisitor))
                         .collect(Collectors.toList());
@@ -90,7 +96,8 @@ class InterfaceVisitor extends Java9BaseVisitor<Interface> {
         }
 
         // handle other things
-        return new Interface(name, modifiers, fields, methods, annotations, superInterfaces, generics, interfaces, classes, enums);
+        return new Interface(name, modifiers, fields, methods, annotations, superInterfaces, generics, interfaces,
+                classes, enums);
     }
 
     // fixme find better way...

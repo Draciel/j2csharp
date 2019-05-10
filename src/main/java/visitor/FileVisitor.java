@@ -9,7 +9,7 @@ import pl.jcsharp.grammar.Java9Parser;
 import java.util.List;
 import java.util.stream.Collectors;
 
-class FileVisitor extends Java9BaseVisitor<File> {
+final class FileVisitor extends Java9BaseVisitor<File> {
 
     private FileVisitor() {
     }

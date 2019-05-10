@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-class MethodTranslator implements ComponentTranslator<Method> {
+final class MethodTranslator implements ComponentTranslator<Method> {
 
     private static Function<Modifier, Modifier> MODIFIER_TRANSFORMER = modifier -> {
         switch (modifier) {

@@ -8,7 +8,7 @@ import pl.jcsharp.grammar.Java9Parser;
 import java.util.Collections;
 import java.util.List;
 
-class TypeParameterVisitor extends Java9BaseVisitor<Generic> {
+final class TypeParameterVisitor extends Java9BaseVisitor<Generic> {
 
     private TypeParameterVisitor() {
         //no instance
@@ -30,7 +30,8 @@ class TypeParameterVisitor extends Java9BaseVisitor<Generic> {
             if (ctx.typeBound().classOrInterfaceType() != null) {
                 generic = ctx.typeBound().classOrInterfaceType().accept(wildcardVisitor);
             } else {
-                return new Generic(new Type(typeName), new Type(ctx.typeBound().typeVariable().getText()), ctx.typeBound().EXTENDS().getText(), false, Collections.emptyList());
+                return new Generic(new Type(typeName), new Type(ctx.typeBound().typeVariable().getText()),
+                        ctx.typeBound().EXTENDS().getText(), false, Collections.emptyList());
             }
         } else {
             generic = Collections.emptyList();

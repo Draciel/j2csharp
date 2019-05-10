@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 
 import static java.util.Collections.emptyList;
 
-class ClassVisitor extends Java9BaseVisitor<Class> {
+final class ClassVisitor extends Java9BaseVisitor<Class> {
 
     private ClassVisitor() {
     }
@@ -98,7 +98,8 @@ class ClassVisitor extends Java9BaseVisitor<Class> {
         }
 
         // handle other things
-        return new Class(name, modifiers, constructors, methods, fields, annotations, superClass, superInterfaces, generics, classes, interfaces, enums);
+        return new Class(name, modifiers, constructors, methods, fields, annotations, superClass, superInterfaces,
+                generics, classes, interfaces, enums);
     }
 
     // fixme find better way...

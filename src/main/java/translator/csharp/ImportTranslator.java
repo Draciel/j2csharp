@@ -4,7 +4,7 @@ import data.Import;
 import translator.ComponentTranslator;
 import utility.Nonnull;
 
-class ImportTranslator implements ComponentTranslator<Import> {
+final class ImportTranslator implements ComponentTranslator<Import> {
 
     private ImportTranslator() {
         //no instance

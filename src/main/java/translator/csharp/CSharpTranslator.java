@@ -8,7 +8,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 
-public class CSharpTranslator implements Translator {
+public final class CSharpTranslator implements Translator {
 
     @Override
     public void translate(final File input, final Path path) {

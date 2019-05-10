@@ -7,10 +7,14 @@ import pl.jcsharp.grammar.Java9Parser;
 import java.util.List;
 import java.util.stream.Collectors;
 
-class AssertStatementVisitor extends Java9BaseVisitor<Statement.AssertStatement> {
+final class AssertStatementVisitor extends Java9BaseVisitor<Statement.AssertStatement> {
 
     public static AssertStatementVisitor instance() {
         return Holder.INSTANCE;
+    }
+
+    private AssertStatementVisitor() {
+        //no instance
     }
 
     @Override

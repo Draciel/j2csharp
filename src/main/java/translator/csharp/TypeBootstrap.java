@@ -6,7 +6,7 @@ import utility.Nonnull;
 
 import java.util.HashMap;
 
-class TypeBootstrap implements ComponentTranslator<Type> {
+final class TypeBootstrap implements ComponentTranslator<Type> {
 
     private final HashMap<Type, Type> typesTranslationMap = new HashMap<>();
 

@@ -9,7 +9,11 @@ import pl.jcsharp.grammar.Java9Parser;
 import java.util.List;
 import java.util.stream.Collectors;
 
-class CatchClauseStatementVisitor extends Java9BaseVisitor<CatchClauseStatement> {
+final class CatchClauseStatementVisitor extends Java9BaseVisitor<CatchClauseStatement> {
+
+    private CatchClauseStatementVisitor() {
+        //no instance
+    }
 
     public static CatchClauseStatementVisitor instance() {
         return Holder.INSTANCE;

@@ -5,7 +5,7 @@ import data.Statement;
 import pl.jcsharp.grammar.Java9BaseVisitor;
 import pl.jcsharp.grammar.Java9Parser;
 
-public class ForStatementVisitor extends Java9BaseVisitor<Statement> {
+final class ForStatementVisitor extends Java9BaseVisitor<Statement> {
 
     private ForStatementVisitor() {
         //no instance
@@ -60,7 +60,8 @@ public class ForStatementVisitor extends Java9BaseVisitor<Statement> {
     public Statement visitForStatementNoShortIf(final Java9Parser.ForStatementNoShortIfContext ctx) {
         final FieldVisitor fieldVisitor = FieldVisitor.instance();
         final StatementExpressionVisitor statementExpressionVisitor = StatementExpressionVisitor.instance();
-        final StatementWithoutTrailingSubstatementVisitor statementVisitor = StatementWithoutTrailingSubstatementVisitor.instance();
+        final StatementWithoutTrailingSubstatementVisitor statementVisitor =
+                StatementWithoutTrailingSubstatementVisitor.instance();
 
         if (ctx.basicForStatementNoShortIf() != null) {
             final Java9Parser.ForInitContext forInitContext = ctx.basicForStatementNoShortIf().forInit();

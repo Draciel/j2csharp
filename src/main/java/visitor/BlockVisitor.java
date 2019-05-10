@@ -8,7 +8,11 @@ import pl.jcsharp.grammar.Java9Parser;
 import java.util.List;
 import java.util.stream.Collectors;
 
-class BlockVisitor extends Java9BaseVisitor<Statement.Block> {
+final class BlockVisitor extends Java9BaseVisitor<Statement.Block> {
+
+    private BlockVisitor() {
+        //no instance
+    }
 
     public static BlockVisitor instance() {
         return Holder.INSTANCE;

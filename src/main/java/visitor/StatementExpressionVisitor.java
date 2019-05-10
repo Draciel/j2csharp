@@ -8,7 +8,7 @@ import pl.jcsharp.grammar.Java9Parser;
 import utility.Nonnull;
 
 // Visitor dedicated for simple statements, initializers, expressions.
-class StatementExpressionVisitor extends Java9BaseVisitor<Statement.StatementExpression> {
+final class StatementExpressionVisitor extends Java9BaseVisitor<Statement.StatementExpression> {
 
     private StatementExpressionVisitor() {
     }

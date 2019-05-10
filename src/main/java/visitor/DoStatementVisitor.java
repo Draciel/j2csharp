@@ -4,7 +4,11 @@ import data.Statement;
 import pl.jcsharp.grammar.Java9BaseVisitor;
 import pl.jcsharp.grammar.Java9Parser;
 
-class DoStatementVisitor extends Java9BaseVisitor<Statement.DoStatement> {
+final class DoStatementVisitor extends Java9BaseVisitor<Statement.DoStatement> {
+
+    private DoStatementVisitor() {
+        //no instance
+    }
 
     public static DoStatementVisitor instance() {
         return Holder.INSTANCE;

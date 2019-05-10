@@ -5,7 +5,11 @@ import pl.jcsharp.grammar.Java9BaseVisitor;
 import pl.jcsharp.grammar.Java9Parser;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
-class LabeledStatementVisitor extends Java9BaseVisitor<Statement.LabeledStatement> {
+final class LabeledStatementVisitor extends Java9BaseVisitor<Statement.LabeledStatement> {
+
+    private LabeledStatementVisitor() {
+        //no instance
+    }
 
     public static LabeledStatementVisitor instance() {
         return Holder.INSTANCE;

@@ -36,16 +36,21 @@ final class FieldTranslator implements ComponentTranslator<Field> {
     @Override
     public String translate(@Nonnull final Field input, final int indentationCounter) {
         final TypeBootstrap bootstrap = TypeBootstrap.instance();
-        return new StringBuilder()
-                .append(Utility.appendIndentation(indentationCounter))
-                .append(Utility.appendModifiers(translateModifiers(input.getModifiers())))
-                .append(Codestyle.space())
-                .append(bootstrap.translate(input.getType(), 0))
+        final StringBuilder fieldBuilder = new StringBuilder();
+
+        fieldBuilder.append(Utility.appendIndentation(indentationCounter))
+                .append(Utility.appendModifiers(translateModifiers(input.getModifiers())));
+
+        if (!input.getModifiers().isEmpty()) {
+            fieldBuilder.append(Codestyle.space());
+        }
+
+        fieldBuilder.append(bootstrap.translate(input.getType(), 0))
                 .append(Codestyle.space())
                 .append(input.getName())
-                .append(Utility.appendInitializer(input.getInitializer()))
-                .append(";")
-                .toString();
+                .append(Utility.appendInitializer(input.getInitializer()));
+
+        return fieldBuilder.toString();
     }
 
     private List<Modifier> translateModifiers(@Nonnull final List<Modifier> modifiers) {

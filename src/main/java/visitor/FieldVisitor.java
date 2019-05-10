@@ -52,7 +52,6 @@ final class FieldVisitor extends Java9BaseVisitor<Field> {
         final String name = variableDeclaratorContext.variableDeclaratorId().identifier().getText();
         final String type = ctx.unannType().getText();
 
-        // fixme some statements like new Object()
         final Statement.StatementExpression initializer =
                 variableDeclaratorContext.variableInitializer() == null ?
                         Statement.StatementExpression.empty() :
@@ -101,10 +100,7 @@ final class FieldVisitor extends Java9BaseVisitor<Field> {
 
     @Override
     public Field visitLocalVariableDeclaration(final Java9Parser.LocalVariableDeclarationContext ctx) {
-        final List<Modifier> modifiers = ctx.variableModifier().stream()
-                .filter(vm -> !isAnnotation(vm))
-                .map(vm -> Modifier.of(vm.getText()))
-                .collect(Collectors.toList());
+        final List<Modifier> modifiers = Collections.emptyList();
 
         //fixme handle multiple variable declaration
         final Java9Parser.VariableDeclaratorContext variableDeclaratorContext = ctx.variableDeclaratorList()
@@ -158,10 +154,10 @@ final class FieldVisitor extends Java9BaseVisitor<Field> {
     }
 
     private static Statement.StatementExpression parseVariableDeclarator(@Nonnull final Java9Parser.VariableDeclaratorContext ctx) {
-        final int a = ctx.start.getStartIndex();
-        final int b = ctx.stop.getStopIndex();
+        final int a = ctx.variableInitializer().start.getStartIndex();
+        final int b = ctx.variableInitializer().stop.getStopIndex();
         final Interval interval = new Interval(a, b);
-        return Statement.StatementExpression.of(ctx.start.getInputStream().getText(interval));
+        return Statement.StatementExpression.of(ctx.variableInitializer().start.getInputStream().getText(interval), false);
     }
 
     private static boolean isAnnotation(@Nonnull final Java9Parser.FieldModifierContext ctx) {

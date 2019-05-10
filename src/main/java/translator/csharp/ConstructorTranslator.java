@@ -2,6 +2,7 @@ package translator.csharp;
 
 import data.Constructor;
 import data.Modifier;
+import data.Statement;
 import translator.ComponentTranslator;
 import utility.Nonnull;
 
@@ -32,7 +33,7 @@ final class ConstructorTranslator implements ComponentTranslator<Constructor> {
     @Nonnull
     @Override
     public String translate(@Nonnull final Constructor input, final int indentationCounter) {
-        return new StringBuilder()
+        final StringBuilder constructorBuilder = new StringBuilder()
                 .append(Utility.appendIndentation(indentationCounter))
                 .append(Utility.appendModifiers(translateModifiers(input.getModifiers())))
                 .append(Codestyle.space())
@@ -40,14 +41,30 @@ final class ConstructorTranslator implements ComponentTranslator<Constructor> {
                 .append("(")
                 .append(Utility.appendParameters(input.getParameters()))
                 .append(")")
-                .append(Codestyle.space())
-                .append("{")
+                .append(Codestyle.space());
+
+        if (!input.getExplicitConstructorInvocation().getContent().isEmpty()) {
+            constructorBuilder.append(":")
+                    .append(Codestyle.space())
+                    .append(translateSuperclassConstructorInvocation(input.getExplicitConstructorInvocation()))
+                    .append(Codestyle.space());
+        }
+
+        constructorBuilder.append("{")
                 .append(Codestyle.newLine())
-                .append(Utility.appendStatements(input.getStatements(), indentationCounter + 1)) //todo maybe use statement translator
+                .append(input.getStatements()
+                        .stream()
+                        .map(s -> StatementTranslator.instance().translate(s, indentationCounter + 1))
+                        .collect(Collectors.joining(Codestyle.newLine())))
                 .append(Codestyle.newLine())
                 .append(Utility.appendIndentation(indentationCounter))
-                .append("}")
-                .toString();
+                .append("}");
+
+        return constructorBuilder.toString();
+    }
+
+    private String translateSuperclassConstructorInvocation(@Nonnull final Statement.StatementExpression statementExpression) {
+        return statementExpression.getContent().replace("super", "base");
     }
 
     private static List<Modifier> translateModifiers(@Nonnull final List<Modifier> modifiers) {

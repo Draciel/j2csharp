@@ -1,16 +1,11 @@
 package visitor;
 
-import data.Annotation;
-import data.Method;
-import data.Modifier;
-import data.Parameter;
-import data.Statement;
+import data.*;
 import pl.jcsharp.grammar.Java9BaseVisitor;
 import pl.jcsharp.grammar.Java9Parser;
 import utility.Nonnull;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -27,8 +22,7 @@ final class MethodVisitor extends Java9BaseVisitor<Method> {
     @Override
     public Method visitInterfaceMethodDeclaration(final Java9Parser.InterfaceMethodDeclarationContext ctx) {
         final String name = ctx.methodHeader().methodDeclarator().identifier().getText();
-        final StatementWithoutTrailingSubstatementVisitor statementVisitor =
-                StatementWithoutTrailingSubstatementVisitor.instance();
+        final BlockVisitor blockVisitor = BlockVisitor.instance();
         final ParameterVisitor parameterVisitor = ParameterVisitor.instance();
         final AnnotationVisitor annotationVisitor = AnnotationVisitor.instance();
 
@@ -55,23 +49,19 @@ final class MethodVisitor extends Java9BaseVisitor<Method> {
                     .accept(parameterVisitor));
         }
 
-        final List<Statement> statements;
+        final Statement block;
         final boolean isDeclaration;
         if (ctx.methodBody().block() == null) {
-            statements = Collections.singletonList(Statement.EmptyStatement.instance());
+            block = Statement.EmptyStatement.instance();
             isDeclaration = true;
         } else if (ctx.methodBody().block().blockStatements() == null) {
-            statements = Collections.singletonList(Statement.EmptyStatement.instance());
+            block = Statement.EmptyStatement.instance();
             isDeclaration = false;
         } else {
             isDeclaration = false;
-            statements = ctx.methodBody()
+            block = ctx.methodBody()
                     .block()
-                    .blockStatements()
-                    .blockStatement()
-                    .stream()
-                    .map(b -> b.accept(statementVisitor))
-                    .collect(Collectors.toList());
+                    .accept(blockVisitor);
         }
 
         // fixme we can optimize modifiers flow a bit
@@ -96,14 +86,13 @@ final class MethodVisitor extends Java9BaseVisitor<Method> {
 
         final String result = ctx.methodHeader().result().getText();
 
-        return new Method(name, parameters, statements, modifiers, annotations, result, isDeclaration);
+        return new Method(name, parameters, block, modifiers, annotations, result, isDeclaration);
     }
 
     @Override
     public Method visitMethodDeclaration(Java9Parser.MethodDeclarationContext ctx) {
         final String name = ctx.methodHeader().methodDeclarator().identifier().getText();
-        final StatementWithoutTrailingSubstatementVisitor statementVisitor =
-                StatementWithoutTrailingSubstatementVisitor.instance();
+        final BlockVisitor blockVisitor = BlockVisitor.instance();
         final ParameterVisitor parameterVisitor = ParameterVisitor.instance();
         final AnnotationVisitor annotationVisitor = AnnotationVisitor.instance();
 
@@ -130,22 +119,18 @@ final class MethodVisitor extends Java9BaseVisitor<Method> {
                     .accept(parameterVisitor));
         }
 
-        final List<Statement> statements;
+        final Statement block;
         final boolean isDeclaration;
         if (ctx.methodBody().block() == null) {
-            statements = Collections.singletonList(Statement.EmptyStatement.instance());
+            block = Statement.EmptyStatement.instance();
             isDeclaration = true;
         } else if (ctx.methodBody().block().blockStatements() == null) {
-            statements = Collections.singletonList(Statement.EmptyStatement.instance());
+            block = Statement.EmptyStatement.instance();
             isDeclaration = false;
         } else {
-            statements = ctx.methodBody()
+            block = ctx.methodBody()
                     .block()
-                    .blockStatements()
-                    .blockStatement()
-                    .stream()
-                    .map(b -> b.accept(statementVisitor))
-                    .collect(Collectors.toList());
+                    .accept(blockVisitor);
             isDeclaration = false;
         }
 
@@ -171,7 +156,7 @@ final class MethodVisitor extends Java9BaseVisitor<Method> {
 
         final String result = ctx.methodHeader().result().getText();
 
-        return new Method(name, parameters, statements, modifiers, annotations, result, isDeclaration);
+        return new Method(name, parameters, block, modifiers, annotations, result, isDeclaration);
     }
 
     private static boolean isAnnotation(@Nonnull final Java9Parser.MethodModifierContext ctx) {

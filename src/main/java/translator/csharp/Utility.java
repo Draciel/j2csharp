@@ -18,6 +18,9 @@ final class Utility {
     }
 
     public static String appendModifiers(@Nonnull final List<Modifier> modifiers) {
+        if (modifiers.isEmpty()) {
+            return "";
+        }
         return modifiers.stream()
                 .map(Modifier::getCodeRepresentation)
                 .collect(Collectors.joining(Codestyle.space()));
@@ -43,13 +46,6 @@ final class Utility {
                 .collect(Collectors.joining("," + Codestyle.space()));
     }
 
-    @Deprecated
-    public static String appendStatements(@Nonnull final List<Statement> statements, final int indentation) {
-        return statements.stream()
-                .map(s -> appendIndentation(indentation))
-                .collect(Collectors.joining(Codestyle.newLine()));
-    }
-
     public static String appendPassedParameters(@Nonnull final List<String> passedParameters) {
         return passedParameters.stream()
                 .collect(Collectors.joining("," + Codestyle.space()));
@@ -61,7 +57,8 @@ final class Utility {
             return Codestyle.space();
         }
 
-        final String prefixSuperInterfaces = superClass.isEmpty() || superInterfaces.isEmpty() ? "" : "," + Codestyle.space();
+        final String prefixSuperInterfaces = superClass.isEmpty() || superInterfaces.isEmpty() ? "" :
+                "," + Codestyle.space();
 
         final String formattedSuperInterfaces = superInterfaces.stream().collect(Collectors.joining(
                 "," + Codestyle.space(), prefixSuperInterfaces, ""));
@@ -73,6 +70,7 @@ final class Utility {
         final StringBuilder builder = new StringBuilder();
         generics.stream()
                 .filter(filterWildcards())
+                .filter(g -> g.getBoundedType().isEmpty() || g.getType() == null)
                 .forEach(g -> builder
                         .append(Codestyle.newLine())
                         .append(appendIndentation(indentation))

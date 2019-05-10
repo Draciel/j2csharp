@@ -17,8 +17,7 @@ final class WhileStatementVisitor extends Java9BaseVisitor<Statement.WhileStatem
     @Override
     public Statement.WhileStatement visitWhileStatement(final Java9Parser.WhileStatementContext ctx) {
         final StatementExpressionVisitor statementExpressionVisitor = StatementExpressionVisitor.instance();
-        final StatementWithoutTrailingSubstatementVisitor statementVisitor =
-                StatementWithoutTrailingSubstatementVisitor.instance();
+        final StatementVisitor statementVisitor = StatementVisitor.instance();
 
         final Statement.StatementExpression condition =
                 ctx.expression().accept(statementExpressionVisitor);

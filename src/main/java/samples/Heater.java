@@ -24,20 +24,20 @@ class Heater<T extends Function<String, Object>, T2 extends Object> extends Obje
     private boolean keepStable;
     private T adapter;
 
-    protected Heater(final int maxTemp) {
-        this.maxTemp = maxTemp;
-    }
-
-    public static Heater create(final int maxTemp) {
-        return new Heater(maxTemp);
-    }
-
     public void whileTest() {
         int i = 0;
         while (i < 5) {
             System.out.println("Looping via while " + i);
             i++;
         }
+    }
+
+    protected Heater(final int maxTemp) {
+        this.maxTemp = maxTemp;
+    }
+
+    public static Heater create(final int maxTemp) {
+        return new Heater(maxTemp);
     }
 
     public void ifThenElseTest() {
@@ -48,6 +48,7 @@ class Heater<T extends Function<String, Object>, T2 extends Object> extends Obje
             System.out.println("I is greater than 3 and lower than 5");
         } else {
             System.out.println("I is lower than 3");
+            System.out.println("Test!");
         }
     }
 
@@ -64,12 +65,10 @@ class Heater<T extends Function<String, Object>, T2 extends Object> extends Obje
     }
 
     public void heat(final int offset) {
-        synchronized (this) {
-            if ((maxTemp - currentTemp - offset) > 0) {
-                currentTemp += offset;
-            }
-            System.out.println(format(HEATING_MESSAGE, currentTemp));
+        if ((maxTemp - currentTemp - offset) > 0) {
+            currentTemp += offset;
         }
+        System.out.println(format(HEATING_MESSAGE, currentTemp));
     }
 
     public synchronized void cool(final int offset) {

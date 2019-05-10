@@ -73,6 +73,7 @@ final class EnumTranslator implements ComponentTranslator<Enum> {
                     .map(f -> fieldTranslator.translate(f, indentationForNested))
                     .forEach(f -> builder.append(Codestyle.newLine())
                             .append(f)
+                            .append(";")
                             .append(Codestyle.newLine()));
 
             input.getConstructors().stream()

@@ -2,8 +2,12 @@ package visitor;
 
 import data.Field;
 import data.Statement;
+import org.antlr.v4.runtime.misc.Interval;
 import pl.jcsharp.grammar.Java9BaseVisitor;
 import pl.jcsharp.grammar.Java9Parser;
+import utility.Nonnull;
+
+import java.util.stream.Collectors;
 
 final class ForStatementVisitor extends Java9BaseVisitor<Statement> {
 
@@ -19,8 +23,7 @@ final class ForStatementVisitor extends Java9BaseVisitor<Statement> {
     public Statement visitForStatement(final Java9Parser.ForStatementContext ctx) {
         final FieldVisitor fieldVisitor = FieldVisitor.instance();
         final StatementExpressionVisitor statementExpressionVisitor = StatementExpressionVisitor.instance();
-        final StatementWithoutTrailingSubstatementVisitor statementVisitor =
-                StatementWithoutTrailingSubstatementVisitor.instance();
+        final StatementVisitor statementVisitor = StatementVisitor.instance();
 
         if (ctx.basicForStatement() != null) {
             final Java9Parser.ForInitContext forInitContext = ctx.basicForStatement().forInit();
@@ -29,12 +32,15 @@ final class ForStatementVisitor extends Java9BaseVisitor<Statement> {
             final Java9Parser.ForUpdateContext forUpdateContext = ctx.basicForStatement().forUpdate();
             final Statement.StatementExpression updateStatement;
             if (forUpdateContext.statementExpressionList() != null) {
-                //todo investigate if it possible to have multiple statement expressions
-                updateStatement = forUpdateContext.statementExpressionList().statementExpression(0)
-                        .accept(statementExpressionVisitor);
+                updateStatement = Statement.StatementExpression.of(forUpdateContext.statementExpressionList()
+                        .statementExpression()
+                        .stream()
+                        .map(ForStatementVisitor::parseStatementExpressionAsString)
+                        .collect(Collectors.joining(", ")), true);
             } else {
                 updateStatement = Statement.StatementExpression.empty();
             }
+
 
             final Java9Parser.ExpressionContext expressionContext = ctx.basicForStatement().expression();
             final Statement.StatementExpression expression =
@@ -60,8 +66,7 @@ final class ForStatementVisitor extends Java9BaseVisitor<Statement> {
     public Statement visitForStatementNoShortIf(final Java9Parser.ForStatementNoShortIfContext ctx) {
         final FieldVisitor fieldVisitor = FieldVisitor.instance();
         final StatementExpressionVisitor statementExpressionVisitor = StatementExpressionVisitor.instance();
-        final StatementWithoutTrailingSubstatementVisitor statementVisitor =
-                StatementWithoutTrailingSubstatementVisitor.instance();
+        final StatementVisitor statementVisitor = StatementVisitor.instance();
 
         if (ctx.basicForStatementNoShortIf() != null) {
             final Java9Parser.ForInitContext forInitContext = ctx.basicForStatementNoShortIf().forInit();
@@ -70,9 +75,11 @@ final class ForStatementVisitor extends Java9BaseVisitor<Statement> {
             final Java9Parser.ForUpdateContext forUpdateContext = ctx.basicForStatementNoShortIf().forUpdate();
             final Statement.StatementExpression updateStatement;
             if (forUpdateContext.statementExpressionList() != null) {
-                //todo investigate if it possible to have multiple statement expressions
-                updateStatement = forUpdateContext.statementExpressionList().statementExpression(0)
-                        .accept(statementExpressionVisitor);
+                updateStatement = Statement.StatementExpression.of(forUpdateContext.statementExpressionList()
+                        .statementExpression()
+                        .stream()
+                        .map(ForStatementVisitor::parseStatementExpressionAsString)
+                        .collect(Collectors.joining(", ")), true);
             } else {
                 updateStatement = Statement.StatementExpression.empty();
             }
@@ -95,6 +102,13 @@ final class ForStatementVisitor extends Java9BaseVisitor<Statement> {
                 ctx.enhancedForStatementNoShortIf().statementNoShortIf().accept(statementVisitor);
 
         return Statement.EnhancedForStatement.of(variable, collection, bodyStatement);
+    }
+
+    private static String parseStatementExpressionAsString(@Nonnull final Java9Parser.StatementExpressionContext ctx) {
+        final int a = ctx.start.getStartIndex();
+        final int b = ctx.stop.getStopIndex();
+        final Interval interval = new Interval(a, b);
+        return ctx.start.getInputStream().getText(interval);
     }
 
     private static final class Holder {

@@ -34,6 +34,7 @@ final class MethodTranslator implements ComponentTranslator<Method> {
     @Override
     public String translate(@Nonnull final Method input, int indentationCounter) {
         final StringBuilder stringBuilder = new StringBuilder();
+        final StatementTranslator statementTranslator = StatementTranslator.instance();
         stringBuilder
                 .append(Utility.appendIndentation(indentationCounter))
                 .append(Utility.appendModifiers(translateModifiers(input.getModifiers(), input.getAnnotations())))
@@ -51,7 +52,7 @@ final class MethodTranslator implements ComponentTranslator<Method> {
             stringBuilder.append(Codestyle.space())
                     .append("{")
                     .append(Codestyle.newLine())
-                    .append(Utility.appendStatements(input.getStatements(), indentationCounter + 1))
+                    .append(statementTranslator.translate(input.getBlock(), indentationCounter))
                     .append(Codestyle.newLine())
                     .append(Utility.appendIndentation(indentationCounter))
                     .append("}");

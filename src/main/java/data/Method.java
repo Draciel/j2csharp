@@ -13,7 +13,7 @@ public class Method {
     private final List<Parameter> parameters;
 
     @Nonnull
-    private final List<Statement> statements;
+    private final Statement block;
 
     // mainly used in interface methods
     @Nonnull
@@ -30,14 +30,14 @@ public class Method {
 
     public Method(@Nonnull final String name,
                   @Nonnull final List<Parameter> parameters,
-                  @Nonnull final List<Statement> statements,
+                  @Nonnull final Statement block,
                   @Nonnull final List<Modifier> modifiers,
                   @Nonnull final List<Annotation> annotations,
                   @Nonnull final String result,
                   final boolean isDeclaration) {
         this.name = name;
         this.parameters = parameters;
-        this.statements = statements;
+        this.block = block;
         this.modifiers = modifiers;
         this.annotations = annotations;
         this.result = result;
@@ -55,8 +55,8 @@ public class Method {
     }
 
     @Nonnull
-    public List<Statement> getStatements() {
-        return statements;
+    public Statement getBlock() {
+        return block;
     }
 
     @Nonnull
@@ -83,7 +83,7 @@ public class Method {
         return "Method{" +
                 "name='" + name + '\'' +
                 ", parameters=" + parameters +
-                ", statements=" + statements +
+                ", block=" + block +
                 ", isDeclaration=" + isDeclaration +
                 ", modifiers=" + modifiers +
                 ", annotations=" + annotations +

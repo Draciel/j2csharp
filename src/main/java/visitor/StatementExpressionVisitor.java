@@ -22,15 +22,16 @@ final class StatementExpressionVisitor extends Java9BaseVisitor<Statement.Statem
         if (ctx.getChildCount() == 0) {
             return Statement.StatementExpression.empty();
         }
-        return Statement.StatementExpression.of(parseRuleAsString(ctx));
+        return Statement.StatementExpression.of(parseRuleAsString(ctx), false);
     }
 
+    //fixme slice this class and pojo to 2 separate visitors to avoid cluttering with extra field
     @Override
     public Statement.StatementExpression visitExpression(final Java9Parser.ExpressionContext ctx) {
         if (ctx.getChildCount() == 0) {
             return Statement.StatementExpression.empty();
         }
-        return Statement.StatementExpression.of(parseRuleAsString(ctx));
+        return Statement.StatementExpression.of(parseRuleAsString(ctx),  true);
     }
 
     private static String parseRuleAsString(@Nonnull final ParserRuleContext ctx) {

@@ -18,8 +18,7 @@ final class BlockStatementVisitor extends Java9BaseVisitor<BlockStatement> {
 
     @Override
     public BlockStatement visitBlockStatement(final Java9Parser.BlockStatementContext ctx) {
-        final StatementWithoutTrailingSubstatementVisitor statementVisitor =
-                StatementWithoutTrailingSubstatementVisitor.instance();
+        final StatementVisitor statementVisitor = StatementVisitor.instance();
         final FieldVisitor fieldVisitor = FieldVisitor.instance();
 
         final Field field;
@@ -36,6 +35,10 @@ final class BlockStatementVisitor extends Java9BaseVisitor<BlockStatement> {
         } else {
             statement = null;
         }
+
+//        if (statement == null && field == null){
+//            return Statement.EmptyStatement.instance();
+//        }
 
         return new BlockStatement(field, statement);
     }

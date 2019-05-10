@@ -16,8 +16,7 @@ final class DoStatementVisitor extends Java9BaseVisitor<Statement.DoStatement> {
 
     @Override
     public Statement.DoStatement visitDoStatement(final Java9Parser.DoStatementContext ctx) {
-        final StatementWithoutTrailingSubstatementVisitor statementVisitor =
-                StatementWithoutTrailingSubstatementVisitor.instance();
+        final StatementVisitor statementVisitor = StatementVisitor.instance();
         final StatementExpressionVisitor statementExpressionVisitor = StatementExpressionVisitor.instance();
 
         final Statement statement = ctx.statement().accept(statementVisitor);

@@ -5,6 +5,7 @@ import data.Constructor;
 import data.Modifier;
 import data.Parameter;
 import data.Statement;
+import org.antlr.v4.runtime.misc.Interval;
 import pl.jcsharp.grammar.Java9BaseVisitor;
 import pl.jcsharp.grammar.Java9Parser;
 import utility.Nonnull;
@@ -27,8 +28,7 @@ final class ConstructorVisitor extends Java9BaseVisitor<Constructor> {
     @Override
     public Constructor visitConstructorDeclaration(Java9Parser.ConstructorDeclarationContext ctx) {
         final ParameterVisitor parameterVisitor = ParameterVisitor.instance();
-        final StatementWithoutTrailingSubstatementVisitor statementVisitor =
-                StatementWithoutTrailingSubstatementVisitor.instance();
+        final StatementVisitor statementVisitor = StatementVisitor.instance();
 
         final String className = ctx.constructorDeclarator().simpleTypeName().identifier().getText();
 
@@ -45,12 +45,14 @@ final class ConstructorVisitor extends Java9BaseVisitor<Constructor> {
         final List<Statement> statements = new ArrayList<>();
 
         if (ctx.constructorBody().explicitConstructorInvocation() != null) {
-            explicitConstructorInvocation =
-                    Statement.StatementExpression.of(ctx.constructorBody().explicitConstructorInvocation().getText());
+            explicitConstructorInvocation = Statement.StatementExpression.of(
+                    parseConstructorInvocation(ctx.constructorBody().explicitConstructorInvocation()),
+                    true);
         } else {
             explicitConstructorInvocation = Statement.StatementExpression.empty();
         }
 
+        // fixme
         if (ctx.constructorBody().blockStatements() != null) {
             final List<Statement> blockStatements = ctx.constructorBody()
                     .blockStatements()
@@ -86,6 +88,14 @@ final class ConstructorVisitor extends Java9BaseVisitor<Constructor> {
 
         return new Constructor(className, parameters, statements, modifiers, annotations,
                 explicitConstructorInvocation);
+    }
+
+    //fixme
+    private static String parseConstructorInvocation(@Nonnull final Java9Parser.ExplicitConstructorInvocationContext ctx) {
+        final int a = ctx.start.getStartIndex();
+        final int b = ctx.stop.getStopIndex();
+        final Interval interval = new Interval(a, b);
+        return ctx.start.getInputStream().getText(interval).replace(";", "");
     }
 
     private static boolean isAnnotation(@Nonnull final Java9Parser.ConstructorModifierContext ctx) {

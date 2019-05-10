@@ -4,13 +4,13 @@ import data.Statement;
 import pl.jcsharp.grammar.Java9BaseVisitor;
 import pl.jcsharp.grammar.Java9Parser;
 
-final class StatementWithoutTrailingSubstatementVisitor extends Java9BaseVisitor<Statement> {
+final class StatementVisitor extends Java9BaseVisitor<Statement> {
 
-    private StatementWithoutTrailingSubstatementVisitor() {
+    private StatementVisitor() {
         //no instance
     }
 
-    public static StatementWithoutTrailingSubstatementVisitor instance() {
+    public static StatementVisitor instance() {
         return Holder.INSTANCE;
     }
 
@@ -107,8 +107,6 @@ final class StatementWithoutTrailingSubstatementVisitor extends Java9BaseVisitor
     }
 
     private static final class Holder {
-        private static final StatementWithoutTrailingSubstatementVisitor INSTANCE =
-                new StatementWithoutTrailingSubstatementVisitor();
+        private static final StatementVisitor INSTANCE = new StatementVisitor();
     }
-
 }

@@ -476,13 +476,13 @@ public abstract class Statement {
 
     public static final class TryStatement extends Statement {
 
-        @Nonnull
+        @Nullable
         private final Block tryBlock;
 
         @Nonnull
         private final List<CatchClauseStatement> catchClauseStatements;
 
-        @Nonnull
+        @Nullable
         private final Block finallyBlock;
 
         private TryStatement(@Nonnull final ComplexStatementType type, @Nonnull final Block tryBlock,
@@ -622,19 +622,24 @@ public abstract class Statement {
     public static final class StatementExpression extends Statement {
 
         private static final StatementExpression EMPTY_STATEMENT_EXPRESSION =
-                new StatementExpression(STATEMENT_EXPRESSION, "");
+                new StatementExpression(STATEMENT_EXPRESSION, "", true);
 
         @Nonnull
         private final String content;
 
+        //expressions can't have semicolons
+        private final boolean isExpression;
+
         private StatementExpression(@Nonnull final ComplexStatementType type,
-                                    @Nonnull final String content) {
+                                    @Nonnull final String content,
+                                    final boolean isExpression) {
             super(type);
             this.content = content;
+            this.isExpression = isExpression;
         }
 
-        public static StatementExpression of(@Nonnull final String content) {
-            return new StatementExpression(STATEMENT_EXPRESSION, content);
+        public static StatementExpression of(@Nonnull final String content, final boolean isExpression) {
+            return new StatementExpression(STATEMENT_EXPRESSION, content, isExpression);
         }
 
         public static StatementExpression empty() {
@@ -646,11 +651,16 @@ public abstract class Statement {
             return content;
         }
 
+        public boolean isExpression() {
+            return isExpression;
+        }
+
         @Override
         public String toString() {
             return "StatementExpression{" +
                     "content='" + content + '\'' +
-                    '}';
+                    ", isExpression=" + isExpression +
+                    "} " + super.toString();
         }
     }
 

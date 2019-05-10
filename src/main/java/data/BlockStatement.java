@@ -1,26 +1,26 @@
 package data;
 
-import utility.Nonnull;
 import utility.Nullable;
 
 import java.util.Objects;
 
 public class BlockStatement {
 
-    @Nonnull
+    @Nullable
     private final Field field;
 
+    //fixme investigate if this can be nullable
     @Nullable
     private final Statement statement;
 
     //fixme class declaration (probably anonymous class)
 
-    public BlockStatement(@Nullable final Field field, @Nonnull final Statement statement) {
+    public BlockStatement(@Nullable final Field field, @Nullable final Statement statement) {
         this.field = field;
         this.statement = statement;
     }
 
-    @Nonnull
+    @Nullable
     public Field getField() {
         return field;
     }

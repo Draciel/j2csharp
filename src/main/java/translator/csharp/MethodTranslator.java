@@ -70,12 +70,12 @@ final class MethodTranslator implements ComponentTranslator<Method> {
                 .filter(MethodTranslator::isAvailableModifier)
                 .collect(Collectors.toList());
 
-        final boolean hasOverrideAnnotation = annotations.stream()
-                .anyMatch(a -> a.getName().equals("@Override"));
-
-        if (hasOverrideAnnotation) {
-            filteredModifiers.add(Modifier.OVERRIDE);
-        }
+//        final boolean hasOverrideAnnotation = annotations.stream()
+//                .anyMatch(a -> a.getName().equals("@Override"));
+//
+//        if (hasOverrideAnnotation) {
+//            filteredModifiers.add(Modifier.OVERRIDE);
+//        }
 
         return filteredModifiers.stream()
                 .map(MODIFIER_TRANSFORMER)

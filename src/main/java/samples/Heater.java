@@ -165,6 +165,12 @@ class Heater<T extends Function<String, Object>, T2 extends JustEmpty> extends O
         public void start() {
             System.out.println("Starting ...!");
         }
+
+        @Override
+        public int stop() {
+            System.out.println("Stoping!");
+            return 0;
+        }
     }
 
     public static class EngineImpl extends BaseEngine {

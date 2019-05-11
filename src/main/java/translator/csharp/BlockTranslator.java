@@ -17,15 +17,7 @@ final class BlockTranslator implements ComponentTranslator<Statement.Block> {
         return Holder.INSTANCE;
     }
 
-    @Nonnull
-    @Override
-    public String translate(@Nonnull final Statement.Block input, final int indentationCounter) {
-        return input.getBlockStatement().stream()
-                .map(bs -> translateBlockStatement(bs, indentationCounter + 1))
-                .collect(Collectors.joining(Codestyle.newLine()));
-    }
-
-    private static String translateBlockStatement(@Nonnull final BlockStatement blockStatement, final int indentation) {
+    static String translateBlockStatement(@Nonnull final BlockStatement blockStatement, final int indentation) {
         final StatementTranslator statementTranslator = StatementTranslator.instance();
         final FieldTranslator fieldTranslator = FieldTranslator.instance();
 
@@ -42,6 +34,14 @@ final class BlockTranslator implements ComponentTranslator<Statement.Block> {
         }
 
         return blockStatementBuilder.toString();
+    }
+
+    @Nonnull
+    @Override
+    public String translate(@Nonnull final Statement.Block input, final int indentationCounter) {
+        return input.getBlockStatement().stream()
+                .map(bs -> translateBlockStatement(bs, indentationCounter + 1))
+                .collect(Collectors.joining(Codestyle.newLine()));
     }
 
     private static final class Holder {

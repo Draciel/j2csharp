@@ -3,7 +3,9 @@ package visitor;
 import data.Statement;
 import pl.jcsharp.grammar.Java9BaseVisitor;
 import pl.jcsharp.grammar.Java9Parser;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 final class SwitchStatementVisitor extends Java9BaseVisitor<Statement.SwitchStatement> {
 
@@ -17,7 +19,19 @@ final class SwitchStatementVisitor extends Java9BaseVisitor<Statement.SwitchStat
 
     @Override
     public Statement.SwitchStatement visitSwitchStatement(final Java9Parser.SwitchStatementContext ctx) {
-        throw new NotImplementedException();
+        final StatementExpressionVisitor statementExpressionVisitor = StatementExpressionVisitor.instance();
+        final SwitchBlockStatementGroupVisitor switchBlockStatementGroupVisitor =
+                SwitchBlockStatementGroupVisitor.instance();
+
+        final Statement.StatementExpression statementExpression = ctx.expression().accept(statementExpressionVisitor);
+
+        final List<Statement.SwitchBlockStatementGroup> switchBlockStatementGroups = ctx.switchBlock()
+                .switchBlockStatementGroup()
+                .stream()
+                .map(sbsg -> sbsg.accept(switchBlockStatementGroupVisitor))
+                .collect(Collectors.toList());
+
+        return Statement.SwitchStatement.of(statementExpression, switchBlockStatementGroups);
     }
 
     private static final class Holder {

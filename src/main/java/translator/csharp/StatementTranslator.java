@@ -1,7 +1,6 @@
 package translator.csharp;
 
 import data.Statement;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 import translator.ComponentTranslator;
 import utility.Nonnull;
 
@@ -49,7 +48,8 @@ final class StatementTranslator implements ComponentTranslator<Statement> {
                         indentationCounter);
 
             case SWITCH:
-                throw new NotImplementedException();
+                return SwitchStatementTranslator.instance().translate((Statement.SwitchStatement) input,
+                        indentationCounter);
 
             case EMPTY:
                 return Codestyle.newLine();

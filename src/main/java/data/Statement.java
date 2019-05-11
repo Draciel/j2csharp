@@ -36,7 +36,7 @@ public abstract class Statement {
         SYNCHRONIZED("synchronized"), RETURN("return"), BLOCK(""), ASSERT("assert"), BREAK("break"),
         CONTINUE("continue"), DO("do"), SWITCH("switch"), EMPTY(""), THROW("throw"), TRY("try"),
         TRY_WITH_RESOURCES("try"), STATEMENT_EXPRESSION(""), IF("if"), WHILE("while"),
-        BASIC_FOR("for"), ENHANCED_FOR("for");
+        BASIC_FOR("for"), ENHANCED_FOR("for"), SWITCH_BLOCK("swth");
 
         //todo this is useless
         private final String keyword;
@@ -227,19 +227,19 @@ public abstract class Statement {
 
     public static final class BreakStatement extends Statement {
 
-        @Nonnull
+        @Nullable
         private final String identifier;
 
-        private BreakStatement(@Nonnull final ComplexStatementType type, @Nonnull final String identifier) {
+        private BreakStatement(@Nonnull final ComplexStatementType type, @Nullable final String identifier) {
             super(type);
             this.identifier = identifier;
         }
 
-        public static BreakStatement of(@Nonnull final String identifier) {
+        public static BreakStatement of(@Nullable final String identifier) {
             return new BreakStatement(BREAK, identifier);
         }
 
-        @Nonnull
+        @Nullable
         public String getIdentifier() {
             return identifier;
         }
@@ -361,39 +361,39 @@ public abstract class Statement {
     public static final class SwitchStatement extends Statement {
 
         @Nonnull
-        private final StatementExpression statementExpression;
+        private final StatementExpression expression;
 
         @Nonnull
-        private final List<Statement> statements;
+        private final List<SwitchBlockStatementGroup> switchBlockStatements;
 
         private SwitchStatement(@Nonnull final ComplexStatementType type,
-                                @Nonnull final StatementExpression statementExpression,
-                                @Nonnull final List<Statement> statements) {
+                                @Nonnull final StatementExpression expression,
+                                @Nonnull final List<SwitchBlockStatementGroup> switchBlockStatements) {
             super(type);
-            this.statementExpression = statementExpression;
-            this.statements = statements;
+            this.expression = expression;
+            this.switchBlockStatements = switchBlockStatements;
         }
 
         public static SwitchStatement of(@Nonnull final StatementExpression statementExpression,
-                                         @Nonnull final List<Statement> statements) {
+                                         @Nonnull final List<SwitchBlockStatementGroup> statements) {
             return new SwitchStatement(SWITCH, statementExpression, statements);
         }
 
         @Nonnull
-        public StatementExpression getStatementExpression() {
-            return statementExpression;
+        public StatementExpression getExpression() {
+            return expression;
         }
 
         @Nonnull
-        public List<Statement> getStatements() {
-            return statements;
+        public List<SwitchBlockStatementGroup> getSwitchBlockStatements() {
+            return switchBlockStatements;
         }
 
         @Override
         public String toString() {
             return "SwitchStatement{" +
-                    "statementExpressions=" + statementExpression +
-                    ", statements=" + statements +
+                    "statementExpressions=" + expression +
+                    ", switchBlockStatements=" + switchBlockStatements +
                     "} " + super.toString();
         }
 
@@ -402,13 +402,13 @@ public abstract class Statement {
             if (this == o) return true;
             if (!(o instanceof SwitchStatement)) return false;
             final SwitchStatement that = (SwitchStatement) o;
-            return Objects.equals(statementExpression, that.statementExpression) &&
-                    Objects.equals(statements, that.statements);
+            return Objects.equals(expression, that.expression) &&
+                    Objects.equals(switchBlockStatements, that.switchBlockStatements);
         }
 
         @Override
         public int hashCode() {
-            return Objects.hash(statementExpression, statements);
+            return Objects.hash(expression, switchBlockStatements);
         }
     }
 
@@ -884,6 +884,60 @@ public abstract class Statement {
                     ", collection=" + collection +
                     ", bodyStatement=" + bodyStatement +
                     '}';
+        }
+    }
+
+    public static class SwitchBlockStatementGroup extends Statement {
+
+        @Nonnull
+        private final List<BlockStatement> blockStatement;
+
+        @Nullable
+        private final List<String> labels;
+
+        private SwitchBlockStatementGroup(@Nonnull final ComplexStatementType type,
+                                          @Nonnull final List<BlockStatement> blockStatement,
+                                          @Nonnull final List<String> labels) {
+            super(type);
+            this.blockStatement = blockStatement;
+            this.labels = labels;
+        }
+
+        public static SwitchBlockStatementGroup of(@Nonnull final List<BlockStatement> statementExpressions,
+                                                   @Nonnull final List<String> labels) {
+            return new SwitchBlockStatementGroup(SWITCH_BLOCK, statementExpressions, labels);
+        }
+
+        @Nonnull
+        public List<BlockStatement> getBlockStatement() {
+            return blockStatement;
+        }
+
+        @Nullable
+        public List<String> getLabels() {
+            return labels;
+        }
+
+        @Override
+        public String toString() {
+            return "SwitchBlockStatementGroup{" +
+                    "blockStatement=" + blockStatement +
+                    ", labels=" + labels +
+                    "} " + super.toString();
+        }
+
+        @Override
+        public boolean equals(final Object o) {
+            if (this == o) return true;
+            if (!(o instanceof SwitchBlockStatementGroup)) return false;
+            final SwitchBlockStatementGroup that = (SwitchBlockStatementGroup) o;
+            return Objects.equals(blockStatement, that.blockStatement) &&
+                    Objects.equals(labels, that.labels);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(blockStatement, labels);
         }
     }
 }

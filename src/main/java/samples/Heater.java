@@ -25,6 +25,24 @@ class Heater<T extends Function<String, Object>, T2 extends JustEmpty> extends O
         this.maxTemp = maxTemp;
     }
 
+    private void switchTest() {
+        final char i = '0';
+        switch (i) {
+            case '1':
+                System.out.println("Its 1");
+                break;
+
+            case '2':
+            case '3':
+                System.out.println("Its 2 or 3");
+                break;
+
+            default:
+                System.out.println("Different");
+                break;
+        }
+    }
+
     public void whileTest() {
         int i = 0;
         while (i < 5) {

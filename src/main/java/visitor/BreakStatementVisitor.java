@@ -16,7 +16,7 @@ final class BreakStatementVisitor extends Java9BaseVisitor<Statement.BreakStatem
 
     @Override
     public Statement.BreakStatement visitBreakStatement(final Java9Parser.BreakStatementContext ctx) {
-        return Statement.BreakStatement.of(ctx.identifier().getText());
+        return Statement.BreakStatement.of(ctx.identifier() == null ? null : ctx.identifier().getText());
     }
 
     private static final class Holder {

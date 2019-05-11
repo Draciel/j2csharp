@@ -23,7 +23,7 @@ final class SwitchBlockStatementTranslator implements ComponentTranslator<Statem
 
         final String formattedLabels = input.getLabels()
                 .stream()
-                .map(l -> l.equals("default") ? "default:" : "case" + l + ":")
+                .map(l -> l.equals("default") ? "default:" : "case" + Codestyle.space() + l + ":")
                 .map(l -> Utility.appendIndentation(indentationCounter) + l)
                 .collect(Collectors.joining(Codestyle.newLine()));
 

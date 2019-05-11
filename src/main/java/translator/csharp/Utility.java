@@ -1,9 +1,6 @@
 package translator.csharp;
 
-import data.Generic;
-import data.Modifier;
-import data.Parameter;
-import data.Statement;
+import data.*;
 import utility.Nonnull;
 
 import java.util.List;
@@ -52,19 +49,21 @@ final class Utility {
                 .collect(Collectors.joining("," + Codestyle.space()));
     }
 
-    public static String appendInheritance(@Nonnull final String superClass,
-                                           @Nonnull final List<String> superInterfaces) {
-        if (superClass.isEmpty() && superInterfaces.isEmpty()) {
+    public static String appendInheritance(@Nonnull final Type superClass,
+                                           @Nonnull final List<Type> superInterfaces) {
+        if (superClass.literal().isEmpty() && superInterfaces.isEmpty()) {
             return Codestyle.space();
         }
 
-        final String prefixSuperInterfaces = superClass.isEmpty() || superInterfaces.isEmpty() ? "" :
+        final TypeBootstrap typeBootstrap = TypeBootstrap.instance();
+        final String prefixSuperInterfaces = superClass.literal().isEmpty() || superInterfaces.isEmpty() ? "" :
                 "," + Codestyle.space();
 
-        final String formattedSuperInterfaces = superInterfaces.stream().collect(Collectors.joining(
-                "," + Codestyle.space(), prefixSuperInterfaces, ""));
+        final String formattedSuperInterfaces = superInterfaces.stream()
+                .map(t -> typeBootstrap.translate(t, 0))
+                .collect(Collectors.joining("," + Codestyle.space(), prefixSuperInterfaces, ""));
 
-        return Codestyle.space() + ":" + Codestyle.space() + superClass + formattedSuperInterfaces;
+        return Codestyle.space() + ":" + Codestyle.space() + typeBootstrap.translate(superClass, 0) + formattedSuperInterfaces;
     }
 
     public static String appendGenericsBounds(@Nonnull final List<Generic> generics, final int indentation) {

@@ -6,7 +6,7 @@ import samples.exception.NotImplementedException;
 import samples.exception.NotImplementedExceptionBetter;
 
 @Deprecated
-class Heater<T extends Function<String, Object>, T2 extends Object> extends Object implements Consumer<T>,
+class Heater<T extends Function<String, Object>, T2 extends JustEmpty> extends Object implements Consumer<T>,
         Comparable<T2> {
 
     public static final int OPTIMAL_TEMP = 10;
@@ -23,10 +23,6 @@ class Heater<T extends Function<String, Object>, T2 extends Object> extends Obje
 
     protected Heater(final int maxTemp) {
         this.maxTemp = maxTemp;
-    }
-
-    public static Heater create(final int maxTemp) {
-        return new Heater(maxTemp);
     }
 
     public void whileTest() {

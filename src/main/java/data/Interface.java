@@ -22,7 +22,7 @@ public class Interface {
     private final List<Annotation> annotations;
 
     @Nonnull
-    private final List<String> superInterfaces;
+    private final List<Type> superInterfaces;
 
     @Nonnull
     private final List<Generic> generics;
@@ -39,7 +39,7 @@ public class Interface {
     public Interface(@Nonnull final String name, @Nonnull final List<Modifier> modifiers,
                      @Nonnull final List<Field> fields, @Nonnull final List<Method> methods,
                      @Nonnull final List<Annotation> annotations,
-                     @Nonnull final List<String> superInterfaces,
+                     @Nonnull final List<Type> superInterfaces,
                      @Nonnull final List<Generic> generics,
                      @Nonnull final List<Interface> interfaces,
                      @Nonnull final List<Class> classes,
@@ -82,7 +82,7 @@ public class Interface {
     }
 
     @Nonnull
-    public List<String> getSuperInterfaces() {
+    public List<Type> getSuperInterfaces() {
         return superInterfaces;
     }
 

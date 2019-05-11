@@ -7,11 +7,17 @@ import java.util.Objects;
 // Proxy class used to avoid mistakes during translation
 public class Type {
 
+    private static final Type EMPTY = new Type("");
+
     @Nonnull
     private final String literal;
 
     public Type(@Nonnull final String literal) {
         this.literal = literal;
+    }
+
+    public static Type empty() {
+        return EMPTY;
     }
 
     @Nonnull

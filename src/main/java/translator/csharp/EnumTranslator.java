@@ -3,6 +3,7 @@ package translator.csharp;
 import data.Enum;
 import data.EnumConstant;
 import data.Modifier;
+import data.Type;
 import translator.ComponentTranslator;
 import utility.Nonnull;
 
@@ -60,7 +61,7 @@ final class EnumTranslator implements ComponentTranslator<Enum> {
                     .append("class")
                     .append(Codestyle.space())
                     .append(input.getName())
-                    .append(Utility.appendInheritance("", input.getSuperInterfaces()))
+                    .append(Utility.appendInheritance(Type.empty(), input.getSuperInterfaces()))
                     .append("{")
                     .append(Codestyle.newLine())
                     .append(Codestyle.newLine())

@@ -23,7 +23,7 @@ final class EnhancedForTranslator implements ComponentTranslator<Statement.Enhan
         final StatementTranslator statementTranslator = StatementTranslator.instance();
 
         forLoopBuilder.append(Utility.appendIndentation(indentationCounter))
-                .append("for")
+                .append("foreach")
                 .append(Codestyle.space())
                 .append("(")
                 .append(fieldTranslator.translate(input.getVariable(), 0))

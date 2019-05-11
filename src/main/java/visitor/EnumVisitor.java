@@ -95,9 +95,9 @@ final class EnumVisitor extends Java9BaseVisitor<Enum> {
                 .filter(Modifier::isAccessModifier)
                 .findFirst();
 
-        final List<String> superInterfaces = ctx.superinterfaces() == null ? emptyList() :
+        final List<Type> superInterfaces = ctx.superinterfaces() == null ? emptyList() :
                 ctx.superinterfaces().interfaceTypeList().interfaceType().stream()
-                        .map(i -> i.classType().getText())
+                        .map(i -> new Type(i.classType().getText()))
                         .collect(Collectors.toList());
 
         if (!accessModifier.isPresent()) {

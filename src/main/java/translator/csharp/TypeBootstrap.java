@@ -13,7 +13,7 @@ final class TypeBootstrap implements ComponentTranslator<Type> {
     private TypeBootstrap() {
         typesTranslationMap.put(new Type("boolean"), new Type("bool"));
         typesTranslationMap.put(new Type("String"), new Type("string"));
-        //no instance
+        typesTranslationMap.put(new Type("RuntimeException"), new Type("SystemException"));
     }
 
     public static TypeBootstrap instance() {

@@ -80,12 +80,12 @@ final class ClassVisitor extends Java9BaseVisitor<Class> {
                 .filter(Modifier::isAccessModifier)
                 .findFirst();
 
-        final String superClass = ctx.normalClassDeclaration().superclass() == null ? "" :
-                ctx.normalClassDeclaration().superclass().classType().getText();
+        final Type superClass = ctx.normalClassDeclaration().superclass() == null ? Type.empty() :
+                new Type(ctx.normalClassDeclaration().superclass().classType().getText());
 
-        final List<String> superInterfaces = ctx.normalClassDeclaration().superinterfaces() == null ? emptyList() :
+        final List<Type> superInterfaces = ctx.normalClassDeclaration().superinterfaces() == null ? emptyList() :
                 ctx.normalClassDeclaration().superinterfaces().interfaceTypeList().interfaceType().stream()
-                        .map(i -> i.classType().getText())
+                        .map(i -> new Type(i.classType().getText()))
                         .collect(Collectors.toList());
 
         final List<Generic> generics = ctx.normalClassDeclaration().typeParameters() == null ? Collections.emptyList() :

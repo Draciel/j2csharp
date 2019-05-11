@@ -18,6 +18,18 @@ public final class CSharpTranslator implements Translator {
         final InterfaceTranslator interfaceTranslator = InterfaceTranslator.instance();
         final EnumTranslator enumTranslator = EnumTranslator.instance();
 
+        // predefined imports
+        fileBuilder.append("using")
+                .append(Codestyle.space())
+                .append("System")
+                .append(";")
+                .append(Codestyle.newLine())
+                .append("using")
+                .append(Codestyle.space())
+                .append("System.Collections.Generic")
+                .append(";")
+                .append(Codestyle.newLine());
+
         input.getImports().stream()
                 .map(f -> importTranslator.translate(f, 0))
                 .forEach(f -> fileBuilder.append(f).append(Codestyle.newLine()));

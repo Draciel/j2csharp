@@ -25,7 +25,7 @@ public class Enum {
     private final List<Annotation> annotations;
 
     @Nonnull
-    private final List<String> superInterfaces;
+    private final List<Type> superInterfaces;
 
     @Nonnull
     private final List<Class> classes;
@@ -43,7 +43,7 @@ public class Enum {
     public Enum(@Nonnull final String name, @Nonnull final List<Modifier> modifiers,
                 @Nonnull final List<Constructor> constructors, @Nonnull final List<Field> fields,
                 @Nonnull final List<Method> methods, @Nonnull final List<Annotation> annotations,
-                @Nonnull final List<String> superInterfaces, @Nonnull final List<Class> classes,
+                @Nonnull final List<Type> superInterfaces, @Nonnull final List<Class> classes,
                 @Nonnull final List<Interface> interfaces, @Nonnull final List<Enum> enums,
                 @Nonnull final List<EnumConstant> enumConstants) {
         this.name = name;
@@ -90,7 +90,7 @@ public class Enum {
     }
 
     @Nonnull
-    public List<String> getSuperInterfaces() {
+    public List<Type> getSuperInterfaces() {
         return superInterfaces;
     }
 

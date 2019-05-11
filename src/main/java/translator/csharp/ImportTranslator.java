@@ -18,16 +18,24 @@ final class ImportTranslator implements ComponentTranslator<Import> {
     @Override
     @SuppressWarnings("StringBufferReplaceableByString") // for this case, StringBuilder is more readable
     public String translate(@Nonnull final Import input, final int indentationCounter) {
-        //fixme investigate static imports in c#
+        //fixme
+        if (input.getClassName().contains("Exception")) {
+            return new StringBuilder().append("using")
+                    .append(Codestyle.space())
+                    .append(input.getClassName())
+                    .append(Codestyle.space())
+                    .append("=")
+                    .append(Codestyle.space())
+                    .append(input.getPackageName())
+                    .append(".")
+                    .append(input.getClassName())
+                    .append(";")
+                    .toString();
+        }
+
         return new StringBuilder().append("using")
                 .append(Codestyle.space())
-                .append(input.getClassName())
-                .append(Codestyle.space())
-                .append("=")
-                .append(Codestyle.space())
                 .append(input.getPackageName())
-                .append(".")
-                .append(input.getClassName())
                 .append(";")
                 .toString();
     }

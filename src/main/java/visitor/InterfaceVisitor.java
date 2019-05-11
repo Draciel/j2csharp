@@ -79,10 +79,9 @@ final class InterfaceVisitor extends Java9BaseVisitor<Interface> {
                 .filter(Modifier::isAccessModifier)
                 .findFirst();
 
-        final List<String> superInterfaces = ctx.normalInterfaceDeclaration().extendsInterfaces() == null ?
-                emptyList() :
+        final List<Type> superInterfaces = ctx.normalInterfaceDeclaration().extendsInterfaces() == null ? emptyList() :
                 ctx.normalInterfaceDeclaration().extendsInterfaces().interfaceTypeList().interfaceType().stream()
-                        .map(i -> i.classType().getText())
+                        .map(i -> new Type(i.classType().getText()))
                         .collect(Collectors.toList());
 
         final List<Generic> generics = ctx.normalInterfaceDeclaration().typeParameters() == null ?

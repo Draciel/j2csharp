@@ -25,10 +25,10 @@ public class Class {
     private final List<Annotation> annotations;
 
     @Nonnull
-    private final String superClass;
+    private final Type superClass;
 
     @Nonnull
-    private final List<String> superInterfaces;
+    private final List<Type> superInterfaces;
 
     @Nonnull
     private final List<Generic> generics;
@@ -46,8 +46,8 @@ public class Class {
                  @Nonnull final List<Constructor> constructors,
                  @Nonnull final List<Method> methods, @Nonnull List<Field> fields,
                  @Nonnull final List<Annotation> annotations,
-                 @Nonnull final String superClass,
-                 @Nonnull final List<String> superInterfaces,
+                 @Nonnull final Type superClass,
+                 @Nonnull final List<Type> superInterfaces,
                  @Nonnull final List<Generic> generics, @Nonnull final List<Class> classes,
                  @Nonnull final List<Interface> interfaces, @Nonnull final List<Enum> enums) {
         this.name = name;
@@ -95,12 +95,12 @@ public class Class {
     }
 
     @Nonnull
-    public String getSuperClass() {
+    public Type getSuperClass() {
         return superClass;
     }
 
     @Nonnull
-    public List<String> getSuperInterfaces() {
+    public List<Type> getSuperInterfaces() {
         return superInterfaces;
     }
 

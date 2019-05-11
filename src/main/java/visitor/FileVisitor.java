@@ -25,7 +25,7 @@ final class FileVisitor extends Java9BaseVisitor<File> {
         final InterfaceVisitor interfaceVisitor = InterfaceVisitor.instance();
         final ImportVisitor importVisitor = ImportVisitor.instance();
 
-        final String packageName = ctx.packageDeclaration().packageName().identifier().getText();
+        final String packageName = ctx.packageDeclaration().packageName().getText();
 
         final List<Import> imports = ctx.importDeclaration()
                 .stream()

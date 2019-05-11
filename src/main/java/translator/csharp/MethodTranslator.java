@@ -6,6 +6,7 @@ import data.Modifier;
 import translator.ComponentTranslator;
 import utility.Nonnull;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -37,7 +38,8 @@ final class MethodTranslator implements ComponentTranslator<Method> {
         final StatementTranslator statementTranslator = StatementTranslator.instance();
         stringBuilder
                 .append(Utility.appendIndentation(indentationCounter))
-                .append(Utility.appendModifiers(translateModifiers(input.getModifiers(), input.getAnnotations())))
+                .append(Utility.appendModifiers(translateModifiers(input.isDeclaration() ? Collections.emptyList() :
+                        input.getModifiers(), input.getAnnotations())))
                 .append(Codestyle.space())
                 .append(TypeBootstrap.instance().translate(input.getResult(), 0))
                 .append(Codestyle.space())

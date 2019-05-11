@@ -2,6 +2,7 @@ package translator.csharp;
 
 import data.Interface;
 import data.Modifier;
+import data.Type;
 import translator.ComponentTranslator;
 import utility.Nonnull;
 
@@ -48,7 +49,7 @@ final class InterfaceTranslator implements ComponentTranslator<Interface> {
                 .append(Codestyle.space())
                 .append(input.getName())
                 .append(Utility.appendGenericsParameters(input.getGenerics()))
-                .append(Utility.appendInheritance("", input.getSuperInterfaces()))
+                .append(Utility.appendInheritance(Type.empty(), input.getSuperInterfaces()))
                 .append(Utility.appendGenericsBounds(input.getGenerics(), indentationForNested))
                 .append(Codestyle.space())
                 .append("{")

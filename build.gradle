@@ -1,6 +1,9 @@
 plugins {
     id 'antlr'
+    id 'application'
 }
+
+mainClassName = "Main"
 
 repositories {
     mavenCentral()
@@ -25,6 +28,4 @@ generateGrammarSource {
     def generatedPackage = "generated"
     arguments += ["-visitor".toString(), "-package".toString(), generatedPackage]
 }
-
-
 

@@ -1,4 +1,3 @@
-import data.File;
 import generated.Java9Lexer;
 import generated.Java9Parser;
 import org.antlr.v4.runtime.CharStreams;
@@ -6,38 +5,40 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import parser.SimpleParser;
 import translator.Translator;
 import translator.csharp.CSharpTranslator;
+import utility.FileUtil;
 import visitor.SimpleJava9Parser;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Main {
 
     public static void main(String[] args) throws IOException {
+        if (args.length == 0) {
+            System.out.println("Please specify input file path");
+            return;
+        }
+
         final SimpleParser visitor = new SimpleJava9Parser();
         final Translator translator = new CSharpTranslator();
+        final List<Path> classes = Arrays.stream(args)
+                .map(File::new)
+                .map(FileUtil::traverseDir)
+                .flatMap(Collection::stream)
+                .map(File::toPath)
+                .filter(translator::supports)
+                .collect(Collectors.toList());
 
-        final List<Path> files = new ArrayList<>();
-        files.add(Paths.get("src/main/java/samples/Heater.java"));
-        files.add(Paths.get("src/main/java/samples/Function.java"));
-        files.add(Paths.get("src/main/java/samples/Consumer.java"));
-        files.add(Paths.get("src/main/java/samples/JustEmpty.java"));
-        files.add(Paths.get("src/main/java/samples/TimeUnit.java"));
-        files.add(Paths.get("src/main/java/samples/atomic/FastBoolean.java"));
-        files.add(Paths.get("src/main/java/samples/comparable/Comparable.java"));
-        files.add(Paths.get("src/main/java/samples/exception/NotImplementedException.java"));
-        files.add(Paths.get("src/main/java/samples/exception/NotImplementedExceptionBetter.java"));
-
-        for (int i = 0; i < files.size(); i++) {
-            final Java9Lexer lexer = new Java9Lexer(CharStreams.fromPath(files.get(i)));
+        for (final Path p : classes) {
+            final Java9Lexer lexer = new Java9Lexer(CharStreams.fromPath(p));
             final CommonTokenStream tokens = new CommonTokenStream(lexer);
             final Java9Parser parser = new Java9Parser(tokens);
-
-            final File file = visitor.parse(parser.compilationUnit());
-            translator.translate(file, files.get(i));
+            translator.translate(visitor.parse(parser.compilationUnit()), p);
         }
     }
 }

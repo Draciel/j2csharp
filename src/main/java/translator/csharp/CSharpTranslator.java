@@ -2,13 +2,14 @@ package translator.csharp;
 
 import data.File;
 import translator.Translator;
+import utility.Nonnull;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.StandardOpenOption;
+import java.nio.file.*;
 
 public final class CSharpTranslator implements Translator {
+
+    private final PathMatcher extensionMatcher = FileSystems.getDefault().getPathMatcher("glob:**.java");
 
     @Override
     public void translate(final File input, final Path path) {
@@ -57,9 +58,12 @@ public final class CSharpTranslator implements Translator {
                 .append(Codestyle.newLine())
                 .append("}");
 
-        final String fileName = path.getFileName().toString();
-
-        final Path outputPath = path.getParent().resolve(fileName.replace(".java", ".cs"));
+        final String fileName = path.getFileName().toString().replace(".java", ".cs");
+        final java.io.File output = new java.io.File("translated");
+        if (!output.exists()) {
+            output.mkdir();
+        }
+        final Path outputPath = output.toPath().resolve(fileName);
         try {
             Files.write(outputPath, fileBuilder.toString().getBytes(), StandardOpenOption.CREATE);
             System.out.println(fileName + " have been successfully translated!");
@@ -67,5 +71,10 @@ public final class CSharpTranslator implements Translator {
             e.printStackTrace();
             System.out.println("Translation finished with exception");
         }
+    }
+
+    @Override
+    public boolean supports(@Nonnull final Path path) {
+        return extensionMatcher.matches(path);
     }
 }

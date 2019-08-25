@@ -1,5 +1,7 @@
 Project for course "Języki formalne i kompilatory"
 
+Configuration without Gradle:
+
 1. Download latest ANTLR version from (in this quickstart guide I will use 4.7.2)
 
         http://www.antlr.org/download/
@@ -29,3 +31,17 @@ Project for course "Języki formalne i kompilatory"
 9. Build project and run Main.main(args) 
 
 10. Have fun!
+
+Configuration with Gradle:
+
+1. Build project from terminal via command:
+    
+        ./gradlew build
+
+2. You can run project via command: 
+        
+        ./gradlew run --args='path'
+
+Path can be directory or direct path to Java class
+
+Translation output will be in dir `translated` 

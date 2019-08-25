@@ -1,3 +1,5 @@
+Project for course "Języki formalne i kompilatory"
+
 1. Download latest ANTLR version from (in this quickstart guide I will use 4.7.2)
 
         http://www.antlr.org/download/

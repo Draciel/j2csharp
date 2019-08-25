@@ -3,8 +3,8 @@ package visitor;
 import data.CatchClauseStatement;
 import data.Statement;
 import data.Type;
-import pl.jcsharp.grammar.Java9BaseVisitor;
-import pl.jcsharp.grammar.Java9Parser;
+import generated.Java9BaseVisitor;
+import generated.Java9Parser;
 
 import java.util.ArrayList;
 import java.util.Collections;

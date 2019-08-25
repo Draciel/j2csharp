@@ -3,8 +3,8 @@ package visitor;
 import data.Annotation;
 import data.Parameter;
 import data.Type;
-import pl.jcsharp.grammar.Java9BaseVisitor;
-import pl.jcsharp.grammar.Java9Parser;
+import generated.Java9BaseVisitor;
+import generated.Java9Parser;
 import utility.Nonnull;
 
 import java.util.List;

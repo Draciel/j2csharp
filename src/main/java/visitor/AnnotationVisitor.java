@@ -1,8 +1,8 @@
 package visitor;
 
 import data.Annotation;
-import pl.jcsharp.grammar.Java9BaseVisitor;
-import pl.jcsharp.grammar.Java9Parser;
+import generated.Java9BaseVisitor;
+import generated.Java9Parser;
 
 final class AnnotationVisitor extends Java9BaseVisitor<Annotation> {
 

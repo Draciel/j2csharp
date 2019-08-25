@@ -1,0 +1,30 @@
+plugins {
+    id 'antlr'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    antlr "org.antlr:antlr4:4.7.2"
+    compile "org.antlr:antlr4-runtime:4.7.2"
+}
+
+sourceSets {
+    // For somehow reason, subpackages doesn't have access to generated files. Let's add t hem
+    main {
+        java {
+            srcDirs += "${buildDir}/generated-src/antlr/main"
+        }
+    }
+}
+
+generateGrammarSource {
+    maxHeapSize = "64m"
+    def generatedPackage = "generated"
+    arguments += ["-visitor".toString(), "-package".toString(), generatedPackage]
+}
+
+
+

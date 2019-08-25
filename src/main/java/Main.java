@@ -1,9 +1,9 @@
 import data.File;
+import generated.Java9Lexer;
+import generated.Java9Parser;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import parser.SimpleParser;
-import pl.jcsharp.grammar.Java9Lexer;
-import pl.jcsharp.grammar.Java9Parser;
 import translator.Translator;
 import translator.csharp.CSharpTranslator;
 import visitor.SimpleJava9Parser;

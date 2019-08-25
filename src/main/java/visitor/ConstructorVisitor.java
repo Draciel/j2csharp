@@ -1,13 +1,9 @@
 package visitor;
 
-import data.Annotation;
-import data.Constructor;
-import data.Modifier;
-import data.Parameter;
-import data.Statement;
+import data.*;
+import generated.Java9BaseVisitor;
+import generated.Java9Parser;
 import org.antlr.v4.runtime.misc.Interval;
-import pl.jcsharp.grammar.Java9BaseVisitor;
-import pl.jcsharp.grammar.Java9Parser;
 import utility.Nonnull;
 
 import java.util.ArrayList;

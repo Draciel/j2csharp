@@ -1,10 +1,10 @@
 package visitor;
 
-import data.*;
 import data.Class;
 import data.Enum;
-import pl.jcsharp.grammar.Java9BaseVisitor;
-import pl.jcsharp.grammar.Java9Parser;
+import data.*;
+import generated.Java9BaseVisitor;
+import generated.Java9Parser;
 import utility.Nonnull;
 
 import java.util.Collections;

@@ -1,8 +1,8 @@
 package visitor;
 
 import data.Statement;
-import pl.jcsharp.grammar.Java9BaseVisitor;
-import pl.jcsharp.grammar.Java9Parser;
+import generated.Java9BaseVisitor;
+import generated.Java9Parser;
 
 import java.util.List;
 import java.util.stream.Collectors;

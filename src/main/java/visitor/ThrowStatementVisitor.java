@@ -1,8 +1,8 @@
 package visitor;
 
 import data.Statement;
-import pl.jcsharp.grammar.Java9BaseVisitor;
-import pl.jcsharp.grammar.Java9Parser;
+import generated.Java9BaseVisitor;
+import generated.Java9Parser;
 
 final class ThrowStatementVisitor extends Java9BaseVisitor<Statement.ThrowStatement> {
 

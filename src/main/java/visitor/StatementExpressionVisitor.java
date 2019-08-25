@@ -1,10 +1,10 @@
 package visitor;
 
 import data.Statement;
+import generated.Java9BaseVisitor;
+import generated.Java9Parser;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.misc.Interval;
-import pl.jcsharp.grammar.Java9BaseVisitor;
-import pl.jcsharp.grammar.Java9Parser;
 import utility.Nonnull;
 
 // Visitor dedicated for simple statements, initializers, expressions.

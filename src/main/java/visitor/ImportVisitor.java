@@ -1,8 +1,8 @@
 package visitor;
 
 import data.Import;
-import pl.jcsharp.grammar.Java9BaseVisitor;
-import pl.jcsharp.grammar.Java9Parser;
+import generated.Java9BaseVisitor;
+import generated.Java9Parser;
 
 final class ImportVisitor extends Java9BaseVisitor<Import> {
 

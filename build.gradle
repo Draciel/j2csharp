@@ -5,6 +5,9 @@ plugins {
 
 mainClassName = "Main"
 
+group 'pl.draciel.j2csharp'
+version '1.0'
+
 repositories {
     mavenCentral()
 }

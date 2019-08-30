@@ -1,6 +1,6 @@
-#Project for course "Języki formalne i kompilatory"
+# Project for course "Języki formalne i kompilatory"
 
-##Configuration without Gradle:
+## Configuration without Gradle:
 
 1. Download latest ANTLR version from (in this quickstart guide I will use 4.7.2)
 
@@ -32,7 +32,7 @@
 
 10. Have fun!
 
-##Configuration with Gradle:
+## Configuration with Gradle:
 
 1. Build project from terminal via command:
     
@@ -46,13 +46,13 @@ Path can be directory or direct path to Java class
 
 Translation output will be in dir `translated` 
 
-##Samples
+## Samples
 
 Sample files are located in `samples` directory
 
-##Translation example
+## Translation example
 
-#####Heater.java
+##### Heater.java
 
         package samples;
         
@@ -247,7 +247,7 @@ Sample files are located in `samples` directory
             }
         }
         
-#####Heater.cs
+##### Heater.cs
         
         using System;
         using System.Collections.Generic;

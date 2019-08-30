@@ -1,5 +1,9 @@
 # Project for course "Języki formalne i kompilatory"
 
+This project uses ANTLR Java9 grammar:
+
+https://github.com/antlr/grammars-v4/blob/master/java9/Java9.g4
+
 ## Configuration without Gradle:
 
 1. Download latest ANTLR version from (in this quickstart guide I will use 4.7.2)

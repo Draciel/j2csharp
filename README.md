@@ -459,7 +459,7 @@ Sample files are located in `samples` directory
           }
         }
         
-### License
+## License
 
     Copyright 2019 Jakub Tyrka
 
